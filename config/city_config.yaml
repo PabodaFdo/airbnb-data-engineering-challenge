@@ -1,0 +1,21 @@
+city:
+  name: amsterdam
+  display_name: Amsterdam
+  country: Netherlands
+
+paths:
+  raw_data: data/raw/amsterdam
+  processed_data: data/processed
+  data_quality_outputs: outputs/data_quality
+  figures: outputs/figures
+  tables: outputs/tables
+  database: outputs/database
+
+files:
+  detailed_listings: listings.csv.gz
+  summary_listings: listings.csv
+  calendar: calendar.csv.gz
+  detailed_reviews: reviews.csv.gz
+  summary_reviews: reviews.csv
+  neighbourhoods: neighbourhoods.csv
+  neighbourhood_geojson: neighbourhoods.geojson
