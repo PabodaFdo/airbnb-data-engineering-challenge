@@ -482,7 +482,7 @@ Potential future improvements include:
 **PabodaFdo**
 
 BSc (Hons) Information Technology Undergraduate
-Specialization in Information Systems Engineering
+Specialization in Data Science
 Sri Lanka Institute of Information Technology (SLIIT)
 
 ---
