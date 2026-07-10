@@ -1,5 +1,9 @@
 # Incomplete Work Summary
 
+> **Project:** Amsterdam Airbnb Data Engineering Challenge  
+> **City:** Amsterdam, Netherlands  
+> **Strategy:** Depth-first prioritization of core engineering quality over optional breadth
+
 ## Purpose
 
 This document records the work that was intentionally not completed within the available execution window for the Amsterdam Airbnb Data Engineering Challenge.
@@ -14,7 +18,7 @@ The completed core includes:
 - Cleaning and standardization.
 - Listing-level enrichment.
 - Review and calendar aggregation.
-- DuckDB analytical warehouse construction.
+- `DuckDB` analytical warehouse construction.
 - Analytical SQL queries.
 - Exploratory data analysis.
 - Statistical hypothesis testing.
@@ -31,7 +35,7 @@ The following areas were not prioritized.
 
 ### Status
 
-Not implemented.
+**Not implemented.**
 
 ### Reason
 
@@ -69,7 +73,7 @@ The current pipeline could be generalized further using configuration-driven cit
 
 ### Status
 
-Not implemented.
+**Not implemented.**
 
 ### Reason
 
@@ -113,7 +117,7 @@ Any predictive model should be built only after careful feature validation and e
 
 ### Status
 
-Not implemented.
+**Not implemented.**
 
 ### Reason
 
@@ -141,7 +145,7 @@ A future dashboard could include:
 - Availability-based proxy analysis.
 - Key business insights.
 
-The dashboard should read from compact Parquet or DuckDB outputs rather than raw large files.
+The dashboard should read from compact `Parquet` or `DuckDB` outputs rather than raw large files.
 
 ---
 
@@ -149,7 +153,7 @@ The dashboard should read from compact Parquet or DuckDB outputs rather than raw
 
 ### Status
 
-Not implemented.
+**Not implemented.**
 
 ### Reason
 
@@ -173,222 +177,243 @@ Possible future deployment options include:
 
 ### Status
 
-Not implemented.
+**Not implemented.**
 
 ### Reason
 
 The project currently uses:
 
 ```bash
-python run_pipeline.py --city amsterdam
+python `run_pipeline.py` --city amsterdam
+```
 
 to execute the complete engineering workflow.
 
-A separate orchestration framework such as Airflow, Prefect, or Dagster was not added because the project has a focused single-city scope and the existing pipeline already provides ordered, reproducible stage execution.
+A separate orchestration framework such as `Airflow`, `Prefect`, or `Dagster` was not added because the project has a focused single-city scope and the existing pipeline already provides ordered, reproducible stage execution.
 
-Future improvement
+### Future improvement
 
 A future production-oriented version could use orchestration for:
 
-Scheduling.
-Retries.
-Dependency management.
-Monitoring.
-Failure alerts.
-Incremental execution.
-6. Incremental Data Processing
-Status
+- Scheduling
+- Retries
+- Dependency management
+- Monitoring
+- Failure alerts
+- Incremental execution
+---
 
-Not implemented.
+## 6. Incremental Data Processing
+### Status
 
-Reason
+**Not implemented.**
+
+### Reason
 
 The current pipeline performs full-batch processing of the selected Amsterdam datasets.
 
 Incremental processing would require reliable change-detection logic, stable source update behavior, and additional metadata management.
 
-Future improvement
+### Future improvement
 
 Possible improvements include:
 
-Incremental ingestion.
-Watermark tracking.
-Change-data capture.
-Partition-based updates.
-Merge/upsert logic.
-Historical snapshots.
-7. CI/CD Pipeline
-Status
+- Incremental ingestion
+- Watermark tracking
+- Change-data capture
+- Partition-based updates
+- Merge/upsert logic
+- Historical snapshots
+---
 
-Not implemented.
+## 7. CI/CD Pipeline
+### Status
 
-Reason
+**Not implemented.**
+
+### Reason
 
 The project includes local automated tests, but a full continuous integration and deployment workflow was not added.
 
-Future improvement
+### Future improvement
 
-A GitHub Actions workflow could automatically:
+A `GitHub Actions` workflow could automatically:
 
-Install dependencies.
-Run unit tests.
-Validate code quality.
-Execute selected lightweight pipeline checks.
-Prevent merges when tests fail.
-8. Dockerization
-Status
+- Install dependencies
+- Run unit tests
+- Validate code quality
+- Execute selected lightweight pipeline checks
+- Prevent merges when tests fail
+---
 
-Not implemented.
+## 8. Dockerization
+### Status
 
-Reason
+**Not implemented.**
+
+### Reason
 
 The project is currently reproducible through:
 
-Python virtual environment.
-requirements.txt.
-Modular source code.
-A single pipeline entry point.
+- Python virtual environment
+- `requirements.txt`
+- Modular source code
+- A single pipeline entry point
 
 Docker was not prioritized ahead of core engineering and documentation deliverables.
 
-Future improvement
+### Future improvement
 
 A Docker image could improve portability and environment consistency.
 
-9. Advanced Data-Quality Framework
-Status
+---
 
-Not implemented.
+## 9. Advanced Data-Quality Framework
+### Status
 
-Reason
+**Not implemented.**
+
+### Reason
 
 The project already includes a custom validation framework with:
 
-PASS.
-WARNING.
-FAIL.
+- `PASS`
+- `WARNING`
+- `FAIL`
 
 It also includes a critical validation gate.
 
-External frameworks such as Great Expectations, Soda, or Deequ were not added because the current custom validation system already covers the most important source-quality checks for the assignment.
+External frameworks such as `Great Expectations`, `Soda`, or `Deequ` were not added because the current custom validation system already covers the most important source-quality checks for the assignment.
 
-Future improvement
+### Future improvement
 
 A larger production system could integrate:
 
-Great Expectations.
-Soda.
-Data contracts.
-Schema evolution checks.
-Trend-based anomaly detection.
-10. Full Historical Snapshot Tracking
-Status
+- `Great Expectations`
+- `Soda`
+- Data contracts
+- Schema evolution checks
+- Trend-based anomaly detection
+---
 
-Not implemented.
+## 10. Full Historical Snapshot Tracking
+### Status
 
-Reason
+**Not implemented.**
+
+### Reason
 
 The project uses the available Amsterdam dataset snapshot and does not maintain a full historical slowly changing dimension model.
 
-Future improvement
+### Future improvement
 
 A production version could support:
 
-Snapshot dates.
-Historical listing changes.
-Host changes.
-Price changes.
-Availability changes.
-Slowly changing dimensions.
-11. Real Occupancy and Revenue Calculation
-Status
+- Snapshot dates
+- Historical listing changes
+- Host changes
+- Price changes
+- Availability changes
+- Slowly changing dimensions
+---
 
-Not implemented.
+## 11. Real Occupancy and Revenue Calculation
+### Status
 
-Reason
+**Not implemented.**
+
+### Reason
 
 The source data does not provide verified reservation records.
 
 Therefore, the project does not claim to calculate:
 
-True occupancy.
-Confirmed booked nights.
-Actual host revenue.
-Verified reservation volume.
+- True occupancy
+- Confirmed booked nights
+- Actual host revenue
+- Verified reservation volume
 
 Calendar unavailability is treated only as:
 
-unavailability_rate_proxy
+`unavailability_rate_proxy`
 
 and is not interpreted as true occupancy.
 
-Future improvement
+### Future improvement
 
 Accurate occupancy or revenue analysis would require trusted reservation and transaction data.
 
-12. Causal Analysis
-Status
+---
 
-Not implemented.
+## 12. Causal Analysis
+### Status
 
-Reason
+**Not implemented.**
+
+### Reason
 
 The project uses observational Airbnb data.
 
 Therefore, the statistical analyses identify associations or differences but do not prove causation.
 
-Future improvement
+### Future improvement
 
 Causal questions would require stronger study design, additional variables, experiments, quasi-experimental methods, or causal-inference techniques.
 
-13. Additional Statistical Hypotheses
-Status
+---
 
-Not prioritized.
+## 13. Additional Statistical Hypotheses
+### Status
 
-Reason
+**Not prioritized.**
+
+### Reason
 
 The project completed two focused statistical hypotheses deeply rather than many shallow tests.
 
 The selected analyses were:
 
-Entire-home versus private-room pricing.
-Superhost versus non-superhost review-score performance.
+1. Entire-home versus private-room pricing
+2. Superhost versus non-superhost review-score performance
 
 The emphasis was on:
 
-Proper hypotheses.
-Appropriate test selection.
-Statistical significance.
-Effect size.
-Practical significance.
-Business interpretation.
-Future improvement
+- Proper hypotheses
+- Appropriate test selection
+- Statistical significance
+- Effect size
+- Practical significance
+- Business interpretation
+### Future improvement
 
 Possible future tests include:
 
-Neighbourhood price differences.
-Weekend versus weekday pricing.
-High-review versus low-review listing performance.
-Availability-proxy differences across room types.
-14. Advanced Geographic Visualization
-Status
+- Neighbourhood price differences
+- Weekend versus weekday pricing
+- High-review versus low-review listing performance
+- Availability-proxy differences across room types
+---
 
-Not prioritized.
+## 14. Advanced Geographic Visualization
+### Status
 
-Reason
+**Not prioritized.**
+
+### Reason
 
 The project includes neighbourhood-level analysis but did not prioritize advanced interactive geospatial mapping.
 
-Future improvement
+### Future improvement
 
 Possible additions include:
 
-Choropleth maps.
-Listing-density maps.
-Price heatmaps.
-Interactive neighbourhood exploration.
-Final Prioritization Rationale
+- Choropleth maps
+- Listing-density maps
+- Price heatmaps
+- Interactive neighbourhood exploration
+---
+
+# Final Prioritization Rationale
 
 The following principle guided the project:
 
@@ -396,32 +421,32 @@ Complete the core work deeply before adding optional breadth.
 
 The project therefore prioritized:
 
-Reliable data ingestion.
-Complete dataset familiarization.
-Automated profiling.
-Data-quality validation.
-Cleaning.
-Enrichment.
-Listing-grain preservation.
-DuckDB analytical modeling.
-SQL.
-EDA.
-Statistical testing.
-Automated tests.
-Documentation.
-Reproducibility.
+1. Reliable data ingestion
+2. Complete dataset familiarization
+3. Automated profiling
+4. Data-quality validation
+5. Cleaning
+6. Enrichment
+7. Listing-grain preservation
+8. `DuckDB` analytical modeling
+9. SQL
+10. EDA
+11. Statistical testing
+12. Automated tests
+13. Documentation
+14. Reproducibility
 
 The following optional areas were intentionally deferred:
 
-Multiple cities.
-Machine learning.
-Dashboarding.
-Cloud deployment.
-Orchestration.
-Incremental processing.
-CI/CD.
-Docker.
-Advanced geospatial analysis.
+- Multiple cities
+- Machine learning
+- Dashboarding
+- Cloud deployment
+- Orchestration
+- Incremental processing
+- CI/CD
+- Docker
+- Advanced geospatial analysis
 
 This was a deliberate engineering trade-off rather than an accidental omission.
 
