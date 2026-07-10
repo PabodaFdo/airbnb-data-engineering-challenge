@@ -1,5 +1,9 @@
 # Engineering Decision Log
 
+> **Project:** Amsterdam Airbnb Data Engineering Challenge  
+> **City:** Amsterdam, Netherlands  
+> **Strategy:** One-city, depth-first, 8 GB RAM-aware implementation
+
 ## Purpose
 
 This document records the major engineering, data-quality, analytical, and scope decisions made during the Amsterdam Airbnb Data Engineering Challenge.
@@ -421,21 +425,22 @@ The source relationships are one-to-many:
 Listing
    ├── many Calendar rows
    └── many Review rows
+```
 
 Joining raw reviews and raw calendar rows directly to listings could create:
 
-Massive intermediate datasets.
-Row multiplication.
-Memory pressure.
-Incorrect metrics.
-Options Considered
+- Massive intermediate datasets
+- Row multiplication
+- Memory pressure
+- Incorrect metrics
+## Options Considered
 Join all raw rows directly.
 Aggregate to listing level first.
-Decision
+## Decision
 
 Aggregate both review and calendar data to one row per listing before joining to the listing master.
 
-Reason
+## Reason
 
 This protects the intended final grain:
 
@@ -443,11 +448,11 @@ One row per listing.
 
 It also improves:
 
-Memory efficiency.
-Join safety.
-Metric clarity.
-Reproducibility.
-Trade-off
+- Memory efficiency
+- Join safety
+- Metric clarity
+- Reproducibility
+## Trade-off
 
 The enriched master does not contain every individual review comment or daily calendar row.
 
@@ -462,25 +467,25 @@ The calendar dataset shows whether dates are available or unavailable.
 
 However, an unavailable date could mean:
 
-A confirmed booking.
-Host blocking.
-Maintenance.
-Personal use.
-Regulation.
-Other unknown reasons.
-Options Considered
+- A confirmed booking
+- Host blocking
+- Maintenance
+- Personal use
+- Regulation
+- Other unknown reasons
+## Options Considered
 Call unavailable dates occupied.
 Estimate occupancy without qualification.
 Use explicit proxy terminology.
-Decision
+## Decision
 
-Use unavailability_rate_proxy and never describe it as verified occupancy.
+Use `unavailability_rate_proxy` and never describe it as verified occupancy.
 
-Reason
+## Reason
 
 The source data does not prove why a date is unavailable.
 
-Trade-off
+## Trade-off
 
 The project cannot calculate true occupancy without confirmed booking data.
 
@@ -493,20 +498,20 @@ The summary reviews dataset contains 22,541 repeated (listing_id, date) rows.
 
 Because the summary file contains only listing ID and date, multiple legitimate reviews on the same day may appear identical at this reduced grain.
 
-Options Considered
+## Options Considered
 Drop all repeated (listing_id, date) rows.
 Preserve repeated rows unless duplicate review-event identity is established.
-Decision
+## Decision
 
 Preserve repeated review-date rows.
 
-Reason
+## Reason
 
 Blind deletion could remove legitimate review events.
 
 The detailed reviews file contains review-level identifiers and is more appropriate for true event-level duplicate validation.
 
-Trade-off
+## Trade-off
 
 The summary reviews file should not be interpreted as having a unique (listing_id, date) key.
 
@@ -519,33 +524,35 @@ Not every data-quality condition should have the same severity.
 
 Examples:
 
-Duplicate primary key → critical.
-Missing price → important limitation but not necessarily fatal.
-Missing reviewer name → non-critical metadata issue.
-Options Considered
+- Duplicate primary key → critical
+- Missing price → important limitation but not necessarily fatal
+- Missing reviewer name → non-critical metadata issue
+## Options Considered
 Binary valid/invalid framework.
 Multi-level severity classification.
-Decision
+## Decision
 
 Use three validation statuses:
 
 PASS
 WARNING
 FAIL
-Reason
+## Reason
 
 This distinguishes between:
 
-Valid data.
-Known limitations requiring interpretation.
-Critical structural failures.
+- Valid data
+- Known limitations requiring interpretation
+- Critical structural failures
 
 Observed validation result:
 
-83 PASS.
-7 WARNING.
-0 FAIL.
-Trade-off
+| Status | Count |
+|---|---:|
+| PASS | 83 |
+| WARNING | 7 |
+| FAIL | 0 |
+## Trade-off
 
 Warnings require human interpretation and documentation.
 
@@ -556,29 +563,31 @@ Warnings require human interpretation and documentation.
 
 Continuing a data pipeline after critical structural failures could create invalid downstream outputs.
 
-Options Considered
+## Options Considered
 Always continue.
 Stop on any warning.
 Stop only on critical FAIL results.
-Decision
+## Decision
 
 Introduce a validation gate after the validation stage.
 
 Pipeline behavior:
 
+```text
 Validation
     │
     ├── FAIL exists → STOP
     │
     └── No FAIL → Continue
+```
 
 Warnings are allowed when they represent understood and documented source limitations.
 
-Reason
+## Reason
 
 This balances safety with practical robustness.
 
-Trade-off
+## Trade-off
 
 Correct severity classification is important because inappropriate FAIL classifications could stop valid processing.
 
@@ -589,27 +598,27 @@ Correct severity classification is important because inappropriate FAIL classifi
 
 The project requires analytical SQL and structured downstream querying.
 
-Options Considered
+## Options Considered
 SQLite.
 PostgreSQL.
 MySQL.
 DuckDB.
-Decision
+## Decision
 
 Use DuckDB.
 
-Reason
+## Reason
 
 DuckDB provides:
 
-Embedded deployment.
-No database server.
-Strong analytical SQL.
-Direct Parquet support.
-Window functions.
-Aggregations.
-Good compatibility with the 8 GB RAM environment.
-Trade-off
+- Embedded deployment
+- No database server
+- Strong analytical SQL
+- Direct Parquet support
+- Window functions
+- Aggregations
+- Good compatibility with the 8 GB RAM environment
+## Trade-off
 
 DuckDB is not being used as a transactional production database.
 
@@ -620,35 +629,35 @@ DuckDB is not being used as a transactional production database.
 
 A complex enterprise warehouse would add implementation overhead without clear value for a one-city take-home assignment.
 
-Options Considered
+## Options Considered
 One denormalized table only.
 Highly complex multi-layer warehouse.
 Simple analytical dimensional model.
-Decision
+## Decision
 
 Create a lightweight warehouse containing analytical entities such as:
 
-enriched_listing_master
-dim_listings
-dim_neighbourhoods
-fact_review_activity
-fact_calendar_activity
+- `enriched_listing_master`
+- `dim_listings`
+- `dim_neighbourhoods`
+- `fact_review_activity`
+- `fact_calendar_activity`
 
 and analytical views such as:
 
-vw_neighbourhood_performance
-vw_room_type_performance
-vw_host_portfolio_performance
-Reason
+- `vw_neighbourhood_performance`
+- `vw_room_type_performance`
+- `vw_host_portfolio_performance`
+## Reason
 
 This provides sufficient structure for:
 
-SQL analysis.
-Business questions.
-Reusable metrics.
-Demonstration of data-modeling understanding.
+- SQL analysis
+- Business questions
+- Reusable metrics
+- Demonstration of data-modeling understanding
 
-Trade-off
+## Trade-off
 
 The model is intentionally simpler than a production enterprise data warehouse.
 
@@ -661,11 +670,11 @@ The statistical-analysis section could contain many possible tests.
 
 However, more tests do not necessarily mean better statistical reasoning.
 
-Options Considered
+## Options Considered
 No statistical testing.
 Many shallow tests.
 Two carefully selected and fully documented hypotheses.
-Decision
+## Decision
 
 Complete two focused statistical hypotheses.
 
@@ -673,18 +682,18 @@ The selected topics compare:
 
 Entire-home and private-room pricing.
 Superhost and non-superhost review-score performance.
-Reason
+## Reason
 
 This allows proper attention to:
 
-Hypothesis definition.
-Assumption checking.
-Test selection.
-P-values.
-Effect sizes.
-Practical significance.
-Business interpretation.
-Trade-off
+- Hypothesis definition
+- Assumption checking
+- Test selection
+- P-values
+- Effect sizes
+- Practical significance
+- Business interpretation
+## Trade-off
 
 Additional hypotheses were not prioritized.
 
@@ -695,33 +704,33 @@ Additional hypotheses were not prioritized.
 
 Airbnb datasets can contain extreme values in:
 
-Price.
-Review counts.
-Availability.
-Capacity.
+- Price
+- Review counts
+- Availability
+- Capacity
 
 Extreme values may be genuine rather than erroneous.
 
-Options Considered
+## Options Considered
 Delete all statistical outliers.
 Winsorize automatically.
 Preserve by default and exclude only for justified analytical purposes.
-Decision
+## Decision
 
 Do not automatically delete outliers.
 
-Reason
+## Reason
 
 Being statistically unusual is not proof of being invalid.
 
 Where necessary, visualizations may show:
 
-Full data.
-A restricted view without extreme upper outliers.
+- Full data
+- A restricted view without extreme upper outliers
 
 The original records remain preserved.
 
-Trade-off
+## Trade-off
 
 Some raw visualizations are heavily skewed and require careful presentation.
 
@@ -732,21 +741,24 @@ Some raw visualizations are heavily skewed and require careful presentation.
 
 Neighbourhood rankings can be misleading when a neighbourhood contains only a few listings.
 
-Options Considered
+## Options Considered
 Rank all neighbourhoods regardless of size.
 Apply an explicitly documented minimum listing threshold.
-Decision
+## Decision
 
 Apply minimum sample thresholds where appropriate.
 
 For example, selected SQL analyses use:
 
+```sql
 WHERE listing_count >= 100
-Reason
+```
+
+## Reason
 
 This reduces unstable comparisons based on tiny samples.
 
-Trade-off
+## Trade-off
 
 Smaller neighbourhoods may be excluded from selected comparative rankings.
 
@@ -757,32 +769,32 @@ Smaller neighbourhoods may be excluded from selected comparative rankings.
 
 Machine learning was optional but could require substantial additional time for:
 
-Feature engineering.
-Leakage prevention.
-Train/test design.
-Model comparison.
-Evaluation.
-Interpretation.
-Options Considered
+- Feature engineering
+- Leakage prevention
+- Train/test design
+- Model comparison
+- Evaluation
+- Interpretation
+## Options Considered
 Build a rushed predictive model.
 Complete the engineering and analytical core first.
-Decision
+## Decision
 
 Do not prioritize machine learning in the core submission.
 
-Reason
+## Reason
 
 The available time provides greater value when invested in:
 
-Data quality.
-Reproducible pipelines.
-Warehouse design.
-Testing.
-EDA.
-Statistics.
-Documentation.
-Business storytelling.
-Trade-off
+- Data quality
+- Reproducible pipelines
+- Warehouse design
+- Testing
+- EDA
+- Statistics
+- Documentation
+- Business storytelling
+## Trade-off
 
 No predictive model is included in the current project.
 
@@ -793,34 +805,34 @@ No predictive model is included in the current project.
 
 The pipeline contains important transformations and integrity requirements.
 
-Options Considered
+## Options Considered
 No automated tests.
 Very large test suite.
 Focused tests covering high-risk engineering logic.
-Decision
+## Decision
 
 Implement 13 focused automated tests.
 
 The tests cover:
 
-Price parsing.
-Raw-price preservation.
-Missing-price preservation.
-Date parsing.
-Invalid-date handling.
-Boolean normalization.
-Unknown Boolean handling.
-Unique listing keys.
-Duplicate ID rejection.
-Null ID rejection.
-Duplicate join-key rejection.
-Derived-feature calculations.
-Final canonical listing-grain preservation.
-Result
+- Price parsing
+- Raw-price preservation
+- Missing-price preservation
+- Date parsing
+- Invalid-date handling
+- Boolean normalization
+- Unknown Boolean handling
+- Unique listing keys
+- Duplicate ID rejection
+- Null ID rejection
+- Duplicate join-key rejection
+- Derived-feature calculations
+- Final canonical listing-grain preservation
+## Result
 
-13 tests passed successfully.
+**13 tests passed successfully.**
 
-Trade-off
+## Trade-off
 
 The suite is intentionally focused rather than exhaustive.
 
@@ -831,23 +843,23 @@ The suite is intentionally focused rather than exhaustive.
 
 Overwriting raw source data reduces reproducibility and makes debugging more difficult.
 
-Options Considered
+## Options Considered
 Modify raw files directly.
 Preserve raw files and write processed outputs separately.
-Decision
+## Decision
 
 Treat all raw source files as immutable.
 
-Reason
+## Reason
 
 This supports:
 
-Reproducibility.
-Traceability.
-Debugging.
-Auditing.
-Reprocessing.
-Trade-off
+- Reproducibility
+- Traceability
+- Debugging
+- Auditing
+- Reprocessing
+## Trade-off
 
 Additional disk space is required for processed outputs.
 
@@ -858,23 +870,23 @@ Additional disk space is required for processed outputs.
 
 The summary and detailed datasets differ in:
 
-Row counts.
-Missingness.
-Attribute coverage.
-Listing coverage.
-Options Considered
+- Row counts
+- Missingness
+- Attribute coverage
+- Listing coverage
+## Options Considered
 Force sources into identical populations.
 Discard unmatched records.
 Preserve and document genuine source differences.
-Decision
+## Decision
 
 Preserve source differences and make them explicit.
 
-Reason
+## Reason
 
 Forcing artificial equality could hide legitimate source limitations or silently delete records.
 
-Trade-off
+## Trade-off
 
 Some final fields have partial coverage.
 
@@ -885,31 +897,31 @@ Some final fields have partial coverage.
 
 AI tools assisted with parts of:
 
-Planning.
-Code review.
-Debugging.
-Statistical methodology.
-Documentation structuring.
-Options Considered
+- Planning
+- Code review
+- Debugging
+- Statistical methodology
+- Documentation structuring
+## Options Considered
 Hide AI usage.
 Copy AI-generated outputs without verification.
 Disclose AI usage and independently validate all material outputs.
-Decision
+## Decision
 
 Use transparent AI disclosure and validate generated suggestions against actual code and data.
 
 Validation methods include:
 
-Executing code locally.
-Running the complete pipeline.
-Inspecting intermediate outputs.
-Checking row counts.
-Verifying uniqueness.
-Reviewing null rates.
-Running automated tests.
-Verifying statistical outputs.
-Rejecting unsupported suggestions.
-Trade-off
+- Executing code locally
+- Running the complete pipeline
+- Inspecting intermediate outputs
+- Checking row counts
+- Verifying uniqueness
+- Reviewing null rates
+- Running automated tests
+- Verifying statistical outputs
+- Rejecting unsupported suggestions
+## Trade-off
 
 AI-assisted work still requires manual validation and ownership by the author.
 
@@ -920,54 +932,56 @@ AI-assisted work still requires manual validation and ownership by the author.
 
 The assignment materials are confidential, and raw datasets may be unnecessarily large for version control.
 
-Options Considered
+## Options Considered
 Commit everything.
 Exclude confidential and reproducible large files.
-Decision
+## Decision
 
 Do not publicly commit:
 
-Confidential assignment PDF.
-Secrets.
-Environment files.
-Large raw datasets when they can be downloaded from the source.
-Local database files where unnecessary.
-Reason
+- Confidential assignment PDF
+- Secrets
+- Environment files
+- Large raw datasets when they can be downloaded from the source
+- Local database files where unnecessary
+## Reason
 
 This protects confidentiality and keeps the repository clean.
 
-Trade-off
+## Trade-off
 
 Users may need to download source datasets separately before running the complete pipeline.
 
-Final Reflection on Engineering Decisions
+---
+
+# Final Reflection on Engineering Decisions
 
 The central engineering strategy of this project was to prefer:
 
-Explicit decisions over hidden assumptions.
-Data preservation over silent deletion.
-Context-aware null handling over blanket imputation.
-Aggregation before one-to-many joins.
-Reproducibility over notebook-only experimentation.
-Memory-aware processing over unnecessary infrastructure.
-Clear warnings over artificially perfect data-quality reports.
-Statistical depth over excessive test quantity.
-Business interpretation over disconnected charts.
-Transparent limitations over unsupported claims.
+- Explicit decisions over hidden assumptions
+- Data preservation over silent deletion
+- Context-aware null handling over blanket imputation
+- Aggregation before one-to-many joins
+- Reproducibility over notebook-only experimentation
+- Memory-aware processing over unnecessary infrastructure
+- Clear warnings over artificially perfect data-quality reports
+- Statistical depth over excessive test quantity
+- Business interpretation over disconnected charts
+- Transparent limitations over unsupported claims
 
 The resulting pipeline successfully:
 
-Profiles all seven Amsterdam datasets.
-Validates source quality.
-Preserves 10,465 canonical listings.
-Aggregates 545,162 detailed review events.
-Processes 3,819,725 calendar rows.
-Produces cleaned and enriched Parquet datasets.
-Builds a validated DuckDB analytical warehouse.
-Stops on critical validation failures.
-Completes with 83 PASS, 7 WARNING, and 0 FAIL validation outcomes.
-Passes 17 warehouse validation checks.
-Passes 13 automated tests.
+- Profiles all seven Amsterdam datasets
+- Validates source quality
+- Preserves 10,465 canonical listings
+- Aggregates 545,162 detailed review events
+- Processes 3,819,725 calendar rows
+- Produces cleaned and enriched Parquet datasets
+- Builds a validated DuckDB analytical warehouse
+- Stops on critical validation failures
+- Completes with 83 PASS, 7 WARNING, and 0 FAIL validation outcomes
+- Passes 17 warehouse validation checks
+- Passes 13 automated tests
 
 These decisions reflect the project's primary objective: build a defensible, reproducible, memory-aware, and professionally documented data engineering workflow rather than maximizing feature count.
 ---
