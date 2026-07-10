@@ -1,0 +1,23 @@
+feature_index,neighbourhood,geometry_type,geometry_missing,coordinates_present
+0,Bijlmer-Oost,MultiPolygon,False,True
+1,Oud-Noord,MultiPolygon,False,True
+2,Noord-Oost,MultiPolygon,False,True
+3,Noord-West,MultiPolygon,False,True
+4,IJburg - Zeeburgereiland,MultiPolygon,False,True
+5,Centrum-West,MultiPolygon,False,True
+6,Oostelijk Havengebied - Indische Buurt,MultiPolygon,False,True
+7,Centrum-Oost,MultiPolygon,False,True
+8,Oud-Oost,MultiPolygon,False,True
+9,Westerpark,MultiPolygon,False,True
+10,Watergraafsmeer,MultiPolygon,False,True
+11,Gaasperdam - Driemond,MultiPolygon,False,True
+12,Bijlmer-Centrum,MultiPolygon,False,True
+13,De Pijp - Rivierenbuurt,MultiPolygon,False,True
+14,Zuid,MultiPolygon,False,True
+15,Buitenveldert - Zuidas,MultiPolygon,False,True
+16,De Baarsjes - Oud-West,MultiPolygon,False,True
+17,Bos en Lommer,MultiPolygon,False,True
+18,Geuzenveld - Slotermeer,MultiPolygon,False,True
+19,Slotervaart,MultiPolygon,False,True
+20,Osdorp,MultiPolygon,False,True
+21,De Aker - Nieuw Sloten,MultiPolygon,False,True

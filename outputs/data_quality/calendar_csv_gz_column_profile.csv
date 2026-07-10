@@ -1,0 +1,6 @@
+column_name,column_type,missing_count,missing_percentage,unique_count
+listing_id,BIGINT,0,0.0,10465
+date,DATE,0,0.0,378
+available,BOOLEAN,0,0.0,2
+minimum_nights,BIGINT,0,0.0,56
+maximum_nights,BIGINT,0,0.0,169

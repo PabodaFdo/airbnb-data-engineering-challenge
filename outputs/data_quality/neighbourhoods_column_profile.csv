@@ -1,0 +1,3 @@
+column_name,data_type,missing_count,missing_percentage,unique_count,minimum,maximum,sample_values
+neighbourhood_group,float64,22,100.0,0,,,[]
+neighbourhood,str,0,0.0,22,Bijlmer-Centrum,Zuid,"['Bijlmer-Centrum', 'Bijlmer-Oost', 'Bos en Lommer']"

@@ -1,0 +1,7 @@
+column_name,column_type,missing_count,missing_percentage,unique_count
+listing_id,BIGINT,0,0.0,9432
+id,BIGINT,0,0.0,545162
+date,DATE,0,0.0,5327
+reviewer_id,BIGINT,0,0.0,523777
+reviewer_name,VARCHAR,1,0.0,72308
+comments,VARCHAR,0,0.0,528743
