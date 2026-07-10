@@ -1,0 +1,23 @@
+neighbourhood,listing_count,total_review_events,avg_reviews_per_listing,median_reviews_per_listing,listings_with_reviews
+Centrum-West,1217,116784.0,95.96,24.0,1112.0
+Centrum-Oost,933,85025.0,91.13,17.0,839.0
+De Baarsjes - Oud-West,1825,69085.0,37.85,10.0,1684.0
+De Pijp - Rivierenbuurt,1201,47109.0,39.22,9.0,1099.0
+Zuid,709,28645.0,40.4,8.0,620.0
+Westerpark,720,27910.0,38.76,11.0,651.0
+Oud-Oost,670,25575.0,38.17,9.0,598.0
+Oud-Noord,479,25295.0,52.81,8.0,428.0
+Bos en Lommer,546,17223.0,31.54,8.0,499.0
+Oostelijk Havengebied - Indische Buurt,411,16186.0,39.38,10.0,377.0
+Osdorp,59,12368.0,209.63,17.0,55.0
+Watergraafsmeer,304,10560.0,34.74,7.0,256.0
+Noord-West,312,10339.0,33.14,7.0,273.0
+Slotervaart,223,10228.0,45.87,10.0,205.0
+IJburg - Zeeburgereiland,187,8494.0,45.42,10.0,163.0
+Bijlmer-Centrum,66,7121.0,107.89,21.5,56.0
+Noord-Oost,179,7073.0,39.51,8.0,144.0
+Geuzenveld - Slotermeer,141,5544.0,39.32,11.0,126.0
+De Aker - Nieuw Sloten,71,4921.0,69.31,8.0,61.0
+Buitenveldert - Zuidas,119,4212.0,35.39,8.0,100.0
+Gaasperdam - Driemond,54,3819.0,70.72,9.5,51.0
+Bijlmer-Oost,39,1646.0,42.21,16.0,35.0

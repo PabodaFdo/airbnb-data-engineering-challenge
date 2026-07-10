@@ -1,0 +1,23 @@
+neighbourhood,listing_count,avg_availability_rate,avg_unavailability_rate_proxy,median_unavailability_rate_proxy
+Bos en Lommer,546,0.1675,0.8325,0.9918
+Noord-West,312,0.2008,0.7992,0.9479
+Oostelijk Havengebied - Indische Buurt,411,0.2123,0.7877,0.9616
+Westerpark,720,0.2152,0.7848,0.9616
+Bijlmer-Oost,39,0.2225,0.7775,0.9479
+Oud-Noord,479,0.2248,0.7752,0.9589
+De Baarsjes - Oud-West,1825,0.2261,0.7739,0.9562
+Slotervaart,223,0.2283,0.7717,0.9726
+IJburg - Zeeburgereiland,187,0.2342,0.7658,0.9233
+Oud-Oost,670,0.2418,0.7582,0.9589
+De Pijp - Rivierenbuurt,1201,0.2522,0.7478,0.9479
+Watergraafsmeer,304,0.2552,0.7448,0.9425
+Noord-Oost,179,0.2646,0.7354,0.8904
+Geuzenveld - Slotermeer,141,0.2782,0.7218,0.8329
+De Aker - Nieuw Sloten,71,0.2981,0.7019,0.8493
+Zuid,709,0.2984,0.7016,0.9014
+Osdorp,59,0.3118,0.6882,0.8685
+Gaasperdam - Driemond,54,0.3144,0.6856,0.8658
+Centrum-West,1217,0.3376,0.6624,0.7781
+Centrum-Oost,933,0.36,0.64,0.7205
+Buitenveldert - Zuidas,119,0.3761,0.6239,0.7425
+Bijlmer-Centrum,66,0.4175,0.5825,0.6575

@@ -1,0 +1,11 @@
+metric,value
+total_canonical_listings,10465
+unique_listing_ids,10465
+detailed_source_matches,10369
+summary_only_listings_preserved,96
+listings_with_review_history,9432
+listings_with_calendar_data,10465
+listings_with_usable_price,6471
+total_neighbourhoods,22
+total_detailed_review_events,545162
+total_calendar_rows_represented,3819725

@@ -1,0 +1,23 @@
+neighbourhood,total_listings,listings_with_price,avg_price,median_price,price_q1,price_q3
+De Pijp - Rivierenbuurt,1201,702,380.78,333.5,235.5,450.0
+De Baarsjes - Oud-West,1825,1073,364.68,328.0,239.0,450.0
+Zuid,709,450,401.85,327.0,231.75,481.25
+Centrum-West,1217,877,398.36,290.0,200.0,460.0
+IJburg - Zeeburgereiland,187,116,330.72,287.0,182.25,430.25
+Westerpark,720,405,332.57,286.0,229.0,371.0
+Centrum-Oost,933,678,350.41,282.5,190.0,448.0
+Watergraafsmeer,304,186,311.24,280.0,171.0,381.0
+Oud-Oost,670,388,308.24,276.0,204.75,372.5
+Noord-Oost,179,124,288.65,266.5,159.5,351.25
+Oud-Noord,479,283,357.02,266.0,202.5,357.0
+Bos en Lommer,546,257,281.79,265.0,206.0,345.0
+Oostelijk Havengebied - Indische Buurt,411,231,290.24,262.0,206.0,354.5
+Noord-West,312,205,265.23,259.0,197.0,339.0
+Buitenveldert - Zuidas,119,87,313.99,240.0,172.0,399.5
+Slotervaart,223,121,253.38,233.0,167.0,331.0
+Geuzenveld - Slotermeer,141,94,250.29,233.0,156.25,310.0
+De Aker - Nieuw Sloten,71,46,233.89,209.0,155.0,280.25
+Gaasperdam - Driemond,54,33,193.06,162.0,120.0,269.0
+Osdorp,59,40,175.05,153.0,117.0,208.0
+Bijlmer-Centrum,66,51,184.25,147.0,106.0,222.5
+Bijlmer-Oost,39,24,206.67,120.5,107.75,290.0

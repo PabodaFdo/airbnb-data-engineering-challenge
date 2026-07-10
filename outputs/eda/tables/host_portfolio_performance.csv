@@ -1,0 +1,4 @@
+host_portfolio_segment,listing_count,listings_with_price,avg_price,median_price,avg_review_score,avg_reviews_per_listing,avg_unavailability_rate_proxy
+Single-listing host,8509,4811,371.11,318.0,4.877,39.29,0.7915
+Small multi-listing host (2-5),1309,1059,274.87,202.0,4.762,123.5,0.5604
+Large/professional host (6+),551,507,265.07,200.0,4.635,72.84,0.4302
