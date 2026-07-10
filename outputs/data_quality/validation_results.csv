@@ -1,0 +1,91 @@
+dataset_name,rule_id,rule_description,checked_column,invalid_count,total_rows,invalid_percentage,status,severity,notes
+listings.csv,SL_003,Report missing host IDs,host_id,96,10465,0.9173,WARNING,WARNING,Missing host IDs reduce host-level enrichment coverage but do not invalidate the listing itself.
+listings.csv,SL_010,Report missing price values,price,3994,10465,38.1653,WARNING,WARNING,Missing price does not mean zero price. Preserve nulls unless a context-specific cleaning decision is justified.
+listings.csv.gz,DL_004,Report canonical summary listings absent from detailed listings,id,96,10465,0.9173,WARNING,WARNING,Known source-coverage difference. Do not silently discard summary-only listings during enrichment.
+listings.csv.gz,DL_010,Report missing price values,price,3992,10369,38.4994,WARNING,WARNING,Missing price values must not be interpreted as zero.
+neighbourhoods.csv,N_003,Report missing neighbourhood_group values,neighbourhood_group,22,22,100.0,WARNING,INFO,Known source limitation. The field is fully empty for this Amsterdam dataset and is not required as a primary key.
+reviews.csv,SR_005,Report exact duplicate summary-review rows,"listing_id,date",22541,545162,4.1347,WARNING,WARNING,"Repeated (listing_id, date) rows are expected because multiple individual reviews can occur for the same listing on the same date. Do not blindly delete them."
+reviews.csv.gz,DR_008,Report missing reviewer names,reviewer_name,1,545162,0.0002,WARNING,WARNING,Reviewer-name missingness is non-critical metadata and does not invalidate the review event.
+calendar.csv.gz,CAL_001,Calendar listing_id must not be null,listing_id,0,3819725,0.0,PASS,ERROR,
+calendar.csv.gz,CAL_002,Calendar listing_id must exist in canonical listings.csv,listing_id,0,3819725,0.0,PASS,ERROR,
+calendar.csv.gz,CAL_003,Calendar date must not be null,date,0,3819725,0.0,PASS,ERROR,
+calendar.csv.gz,CAL_004,Non-null calendar dates must be parseable,date,0,3819725,0.0,PASS,ERROR,
+calendar.csv.gz,CAL_005,"(listing_id, date) must be unique","listing_id,date",0,3819725,0.0,PASS,ERROR,Uses DuckDB hash-based full-pair distinct counting for memory-aware duplicate detection.
+calendar.csv.gz,CAL_006,available must represent a valid Boolean availability value,available,0,3819725,0.0,PASS,ERROR,Accepts raw CSV values t/f and Boolean values true/false because DuckDB may automatically infer the source column as BOOLEAN during CSV ingestion.
+calendar.csv.gz,CAL_007,minimum_nights must not be negative,minimum_nights,0,3819725,0.0,PASS,ERROR,
+calendar.csv.gz,CAL_008,maximum_nights must not be negative,maximum_nights,0,3819725,0.0,PASS,ERROR,
+calendar.csv.gz,CAL_009,maximum_nights should not be less than minimum_nights,"minimum_nights,maximum_nights",0,3819725,0.0,PASS,ERROR,
+calendar.csv.gz,CAL_SCHEMA_001,Required column 'available' must exist,available,0,3819725,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+calendar.csv.gz,CAL_SCHEMA_002,Required column 'date' must exist,date,0,3819725,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+calendar.csv.gz,CAL_SCHEMA_003,Required column 'listing_id' must exist,listing_id,0,3819725,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+calendar.csv.gz,CAL_SCHEMA_004,Required column 'maximum_nights' must exist,maximum_nights,0,3819725,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+calendar.csv.gz,CAL_SCHEMA_005,Required column 'minimum_nights' must exist,minimum_nights,0,3819725,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv,SL_001,Listing ID must not be null,id,0,10465,0.0,PASS,ERROR,
+listings.csv,SL_002,Listing ID must be unique,id,0,10465,0.0,PASS,ERROR,Counts all rows participating in duplicate ID groups.
+listings.csv,SL_004,Latitude must be between -90 and 90,latitude,0,10465,0.0,PASS,ERROR,
+listings.csv,SL_005,Longitude must be between -180 and 180,longitude,0,10465,0.0,PASS,ERROR,
+listings.csv,SL_006,availability_365 must be between 0 and 365,availability_365,0,10465,0.0,PASS,ERROR,
+listings.csv,SL_007,minimum_nights must not be negative,minimum_nights,0,10465,0.0,PASS,ERROR,
+listings.csv,SL_008,Price must not be negative after parsing,price,0,10465,0.0,PASS,ERROR,
+listings.csv,SL_009,Non-null price values must be parseable,price,0,10465,0.0,PASS,ERROR,
+listings.csv,SL_011,Room type must be an expected category,room_type,0,10465,0.0,PASS,WARNING,Unexpected categories should be reviewed before normalization; new source values are not automatically errors.
+listings.csv,SL_012,Listing neighbourhood must exist in neighbourhoods.csv,neighbourhood,0,10465,0.0,PASS,ERROR,
+listings.csv,SL_SCHEMA_001,Required column 'availability_365' must exist,availability_365,0,10465,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv,SL_SCHEMA_002,Required column 'host_id' must exist,host_id,0,10465,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv,SL_SCHEMA_003,Required column 'id' must exist,id,0,10465,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv,SL_SCHEMA_004,Required column 'latitude' must exist,latitude,0,10465,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv,SL_SCHEMA_005,Required column 'longitude' must exist,longitude,0,10465,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv,SL_SCHEMA_006,Required column 'minimum_nights' must exist,minimum_nights,0,10465,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv,SL_SCHEMA_007,Required column 'neighbourhood' must exist,neighbourhood,0,10465,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv,SL_SCHEMA_008,Required column 'price' must exist,price,0,10465,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv,SL_SCHEMA_009,Required column 'room_type' must exist,room_type,0,10465,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv.gz,DL_001,Detailed listing ID must not be null,id,0,10369,0.0,PASS,ERROR,
+listings.csv.gz,DL_002,Detailed listing ID must be unique,id,0,10369,0.0,PASS,ERROR,
+listings.csv.gz,DL_003,Detailed listing IDs should exist in canonical listings.csv,id,0,10369,0.0,PASS,ERROR,
+listings.csv.gz,DL_005,Report missing host IDs,host_id,0,10369,0.0,PASS,WARNING,
+listings.csv.gz,DL_006,Latitude must be between -90 and 90,latitude,0,10369,0.0,PASS,ERROR,
+listings.csv.gz,DL_007,Longitude must be between -180 and 180,longitude,0,10369,0.0,PASS,ERROR,
+listings.csv.gz,DL_008,Price must not be negative after parsing,price,0,10369,0.0,PASS,ERROR,
+listings.csv.gz,DL_009,Non-null price values must be parseable,price,0,10369,0.0,PASS,ERROR,
+listings.csv.gz,DL_011,minimum_nights must not be negative,minimum_nights,0,10369,0.0,PASS,ERROR,
+listings.csv.gz,DL_012,availability_365 must be between 0 and 365,availability_365,0,10369,0.0,PASS,ERROR,
+listings.csv.gz,DL_013,Room type must be an expected category,room_type,0,10369,0.0,PASS,WARNING,
+listings.csv.gz,DL_014,neighbourhood_cleansed must exist in neighbourhoods.csv,neighbourhood_cleansed,0,10369,0.0,PASS,ERROR,
+listings.csv.gz,DL_SCHEMA_001,Required column 'availability_365' must exist,availability_365,0,10369,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv.gz,DL_SCHEMA_002,Required column 'host_id' must exist,host_id,0,10369,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv.gz,DL_SCHEMA_003,Required column 'id' must exist,id,0,10369,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv.gz,DL_SCHEMA_004,Required column 'latitude' must exist,latitude,0,10369,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv.gz,DL_SCHEMA_005,Required column 'longitude' must exist,longitude,0,10369,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv.gz,DL_SCHEMA_006,Required column 'minimum_nights' must exist,minimum_nights,0,10369,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv.gz,DL_SCHEMA_007,Required column 'neighbourhood_cleansed' must exist,neighbourhood_cleansed,0,10369,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv.gz,DL_SCHEMA_008,Required column 'price' must exist,price,0,10369,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+listings.csv.gz,DL_SCHEMA_009,Required column 'room_type' must exist,room_type,0,10369,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+neighbourhoods.csv,N_001,Neighbourhood name must not be null,neighbourhood,0,22,0.0,PASS,ERROR,
+neighbourhoods.csv,N_002,Neighbourhood name must be unique,neighbourhood,0,22,0.0,PASS,ERROR,Counts all rows participating in duplicate name groups.
+neighbourhoods.csv,N_SCHEMA_001,Required column 'neighbourhood' must exist,neighbourhood,0,22,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+neighbourhoods.geojson,GJ_001,GeoJSON neighbourhood name must not be null,properties.neighbourhood,0,22,0.0,PASS,ERROR,
+neighbourhoods.geojson,GJ_002,GeoJSON neighbourhood name must be unique,properties.neighbourhood,0,22,0.0,PASS,ERROR,
+neighbourhoods.geojson,GJ_003,GeoJSON neighbourhoods must exist in neighbourhoods.csv,properties.neighbourhood,0,22,0.0,PASS,ERROR,
+neighbourhoods.geojson,GJ_004,All reference neighbourhoods should have GeoJSON boundaries,properties.neighbourhood,0,22,0.0,PASS,ERROR,
+neighbourhoods.geojson,GJ_005,GeoJSON geometry must not be missing,geometry,0,22,0.0,PASS,ERROR,
+neighbourhoods.geojson,GJ_006,Geometry type must be Polygon or MultiPolygon,geometry.type,0,22,0.0,PASS,ERROR,
+reviews.csv,SR_001,Review listing_id must not be null,listing_id,0,545162,0.0,PASS,ERROR,
+reviews.csv,SR_002,Review listing_id should exist in canonical listings.csv,listing_id,0,545162,0.0,PASS,ERROR,
+reviews.csv,SR_003,Review date must not be null,date,0,545162,0.0,PASS,ERROR,
+reviews.csv,SR_004,Non-null review dates must be parseable,date,0,545162,0.0,PASS,ERROR,
+reviews.csv,SR_SCHEMA_001,Required column 'date' must exist,date,0,545162,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+reviews.csv,SR_SCHEMA_002,Required column 'listing_id' must exist,listing_id,0,545162,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+reviews.csv.gz,DR_001,Review ID must not be null,id,0,545162,0.0,PASS,ERROR,
+reviews.csv.gz,DR_002,Review ID must be unique,id,0,545162,0.0,PASS,ERROR,
+reviews.csv.gz,DR_003,Detailed review listing_id must not be null,listing_id,0,545162,0.0,PASS,ERROR,
+reviews.csv.gz,DR_004,Detailed review listing_id should exist in canonical listings.csv,listing_id,0,545162,0.0,PASS,ERROR,
+reviews.csv.gz,DR_005,Detailed review date must not be null,date,0,545162,0.0,PASS,ERROR,
+reviews.csv.gz,DR_006,Non-null review dates must be parseable,date,0,545162,0.0,PASS,ERROR,
+reviews.csv.gz,DR_007,Report missing reviewer IDs,reviewer_id,0,545162,0.0,PASS,WARNING,
+reviews.csv.gz,DR_009,Report missing or empty review comments,comments,0,545162,0.0,PASS,INFO,Missing review text may matter for optional NLP analysis but does not invalidate the core review event.
+reviews.csv.gz,DR_SCHEMA_001,Required column 'comments' must exist,comments,0,545162,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+reviews.csv.gz,DR_SCHEMA_002,Required column 'date' must exist,date,0,545162,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+reviews.csv.gz,DR_SCHEMA_003,Required column 'id' must exist,id,0,545162,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+reviews.csv.gz,DR_SCHEMA_004,Required column 'listing_id' must exist,listing_id,0,545162,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+reviews.csv.gz,DR_SCHEMA_005,Required column 'reviewer_id' must exist,reviewer_id,0,545162,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
+reviews.csv.gz,DR_SCHEMA_006,Required column 'reviewer_name' must exist,reviewer_name,0,545162,0.0,PASS,ERROR,Critical schema validation. Missing required columns can prevent downstream processing.
