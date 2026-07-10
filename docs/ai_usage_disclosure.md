@@ -79,39 +79,47 @@ Final verified results include:
 
 13 automated tests passed
 0 failed
-Representative Prompts
+```
+
+---
+
+## Representative Prompts
 
 Examples of prompts used:
 
-Review the assignment requirements and create a realistic one-city implementation plan for an 8 GB RAM laptop.
+> Review the assignment requirements and create a realistic one-city implementation plan for an 8 GB RAM laptop.
 
-Help me inspect the Airbnb datasets for missing values, duplicates, keys, relationships, and limitations.
+> Help me inspect the Airbnb datasets for missing values, duplicates, keys, relationships, and limitations.
 
-Review these validation results and help classify them as PASS, WARNING, or FAIL.
+> Review these validation results and help classify them as PASS, WARNING, or FAIL.
 
-Help design a safe enrichment strategy that preserves one row per listing.
+> Help design a safe enrichment strategy that preserves one row per listing.
 
-Help connect the existing project modules into one end-to-end pipeline.
+> Help connect the existing project modules into one end-to-end pipeline.
 
-Suggest focused tests for cleaning, key integrity, joins, and derived features.
+> Suggest focused tests for cleaning, key integrity, joins, and derived features.
 
-Modifications Made
+---
+
+## Modifications Made
 
 AI suggestions were changed when they did not match the actual data.
 
 Examples:
 
-Missing prices were preserved as null.
-Unavailable host fields were not fabricated.
-96 summary-only listings were preserved.
-Repeated review dates were not blindly deleted.
-Calendar unavailability was not called occupancy.
-Optional machine learning and multi-city analysis were deferred.
-Final Disclosure Statement
+- Missing prices were preserved as null.
+- Unavailable host fields were not fabricated.
+- 96 summary-only listings were preserved.
+- Repeated review dates were not blindly deleted.
+- Calendar unavailability was not called occupancy.
+- Optional machine learning and multi-city analysis were deferred.
+
+---
+
+## Final Disclosure Statement
 
 Generative AI was used as a planning, review, debugging, testing, and documentation assistant.
 
 All important technical outputs and analytical results were validated using actual project data, local execution, generated reports, warehouse reconciliation, statistical outputs, and automated tests.
 
 Final responsibility for the implementation, analysis, documentation, and conclusions remains with the project author.
-
