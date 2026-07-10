@@ -4,7 +4,7 @@ listings.csv,SL_010,Report missing price values,price,3994,10465,38.1653,WARNING
 listings.csv.gz,DL_004,Report canonical summary listings absent from detailed listings,id,96,10465,0.9173,WARNING,WARNING,Known source-coverage difference. Do not silently discard summary-only listings during enrichment.
 listings.csv.gz,DL_010,Report missing price values,price,3992,10369,38.4994,WARNING,WARNING,Missing price values must not be interpreted as zero.
 neighbourhoods.csv,N_003,Report missing neighbourhood_group values,neighbourhood_group,22,22,100.0,WARNING,INFO,Known source limitation. The field is fully empty for this Amsterdam dataset and is not required as a primary key.
-reviews.csv,SR_005,Report exact duplicate summary-review rows,"listing_id,date",22541,545162,4.1347,WARNING,WARNING,"Repeated (listing_id, date) rows are expected because multiple individual reviews can occur for the same listing on the same date. Do not blindly delete them."
+reviews.csv,SR_005,Report repeated summary-review (listing_id, date) rows,"listing_id,date",22541,545162,4.1347,WARNING,WARNING,"Repeated (listing_id, date) rows are expected because multiple individual reviews can occur for the same listing on the same date. Do not blindly delete them."
 reviews.csv.gz,DR_008,Report missing reviewer names,reviewer_name,1,545162,0.0002,WARNING,WARNING,Reviewer-name missingness is non-critical metadata and does not invalidate the review event.
 calendar.csv.gz,CAL_001,Calendar listing_id must not be null,listing_id,0,3819725,0.0,PASS,ERROR,
 calendar.csv.gz,CAL_002,Calendar listing_id must exist in canonical listings.csv,listing_id,0,3819725,0.0,PASS,ERROR,

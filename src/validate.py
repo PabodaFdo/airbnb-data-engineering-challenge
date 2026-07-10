@@ -582,7 +582,7 @@ def validate_summary_reviews(reference_sets: dict[str, set[Any]]) -> None:
     add_result(
         dataset_name=dataset_name,
         rule_id="SR_005",
-        rule_description="Report exact duplicate summary-review rows",
+        rule_description="Report repeated summary-review (listing_id, date) rows",
         checked_column="listing_id,date",
         invalid_count=int(df.duplicated().sum()),
         total_rows=total_rows,
