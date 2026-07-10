@@ -1,0 +1,8 @@
+dataset_name,file_name,file_type,file_size_mb,row_count,column_count,duplicate_count,duplicate_method,processing_engine,status,error_message
+neighbourhoods,neighbourhoods.csv,csv,0.0,22,2,0,exact_pandas,pandas,SUCCESS,
+summary_listings,listings.csv,csv,1.968,10465,19,0,exact_pandas,pandas,SUCCESS,
+summary_reviews,reviews.csv,csv,11.298,545162,2,22541,exact_pandas,pandas,SUCCESS,
+detailed_listings,listings.csv.gz,csv.gz,5.493,10369,90,0,exact_pandas,pandas,SUCCESS,
+neighbourhoods_geojson,neighbourhoods.geojson,geojson,0.181,22,3,0,exact_full_feature_json,python_json+pandas,SUCCESS,
+calendar,calendar.csv.gz,csv.gz,8.567,3819725,5,0,duckdb_full_row_hash,duckdb,SUCCESS,
+detailed_reviews,reviews.csv.gz,csv.gz,63.477,545162,6,0,duckdb_full_row_hash,duckdb,SUCCESS,
