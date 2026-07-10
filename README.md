@@ -1,231 +1,182 @@
 # Amsterdam Airbnb Data Engineering & Analytics Challenge
 
-An end-to-end **Data Engineering and Analytics project** built using publicly available data from **Inside Airbnb** for **Amsterdam, Netherlands**.
+> **End-to-end Data Engineering and Analytics project using Inside Airbnb data for Amsterdam, Netherlands.**  
+> Built with **Python, Pandas, DuckDB, Parquet, SciPy, Matplotlib, Seaborn, Pytest, and Jupyter**.
 
-The project focuses on transforming raw Airbnb data into reliable, analysis-ready datasets through structured dataset familiarization, automated profiling, validation, cleaning, enrichment, analytical modeling, exploratory data analysis, and statistical testing.
+---
 
-The project follows a **depth-first approach**, prioritizing data quality, reproducibility, engineering decisions, analytical storytelling, and clear business interpretation.
+## Project Overview
+
+This project transforms raw Airbnb data into reliable, analysis-ready datasets through a complete and reproducible workflow:
+
+```text
+Raw Source Files
+        ↓
+Raw Input Verification
+        ↓
+Automated Dataset Profiling
+        ↓
+Data-Quality Validation
+        ↓
+Critical Validation Gate
+        ↓
+Cleaning & Standardization
+        ↓
+Listing-Level Enrichment
+        ↓
+Processed Parquet Outputs
+        ↓
+DuckDB Analytical Warehouse
+        ↓
+SQL Analysis + EDA + Statistical Testing
+        ↓
+Business Findings & Recommendations
+```
+
+The project follows a **one-city, depth-first strategy** and prioritizes data quality, reproducibility, memory-aware processing, analytical depth, statistical reasoning, and clear business interpretation.
+
+---
+
+## Key Engineering Results
+
+| Metric | Result |
+|---|---:|
+| Canonical listings preserved | **10,465** |
+| Detailed listings matched | **10,369** |
+| Summary-only listings preserved | **96** |
+| Review events reconciled | **545,162** |
+| Calendar rows reconciled | **3,819,725** |
+| Source datasets profiled | **7 / 7** |
+| Data-quality validation | **83 PASS / 7 WARNING / 0 FAIL** |
+| Warehouse validation | **17 PASS / 0 FAIL** |
+| Automated tests | **13 passed / 0 failed** |
+| EDA visualizations | **10** |
+| Statistical hypotheses | **2** |
+| Latest full pipeline runtime | **45.49 seconds** |
 
 ---
 
 ## Project Objectives
 
-The main objectives of this project are to:
+The main objectives are to:
 
-- Understand and document the structure of all seven Inside Airbnb source files.
-- Identify candidate primary keys, composite keys, and cross-dataset relationships.
-- Build a repeatable data ingestion pipeline.
+- Understand and document all seven Amsterdam Airbnb source files.
+- Validate candidate primary keys and cross-dataset relationships.
+- Build a repeatable end-to-end data pipeline.
 - Automate dataset profiling and data-quality reporting.
-- Detect missing values, duplicates, outliers, and invalid domain values.
-- Clean and standardize raw listing, review, calendar, and neighbourhood data.
-- Build an enriched listing-level analytical dataset.
-- Store processed analytical data efficiently using Parquet.
-- Create a simple analytical data model using DuckDB.
-- Execute meaningful SQL queries for business analysis.
+- Detect missing values, duplicates, source-coverage differences, and invalid domain values.
+- Clean and standardize listing data using context-aware rules.
+- Aggregate large review and calendar datasets safely.
+- Build an enriched one-row-per-listing analytical dataset.
+- Store processed outputs efficiently in Parquet.
+- Build a lightweight DuckDB analytical warehouse.
+- Write business-oriented analytical SQL queries.
 - Perform focused exploratory data analysis.
-- Conduct statistical hypothesis testing.
-- Translate technical findings into clear business insights and recommendations.
+- Complete two statistical hypothesis tests.
+- Translate technical results into business insights and recommendations.
 
 ---
 
-## Selected City
+## Selected Scope
 
-**Amsterdam, North Holland, Netherlands**
+### City
 
-The project intentionally focuses on one city to prioritize:
+**Amsterdam, Netherlands**
 
-- Analytical depth
-- Data quality
+The project intentionally focuses on one city to prioritize depth over breadth.
+
+This choice allows greater attention to:
+
+- Dataset familiarization
+- Data-quality validation
 - Reproducibility
-- Clean engineering practices
-- Memory-aware processing
-- Clear business storytelling
+- Pipeline reliability
+- Analytical modeling
+- Statistical rigor
+- Business storytelling
+- Professional documentation
 
-The pipeline is designed with future extensibility in mind and can later be generalized to support additional cities.
+> Findings should be interpreted within the Amsterdam market context and not automatically generalized to other cities.
 
 ---
 
-## Dataset
+## Dataset Overview
 
-All data used in this project comes from the publicly available **Inside Airbnb** dataset.
-
-Seven Amsterdam source files are used:
+All data comes from the publicly available **Inside Airbnb** dataset.
 
 | File | Rows / Features | Columns / Properties | Grain |
 |---|---:|---:|---|
 | `neighbourhoods.csv` | 22 rows | 2 columns | One row per neighbourhood |
-| `listings.csv` | 10,465 rows | 19 columns | One row per listing |
+| `listings.csv` | 10,465 rows | 19 columns | One row per canonical listing |
 | `reviews.csv` | 545,162 rows | 2 columns | Review event by listing and date |
 | `listings.csv.gz` | 10,369 rows | 90 columns | One row per detailed listing |
-| `neighbourhoods.geojson` | 22 features | Geographic properties + geometry | One geographic feature per neighbourhood |
+| `neighbourhoods.geojson` | 22 features | Geographic properties + geometry | One feature per neighbourhood |
 | `calendar.csv.gz` | 3,819,725 rows | 5 columns | One row per listing per calendar date |
 | `reviews.csv.gz` | 545,162 rows | 6 columns | One row per individual review |
 
-The raw datasets are intentionally excluded from the Git repository because of file size and reproducibility considerations.
-
-They can be downloaded directly from the official Inside Airbnb data portal.
+> Raw datasets are intentionally excluded from the Git repository because of size and reproducibility considerations.
 
 ---
 
-## Dataset Familiarization — Completed
+## Important Dataset Findings
 
-Dataset Familiarization has been completed for all seven source files.
+### 1. Canonical Listing Population
 
-For every dataset, the project reviewed or validated:
+`listings.csv` is treated as the canonical listing population.
 
-- File shape
-- Column names
-- Data types
-- Sample records
-- Missing values and missing percentages
-- Unique values and cardinality
-- Minimum and maximum values where meaningful
-- Duplicate rows
-- Candidate primary keys
-- Composite keys
-- Cross-dataset relationships
-- Business meaning
-- Data-quality limitations
-- Downstream processing strategy
+- `listings.csv`: **10,465 listings**
+- `listings.csv.gz`: **10,369 listings**
+- Summary-only listings preserved: **96**
 
-The completed notebook is:
+The enrichment process uses a left-preserving strategy so these 96 canonical listings are not silently lost.
 
-```text
-notebooks/01_dataset_familiarization.ipynb
-```
+### 2. One Row per Listing
 
----
+The final enriched master dataset is designed at the grain:
 
-## Key Dataset Findings
+> **One row per canonical listing**
 
-### 1. Canonical listing population
+The final dataset contains **10,465 rows with unique, non-null listing IDs**.
 
-`listings.csv` contains **10,465 listings** and is used as the canonical listing population.
+Review and calendar datasets are aggregated to listing level before joining to prevent row multiplication.
 
-`listings.csv.gz` contains **10,369 detailed listings**, meaning **96 listings from the summary dataset are absent from the detailed listing source**.
+### 3. Missing Prices Are Preserved as Null
 
-These 96 listings should not be silently discarded during enrichment.
+Observed missing prices:
 
----
+- Summary listings: **3,994**
+- Detailed listings: **3,992**
 
-### 2. Calendar coverage is structurally strong
+A missing price does **not** mean zero. Missing prices remain `null`, zero-value imputation is not used, and price-based analyses use only valid observations.
 
-`calendar.csv.gz` contains:
+### 4. Repeated Review Dates Are Not Automatically Duplicates
 
-- **3,819,725 rows**
-- **10,465 unique listing IDs**
-- Exactly **365 calendar rows per listing**
-
-The validated composite key is:
-
-```text
-(listing_id, date)
-```
-
-Because the calendar dataset is large, it should be aggregated before being joined to listing-level data.
-
----
-
-### 3. Detailed reviews are preferred for review-level analysis
-
-Both review datasets contain **545,162 rows**.
-
-`reviews.csv` contains only:
-
-```text
-listing_id
-date
-```
-
-and does not have a unique review identifier.
-
-`reviews.csv.gz` contains:
-
-```text
-listing_id
-id
-date
-reviewer_id
-reviewer_name
-comments
-```
-
-The `id` column is the preferred candidate primary key for individual reviews.
-
-The summary reviews file is retained mainly for validation and lightweight reference, while detailed reviews are preferred for enrichment.
-
----
-
-### 4. Summary reviews contain repeated listing-date combinations
-
-The summary review dataset contains repeated `(listing_id, date)` combinations because multiple individual reviews can occur for the same listing on the same date.
-
-Observed results:
+The summary reviews dataset contains:
 
 - **12,942 repeated `(listing_id, date)` groups**
 - **22,541 extra rows beyond the first occurrence**
 
-Therefore:
+These rows are preserved because multiple legitimate reviews may occur for the same listing on the same date.
+
+### 5. Calendar Unavailability Is Not True Occupancy
+
+An unavailable date may represent a booking, host blocking, maintenance, personal use, regulation, or another unknown reason.
+
+Therefore, the project uses:
 
 ```text
-(listing_id, date)
+unavailability_rate_proxy
 ```
 
-is **not** a unique key for `reviews.csv`.
+and does **not** describe it as verified occupancy.
 
----
+### 6. Review Count Is Not Booking Count
 
-### 5. Neighbourhood relationships are highly consistent
-
-All **22 Amsterdam neighbourhoods** align across:
-
-- `neighbourhoods.csv`
-- `listings.csv`
-- `listings.csv.gz`
-- `neighbourhoods.geojson`
-
-This provides a strong foundation for neighbourhood-level enrichment and optional geographic analysis.
-
----
-
-### 6. Missing values require context-aware treatment
-
-Missing values will not be handled with a universal strategy such as filling every null with zero.
-
-Examples:
-
-- Missing price does not mean zero price.
-- Missing review scores do not mean zero quality.
-- Missing review fields may indicate no review history.
-- Fully empty fields may be excluded from processed analytical outputs while remaining untouched in raw source data.
-
----
-
-### 7. Availability is not true occupancy
-
-Calendar availability does not prove whether an unavailable date was booked.
-
-Therefore, any derived metric based on unavailable dates will be described as an:
-
-```text
-availability-based proxy
-```
-
-rather than true occupancy.
-
----
-
-### 8. Review count is not booking count
-
-Not every guest leaves a review.
-
-Review count or review frequency may be used as a proxy for guest activity, but not as an exact measure of reservations.
+Not every guest leaves a review. Review counts may be used as an imperfect proxy for guest activity, but not as verified booking volume.
 
 ---
 
 ## Cross-Dataset Relationships
-
-The primary relationship structure is:
 
 ```text
                          Host
@@ -242,7 +193,6 @@ The primary relationship structure is:
                      │     │  │  Neighbourhood   │
                      │     │  └──────────────────┘
                      │     │           │
-                     │     │           │ neighbourhood
                      │     │           ▼
                      │     │  ┌──────────────────┐
                      │     │  │ GeoJSON Boundary │
@@ -257,61 +207,208 @@ The primary relationship structure is:
                per listing                  per listing
 ```
 
-Important validated relationships include:
+Validated relationship examples:
 
-- `listings.csv.id` → canonical listing identifier.
-- `listings.csv.gz.id` → detailed listing subset.
-- `calendar.csv.gz.listing_id` → `listings.csv.id`.
-- `reviews.csv.gz.listing_id` → `listings.csv.id`.
-- `reviews.csv.listing_id` → `listings.csv.id`.
-- `neighbourhoods.csv.neighbourhood` → listing neighbourhood fields.
-- `neighbourhoods.geojson.neighbourhood` → neighbourhood reference data.
+- `listings.csv.id` → canonical listing identifier
+- `listings.csv.gz.id` → detailed listing subset
+- `calendar.csv.gz.listing_id` → `listings.csv.id`
+- `reviews.csv.gz.listing_id` → `listings.csv.id`
+- `reviews.csv.listing_id` → `listings.csv.id`
 
 ---
 
-## Data Quality Outputs
+## End-to-End Pipeline
 
-The Dataset Familiarization notebook currently generates compact outputs such as:
+Run the complete workflow using:
 
-```text
-outputs/data_quality/
-├── calendar_availability_distribution.csv
-├── calendar_csv_gz_column_profile.csv
-├── calendar_window_distribution.csv
-├── detailed_listings_column_profile.csv
-├── neighbourhoods_column_profile.csv
-├── neighbourhoods_geojson_geometry_validation.csv
-├── neighbourhoods_geojson_property_profile.csv
-├── reviews_csv_gz_column_profile.csv
-├── reviews_csv_gz_repeated_listing_date_groups.csv
-├── reviews_csv_gz_top_listings_by_review_count.csv
-├── summary_listings_column_profile.csv
-└── summary_reviews_column_profile.csv
+```bash
+python run_pipeline.py --city amsterdam
 ```
 
-These files provide reproducible evidence of profiling, validation, and structural checks performed during familiarization.
+The pipeline executes seven stages:
+
+```text
+1. Verify Raw Source Files
+2. Automated Dataset Profiling
+3. Data-Quality Validation
+4. Critical Validation Gate
+5. Cleaning and Standardization
+6. Data Enrichment
+7. DuckDB Analytical Warehouse
+```
+
+### Latest successful pipeline run
+
+| Stage | Time |
+|---|---:|
+| Verify Raw Source Files | 0.01 s |
+| Automated Dataset Profiling | 18.75 s |
+| Data-Quality Validation | 21.98 s |
+| Critical Validation Gate | 0.13 s |
+| Cleaning and Standardization | 1.56 s |
+| Data Enrichment | 2.65 s |
+| DuckDB Analytical Warehouse | 0.41 s |
+| **Total** | **45.49 s** |
+
+---
+
+## Automated Dataset Profiling
+
+Reusable profiling logic is implemented in:
+
+```text
+src/profile.py
+```
+
+Generated outputs include:
+
+```text
+outputs/data_quality/dataset_summary.csv
+outputs/data_quality/column_profile.csv
+```
+
+Profiling covers row counts, column counts, duplicates, data types, missing values, cardinality, ranges, and sample values.
+
+### Result
+
+**7 / 7 datasets profiled successfully**
+
+---
+
+## Data-Quality Validation
+
+Reusable validation logic is implemented in:
+
+```text
+src/validate.py
+```
+
+Validation areas include:
+
+- Required columns
+- Missing identifiers
+- Unique-key expectations
+- Duplicate IDs
+- Missing and negative prices
+- Coordinate validity
+- Availability ranges
+- Room-type categories
+- Date parsing
+- Foreign-key coverage
+- Source-coverage differences
+- Missing metadata
+- Repeated review rows
+
+### Final validation result
+
+| Status | Count |
+|---|---:|
+| PASS | **83** |
+| WARNING | **7** |
+| FAIL | **0** |
+
+All seven warnings were manually reviewed and treated as documented source limitations or non-critical structural conditions.
+
+---
+
+## Critical Validation Gate
+
+```text
+Validation Results
+      │
+      ├── FAIL exists → STOP
+      │
+      └── No FAIL → Continue
+```
+
+Warnings do not automatically block downstream processing when the limitation is understood, valid data is preserved, and the condition is documented.
+
+---
+
+## Cleaning and Standardization
+
+Reusable cleaning logic is implemented in:
+
+```text
+src/clean.py
+```
+
+Major transformations include:
+
+- Currency-formatted price parsing
+- Raw-price preservation
+- Missing-price preservation
+- Date parsing
+- Boolean normalization
+- Listing-key integrity validation
+- Raw-data preservation
+
+Generated outputs:
+
+```text
+data/processed/cleaned_listings.parquet
+data/processed/cleaned_detailed_listings.parquet
+outputs/data_quality/cleaning_summary.csv
+```
+
+| Output | Rows | Listing ID Integrity |
+|---|---:|---|
+| `cleaned_listings.parquet` | 10,465 | Unique and non-null |
+| `cleaned_detailed_listings.parquet` | 10,369 | Unique and non-null |
+
+---
+
+## Listing-Level Data Enrichment
+
+Reusable enrichment logic is implemented in:
+
+```text
+src/enrich.py
+```
+
+The enrichment process:
+
+1. Starts with the **10,465 canonical listings**.
+2. Adds matching detailed-listing attributes.
+3. Aggregates detailed reviews to listing level.
+4. Aggregates calendar data to listing level.
+5. Joins compact listing-level aggregates.
+6. Creates derived analytical features.
+7. Validates one-row-per-listing grain.
+
+Generated outputs:
+
+```text
+data/processed/review_listing_aggregates.parquet
+data/processed/calendar_listing_aggregates.parquet
+data/processed/enriched_listing_master.parquet
+outputs/data_quality/enrichment_summary.csv
+```
+
+| Metric | Result |
+|---|---:|
+| Canonical listings preserved | **10,465** |
+| Detailed-source matches | **10,369** |
+| Summary-only listings preserved | **96** |
+| Unique non-null listing IDs | **Yes** |
 
 ---
 
 ## 8 GB RAM-Aware Processing Strategy
 
-The project is intentionally designed for an **8 GB RAM laptop**.
-
-The core memory rule is:
+The project was intentionally designed for an **8 GB RAM Windows laptop**.
 
 > Never keep all seven raw datasets as full Pandas DataFrames in memory at the same time.
 
-Processing strategy:
+The strategy includes:
 
-- Use **Pandas** for small and medium datasets.
-- Use **DuckDB** or chunked processing for large datasets.
-- Read only required columns where possible.
-- Aggregate large review and calendar datasets before joins.
-- Save compact intermediate outputs to Parquet.
-- Use listing-level or aggregated datasets for most visualizations.
-- Release large temporary DataFrames after use.
-
-Recommended access pattern:
+- Pandas for small and medium datasets
+- DuckDB for large detailed files
+- One major processing stage at a time
+- Listing-level aggregation before joins
+- Parquet intermediate outputs
+- Compact analytical extracts for EDA
+- Memory cleanup between major stages
 
 | Dataset | Recommended Access |
 |---|---|
@@ -319,45 +416,157 @@ Recommended access pattern:
 | `listings.csv` | Pandas |
 | `reviews.csv` | Pandas |
 | `listings.csv.gz` | Pandas |
-| `neighbourhoods.geojson` | JSON / GeoPandas if needed |
-| `calendar.csv.gz` | DuckDB / chunked processing |
-| `reviews.csv.gz` | DuckDB / chunked processing |
+| `neighbourhoods.geojson` | JSON / optional GeoPandas |
+| `calendar.csv.gz` | DuckDB |
+| `reviews.csv.gz` | DuckDB |
 
 ---
 
-## Project Architecture
+## DuckDB Analytical Warehouse
 
-The planned end-to-end data flow is:
+The warehouse is built by:
 
 ```text
-Inside Airbnb
-      ↓
-Raw CSV / CSV.GZ / GeoJSON Files
-      ↓
-Dataset Familiarization
-      ↓
-Data Ingestion
-      ↓
-Automated Profiling
-      ↓
-Data Quality Validation
-      ↓
-Cleaning & Standardization
-      ↓
-Data Enrichment
-      ↓
-Processed Parquet Files
-      ↓
-DuckDB Analytical Model
-      ↓
-SQL Analysis
-      ↓
-Exploratory Data Analysis
-      ↓
-Statistical Testing
-      ↓
-Business Findings & Recommendations
+src/build_warehouse.py
 ```
+
+Warehouse path:
+
+```text
+data/warehouse/airbnb_analytics.duckdb
+```
+
+### Main analytical structures
+
+```text
+enriched_listing_master
+dim_listings
+dim_neighbourhoods
+fact_review_activity
+fact_calendar_activity
+```
+
+### Analytical views
+
+```text
+vw_neighbourhood_performance
+vw_room_type_performance
+vw_host_portfolio_performance
+```
+
+### Warehouse reconciliation
+
+| Metric | Result |
+|---|---:|
+| Canonical listings | **10,465** |
+| Review events | **545,162** |
+| Calendar rows | **3,819,725** |
+
+### Warehouse validation
+
+| Status | Count |
+|---|---:|
+| PASS | **17** |
+| FAIL | **0** |
+
+---
+
+## Analytical SQL Queries
+
+Business-oriented SQL is stored in:
+
+```text
+sql/analytical_queries.sql
+```
+
+The query set covers:
+
+1. Pricing and performance by room type
+2. Neighbourhood pricing and market activity
+3. Host portfolio concentration
+4. Superhost versus non-superhost performance
+5. Neighbourhood review activity
+6. Highly reviewed but relatively low-rated listings
+7. Availability-based proxy patterns
+8. Pricing by accommodation capacity
+
+---
+
+## Exploratory Data Analysis
+
+The project generated **10 EDA visualizations**:
+
+```text
+01_listings_by_neighbourhood.png
+02_median_price_by_neighbourhood.png
+03_median_price_by_room_type.png
+04_median_price_by_host_segment.png
+05_review_activity_by_neighbourhood.png
+06_unavailability_proxy_by_neighbourhood.png
+07_median_price_by_capacity.png
+08_price_distribution_full.png
+09_price_distribution_without_iqr_upper_outliers.png
+10_correlation_matrix.png
+```
+
+The final report prioritizes the strongest figures using:
+
+```text
+Finding → Business Meaning → Recommended Action
+```
+
+---
+
+## Statistical Analysis
+
+Two focused statistical hypotheses were completed.
+
+### Hypothesis 1
+
+**Do entire-home listings have significantly different or higher prices than private-room listings?**
+
+### Hypothesis 2
+
+**Do superhost listings achieve different or higher review scores than non-superhost listings?**
+
+The statistical workflow includes:
+
+- Null and alternative hypotheses
+- Sample-size review
+- Distribution assessment
+- Assumption considerations
+- Test selection
+- Test statistic
+- P-value
+- Effect size
+- Practical significance
+- Business interpretation
+- Limitations
+
+> Statistical significance is not treated as automatic practical importance, and observational results are not presented as proof of causation.
+
+---
+
+## Automated Tests
+
+Automated tests are implemented in:
+
+```text
+tests/test_data_quality.py
+```
+
+The suite covers cleaning, date parsing, Boolean normalization, key integrity, derived features, and final canonical-grain preservation.
+
+Run tests with:
+
+```bash
+python -m pytest tests/ -v
+```
+
+| Test Result | Count |
+|---|---:|
+| Passed | **13** |
+| Failed | **0** |
 
 ---
 
@@ -371,36 +580,31 @@ airbnb-data-engineering-challenge/
 ├── .gitignore
 ├── run_pipeline.py
 │
-├── config/
-│   └── city_config.yaml
-│
 ├── data/
 │   ├── raw/
 │   │   └── amsterdam/
-│   └── processed/
+│   ├── processed/
+│   └── warehouse/
 │
 ├── src/
 │   ├── __init__.py
-│   ├── ingest.py
 │   ├── profile.py
 │   ├── validate.py
 │   ├── clean.py
 │   ├── enrich.py
-│   ├── database.py
-│   └── utils.py
+│   └── build_warehouse.py
+│
+├── sql/
+│   └── analytical_queries.sql
 │
 ├── notebooks/
 │   ├── 01_dataset_familiarization.ipynb
 │   └── 02_eda_and_statistics.ipynb
 │
-├── sql/
-│   └── analytical_queries.sql
-│
 ├── outputs/
-│   ├── figures/
-│   ├── tables/
 │   ├── data_quality/
-│   └── database/
+│   ├── eda/
+│   └── statistics/
 │
 ├── docs/
 │   ├── assumptions.md
@@ -410,211 +614,8 @@ airbnb-data-engineering-challenge/
 │   └── ai_usage_disclosure.md
 │
 └── tests/
+    └── test_data_quality.py
 ```
-
----
-
-## Data Engineering Workflow
-
-### 1. Dataset Familiarization ✅ Completed
-
-Completed for all seven source files.
-
-The project now has:
-
-- File inventory
-- Schema documentation
-- Missing-value summaries
-- Duplicate analysis
-- Candidate-key validation
-- Cross-dataset relationship validation
-- Business-domain interpretation
-- Dataset limitations
-- Overall seven-dataset summary
-- Memory-aware processing decisions
-
----
-
-### 2. Automated Data Profiling — Next Stage
-
-The next phase is to create a reusable profiling module:
-
-```text
-src/profile.py
-```
-
-The profiler will generate structured reports containing:
-
-- Dataset name
-- Row count
-- Column count
-- Duplicate count
-- Column names
-- Data types
-- Missing counts
-- Missing percentages
-- Unique counts
-- Minimum and maximum values
-- Sample values
-
-Planned outputs:
-
-```text
-outputs/data_quality/dataset_summary.csv
-outputs/data_quality/column_profile.csv
-```
-
-For large text-heavy columns, exact high-cardinality calculations may be avoided when they add significant cost without analytical value.
-
----
-
-### 3. Data Quality Validation
-
-The validation phase will introduce reusable rules for areas such as:
-
-- Negative or invalid prices
-- Invalid latitude and longitude values
-- Unexpected availability ranges
-- Duplicate listing identifiers
-- Missing required join keys
-- Invalid date values
-- Unexpected room-type categories
-- Referential-integrity issues
-
-Planned output:
-
-```text
-outputs/data_quality/validation_results.csv
-```
-
----
-
-### 4. Cleaning and Standardization
-
-The cleaning stage will include:
-
-- Cleaning currency-formatted price fields
-- Converting appropriate columns to numeric types
-- Parsing date columns
-- Handling missing values using context-aware strategies
-- Normalizing categorical values
-- Preserving raw data
-- Writing separate processed outputs
-
----
-
-### 5. Data Enrichment
-
-An enriched listing-level master dataset will be created.
-
-Potential fields include:
-
-- Listing ID
-- Host ID
-- Neighbourhood
-- Latitude and longitude
-- Room type
-- Property type
-- Clean price
-- Bedrooms
-- Beds
-- Minimum nights
-- Availability
-- Number of reviews
-- Review score
-- Superhost status
-- Host tenure
-- Price per bedroom
-- Review frequency
-- Host portfolio size
-
-Optional calendar-derived values may include:
-
-- Average calendar price, if supported by the source data
-- Weekday and weekend prices, if supported by the source data
-- Availability-based proxy metrics
-
-Any occupancy-related metric will be clearly described as a **proxy**, not verified occupancy.
-
----
-
-### 6. Analytical Data Modeling
-
-The project will use **DuckDB** as the analytical database engine.
-
-Planned analytical tables include:
-
-- `dim_listing`
-- `dim_host`
-- `dim_neighbourhood`
-- `fact_listing_performance`
-
-An optional daily calendar fact table may be included if justified by analytical needs, time, and storage constraints.
-
----
-
-## Exploratory Data Analysis
-
-The project aims to investigate several key areas:
-
-1. Price distribution and premium listing outliers
-2. Price differences by room type
-3. Neighbourhood-level pricing patterns
-4. Host portfolio concentration
-5. Availability patterns
-6. Reviews and listing performance
-7. Temporal pricing trends, if supported by the source data
-8. Geographic patterns, if time permits
-
-Each major analytical result will follow:
-
-```text
-Finding → Business Meaning → Recommended Action
-```
-
----
-
-## Statistical Analysis
-
-Two focused hypotheses are planned.
-
-### Hypothesis 1
-
-**Do entire-home listings have significantly higher prices than private rooms?**
-
-### Hypothesis 2
-
-**Do superhost listings receive different or higher review scores than non-superhost listings?**
-
-The statistical workflow will include:
-
-- Null and alternative hypotheses
-- Sample-size review
-- Distribution assessment
-- Assumption checking
-- Statistical test selection
-- Test statistic
-- P-value
-- Effect size
-- Practical significance
-- Business interpretation
-- Limitations
-
----
-
-## Technology Stack
-
-| Area | Technology |
-|---|---|
-| Programming Language | Python |
-| Data Processing | Pandas, NumPy |
-| Large-File Analytics | DuckDB |
-| Data Storage | Parquet |
-| Statistical Testing | SciPy |
-| Visualization | Matplotlib, Seaborn |
-| Notebook Environment | Jupyter Notebook |
-| Configuration | YAML |
-| Version Control | Git & GitHub |
 
 ---
 
@@ -623,20 +624,26 @@ The statistical workflow will include:
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/PabodaFdo/airbnb-data-engineering-challenge.git
 cd airbnb-data-engineering-challenge
 ```
 
 ### 2. Create a virtual environment
 
 ```bash
-python -m venv venv
+python -m venv .venv
 ```
 
-Activate it on Windows:
+Windows:
 
 ```bash
-venv\Scripts\activate
+.venv\Scripts\activate
+```
+
+Git Bash:
+
+```bash
+source .venv/Scripts/activate
 ```
 
 ### 3. Install dependencies
@@ -645,9 +652,9 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 4. Download the Amsterdam dataset
+### 4. Add the Amsterdam source files
 
-Download the seven Amsterdam source files from the Inside Airbnb data portal and place them inside:
+Place the seven source files inside:
 
 ```text
 data/raw/amsterdam/
@@ -665,120 +672,78 @@ neighbourhoods.csv
 neighbourhoods.geojson
 ```
 
-The `.csv.gz` files should remain compressed.
-
----
-
-## Running the Pipeline
-
-The planned final execution command is:
+### 5. Run the complete pipeline
 
 ```bash
 python run_pipeline.py --city amsterdam
 ```
 
-The pipeline implementation is still in progress and this section will be updated as reusable engineering modules are completed.
+### 6. Run automated tests
 
----
-
-## Project Status
-
-### Current Stage
-
-- [x] Project scope defined
-- [x] Amsterdam selected as the primary city
-- [x] Seven Inside Airbnb datasets downloaded
-- [x] Initial repository structure created
-- [x] Dataset familiarization completed for all seven source files
-- [x] Missing-value analysis completed
-- [x] Duplicate analysis completed
-- [x] Candidate keys validated
-- [x] Cross-dataset relationships verified
-- [x] Dataset limitations documented
-- [x] Overall seven-dataset summary completed
-- [ ] Automated profiling module
-- [ ] Data quality validation
-- [ ] Data cleaning and standardization
-- [ ] Data enrichment
-- [ ] DuckDB analytical model
-- [ ] SQL analysis
-- [ ] Exploratory data analysis
-- [ ] Statistical hypothesis testing
-- [ ] Professional analytical report
-
-### Current Checkpoint
-
-```text
-✅ Dataset Familiarization Complete
-              ↓
-NEXT: Automated Data Profiling
-              ↓
-      Data Quality Validation
-              ↓
-     Cleaning & Standardization
-              ↓
-          Data Enrichment
+```bash
+python -m pytest tests/ -v
 ```
 
 ---
 
-## Engineering Decisions
+## Documentation
 
-Important architectural and analytical decisions are documented in:
+Detailed documentation is available under:
 
 ```text
-docs/decision_log.md
+docs/
 ```
 
-Key decisions include:
-
-- Why one city was selected
-- Why Pandas is used for smaller datasets
-- Why DuckDB is preferred for large-file analytics
-- Why Parquet is used for processed data
-- Why large raw tables are aggregated before joins
-- Why missing values require context-aware handling
-- Why availability is not treated as true occupancy
-- Why review count is not treated as exact booking count
-- Why the project is designed around an 8 GB RAM constraint
-- Why optional work is deferred until the core pipeline is complete
+- `assumptions.md` — assumptions, limitations, and interpretation rules
+- `decision_log.md` — major engineering decisions and trade-offs
+- `completed_work.md` — evidence-based summary of completed work
+- `incomplete_work.md` — optional work intentionally deferred
+- `ai_usage_disclosure.md` — transparent AI assistance disclosure
 
 ---
 
 ## Assumptions and Limitations
 
-The project explicitly recognizes the following limitations:
+Important limitations include:
 
-- Airbnb data is obtained through web scraping and may contain inconsistencies.
-- Availability does not necessarily represent true vacancy or verified occupancy.
-- Review count is an imperfect proxy for booking demand.
-- Revenue estimates do not represent actual host earnings unless directly supported.
-- Historical review activity may not perfectly align with current listing attributes.
-- Historical coverage may be incomplete.
-- Some listing fields contain substantial missingness.
-- The detailed listing dataset does not contain every listing from the summary population.
-- A single-city analysis cannot automatically be generalized to all Airbnb markets.
-- Statistical findings do not necessarily imply causation.
+- Airbnb source data may contain scraping inconsistencies.
+- Missing price does not mean zero price.
+- Calendar unavailability is not verified occupancy.
+- Review count is not booking count.
+- Detailed listings do not contain every canonical listing.
+- Repeated review dates are not automatically duplicates.
+- A single-city analysis cannot be generalized automatically to all markets.
+- Statistical findings do not prove causation.
+
+See:
+
+```text
+docs/assumptions.md
+```
+
+for the full set of assumptions and analytical caveats.
 
 ---
 
 ## AI Usage Disclosure
 
-AI-assisted work used during this project is transparently documented in:
+Generative AI was used as a support tool for planning, code review, debugging, statistical methodology guidance, testing, and documentation.
+
+AI-generated suggestions were not accepted automatically. Validation included:
+
+- Running the full pipeline locally
+- Checking row counts and unique keys
+- Reviewing missing values and warnings
+- Verifying processed Parquet outputs
+- Reconciling DuckDB warehouse counts
+- Reviewing statistical outputs
+- Running automated tests
+
+Full disclosure:
 
 ```text
 docs/ai_usage_disclosure.md
 ```
-
-The disclosure will include:
-
-- AI tools used
-- Areas where AI assistance was used
-- Important prompts
-- Validation methods
-- Modifications made to AI-generated suggestions
-
-All code, analytical outputs, statistical results, and interpretations will be validated against the actual project data.
 
 ---
 
@@ -789,14 +754,55 @@ Potential future improvements include:
 - Multi-city pipeline support
 - Automated schema harmonization
 - Incremental processing
-- More comprehensive automated data-quality testing
-- Additional statistical analyses
+- Advanced data-quality frameworks
+- Additional statistical hypotheses
 - Price prediction models
 - Streamlit dashboard
 - Workflow orchestration
 - Docker containerization
 - Cloud deployment
 - CI/CD
+- Advanced geospatial analysis
+
+These were intentionally deferred to protect the quality of the completed engineering core.
+
+---
+
+## Project Status
+
+### Completed
+
+```text
+✅ Dataset Familiarization
+✅ Automated Profiling
+✅ Data-Quality Validation
+✅ Critical Validation Gate
+✅ Cleaning and Standardization
+✅ Listing-Level Enrichment
+✅ Review and Calendar Aggregation
+✅ Processed Parquet Layer
+✅ DuckDB Analytical Warehouse
+✅ 8 Analytical SQL Queries
+✅ 10 EDA Visualizations
+✅ 2 Statistical Hypothesis Tests
+✅ End-to-End Pipeline
+✅ 13 Automated Tests
+✅ Assumptions Documentation
+✅ Engineering Decision Log
+✅ Completed Work Summary
+✅ Incomplete Work Summary
+✅ AI Usage Disclosure
+```
+
+### Remaining Submission Work
+
+```text
+⬜ Final Architecture Diagram
+⬜ Professional 20+ Page PDF Report
+⬜ Final Repository QA
+⬜ Merge dev → main
+⬜ Submit
+```
 
 ---
 
@@ -810,10 +816,16 @@ Sri Lanka Institute of Information Technology (SLIIT)
 
 ---
 
-## License and Data Attribution
-
-This repository contains original project code, engineering logic, documentation, and analysis.
+## Data Attribution
 
 The Airbnb datasets used in this project are sourced from **Inside Airbnb**, an independent public-data initiative.
 
 Raw dataset files are not included in this repository.
+
+---
+
+## Final Note
+
+This project demonstrates a reproducible, memory-aware, validated, and analytically useful data engineering workflow for the Amsterdam Airbnb market.
+
+> **The goal was not to maximize feature count, but to build a defensible submission with clear assumptions, reliable data processing, strong validation, transparent engineering decisions, reproducible outputs, focused analysis, and honest limitations.**
