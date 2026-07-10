@@ -1,0 +1,16 @@
+metric,value,notes
+detailed_listing_rows,10369,Number of one-row-per-listing records available from the cleaned detailed listing source.
+detailed_listing_selected_columns,29,"Number of detailed attributes retained for listing enrichment, including the source-availability flag."
+review_aggregate_rows,9432,Number of listings with at least one detailed review.
+total_detailed_reviews_aggregated,545162,Total detailed review events represented in the listing-level aggregate.
+calendar_aggregate_rows,10465,Number of listings represented in the one-row-per-listing calendar aggregate.
+total_calendar_rows_aggregated,3819725,Total daily calendar rows represented in the aggregate.
+listings_with_complete_365_day_calendar,10465,Listings with exactly 365 observed calendar rows.
+canonical_input_rows,10465,Canonical listing population before enrichment.
+detailed_listing_matches,10369,Canonical listings matched to the cleaned detailed source.
+summary_only_listings_preserved,96,Canonical listings without a detailed-source match. These rows remain in the enriched master.
+final_enriched_rows,10465,Final listing-level master row count. Must equal the canonical input population.
+final_enriched_columns,82,Number of analysis-ready fields in the enriched listing master.
+price_best_available_non_null,6471,"Listings with a usable price from the summary source first, falling back to the detailed source when summary price is missing."
+listings_with_review_history,9432,Listings with at least one detailed review event.
+listings_with_calendar_data,10465,Canonical listings with listing-level calendar aggregates.
