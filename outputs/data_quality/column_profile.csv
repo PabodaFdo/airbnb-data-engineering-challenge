@@ -115,14 +115,14 @@ detailed_listings,listings.csv.gz,reviews_per_month,float64,1023,9.8659,680.0,0.
 neighbourhoods_geojson,neighbourhoods.geojson,neighbourhood,str,0,0.0,22.0,,,Bijlmer-Oost | Oud-Noord | Noord-Oost,GeoJSON property or derived geometry type; lexical min/max not reported.
 neighbourhoods_geojson,neighbourhoods.geojson,neighbourhood_group,object,22,100.0,0.0,,,,GeoJSON property or derived geometry type; lexical min/max not reported.
 neighbourhoods_geojson,neighbourhoods.geojson,geometry_type,str,0,0.0,1.0,,,MultiPolygon,GeoJSON property or derived geometry type; lexical min/max not reported.
-calendar,calendar.csv.gz,listing_id,BIGINT,0,0.0,10465.0,28871,1708158632781004601,18017858 | 18172462 | 18248976,
-calendar,calendar.csv.gz,date,DATE,0,0.0,378.0,2026-06-15,2027-06-27,2026-06-23 | 2026-07-06 | 2026-07-09,
+calendar,calendar.csv.gz,listing_id,BIGINT,0,0.0,10465.0,28871,1708158632781004601,613088 | 741043 | 800723,
+calendar,calendar.csv.gz,date,DATE,0,0.0,378.0,2026-06-15,2027-06-27,2027-03-06 | 2027-03-29 | 2027-04-13,
 calendar,calendar.csv.gz,available,BOOLEAN,0,0.0,2.0,,,False | True,
-calendar,calendar.csv.gz,minimum_nights,BIGINT,0,0.0,56.0,1,800,15 | 31 | 180,
-calendar,calendar.csv.gz,maximum_nights,BIGINT,0,0.0,169.0,1,2147483647,11 | 16 | 26,
-detailed_reviews,reviews.csv.gz,listing_id,BIGINT,0,0.0,9432.0,28871,1704341300366137848,8168988 | 8181348 | 8201117,
-detailed_reviews,reviews.csv.gz,id,BIGINT,0,0.0,545162.0,79730,1717984606216649127,959327697120705951 | 962950389958303525 | 1013676607298240321,
-detailed_reviews,reviews.csv.gz,date,DATE,0,0.0,5327.0,2010-08-16,2026-06-28,2017-02-19 | 2017-04-13 | 2017-06-29,
-detailed_reviews,reviews.csv.gz,reviewer_id,BIGINT,0,0.0,523777.0,1,1711012061390045280,200181356 | 90405801 | 201112245,
-detailed_reviews,reviews.csv.gz,reviewer_name,VARCHAR,1,0.0002,72308.0,,,Colin | Mary Parker | Aurélie,
-detailed_reviews,reviews.csv.gz,comments,VARCHAR,0,0.0,,,,"Cannot recommend staying in this houseboat enough. It’s a lovely space and such a special way to spend time in the ci... | Juliette's place is wonderful. The apartment is spacious, very well equipped and decorated with a subtle, understated... | Definatelly is the best apartment that I have been in Amsterdam for these prices. It was full equiped with all we nee...",Exact distinct count skipped for high-cardinality free-text column.
+calendar,calendar.csv.gz,minimum_nights,BIGINT,0,0.0,56.0,1,800,11 | 26 | 55,
+calendar,calendar.csv.gz,maximum_nights,BIGINT,0,0.0,169.0,1,2147483647,37 | 35 | 326,
+detailed_reviews,reviews.csv.gz,listing_id,BIGINT,0,0.0,9432.0,28871,1704341300366137848,34559989 | 34561783 | 34581534,
+detailed_reviews,reviews.csv.gz,id,BIGINT,0,0.0,545162.0,79730,1717984606216649127,928775656234006160 | 972363018841870664 | 985416705731032621,
+detailed_reviews,reviews.csv.gz,date,DATE,0,0.0,5327.0,2010-08-16,2026-06-28,2021-05-24 | 2021-06-21 | 2024-10-19,
+detailed_reviews,reviews.csv.gz,reviewer_id,BIGINT,0,0.0,523777.0,1,1711012061390045280,75034330 | 271082519 | 13338931,
+detailed_reviews,reviews.csv.gz,reviewer_name,VARCHAR,1,0.0002,72308.0,,,Emmanuel | Kai | Marifer,
+detailed_reviews,reviews.csv.gz,comments,VARCHAR,0,0.0,,,,"Ollie was great host, accommodated special requests. was very friendly and helpful.. The Tiny Houseboot was a unique ... | Saubere Unterkunft. Sehr netter Gastgeber! | It was great place to stay. Olle was very kind and helpful, amazing location as well, it was close to everything.",Exact distinct count skipped for high-cardinality free-text column.
