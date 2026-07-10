@@ -1,0 +1,18 @@
+object_name,metric,value,expected_value,status,notes
+enriched_listing_master,row_count,10465,10465,PASS,Final master must preserve all canonical listings.
+enriched_listing_master,unique_listing_ids,10465,10465,PASS,Each canonical listing ID must appear exactly once.
+enriched_listing_master,null_listing_ids,0,0,PASS,Listing IDs must never be null.
+enriched_listing_master,duplicate_listing_id_rows,0,0,PASS,The final master must remain one row per listing.
+dim_listings,row_count,10465,10465,PASS,Listing dimension must preserve canonical grain.
+dim_listings,unique_listing_ids,10465,10465,PASS,Listing dimension key must be unique.
+dim_neighbourhoods,row_count,22,22,PASS,Amsterdam neighbourhood dimension should contain 22 rows.
+fact_review_activity,row_count,9432,9432,PASS,One row per listing with at least one detailed review.
+fact_review_activity,total_detailed_review_events,545162,545162,PASS,All detailed review events must reconcile to the source total.
+fact_review_activity,duplicate_listing_id_rows,0,0,PASS,Review fact table must remain one row per reviewed listing.
+fact_calendar_activity,row_count,10465,10465,PASS,Calendar fact table should contain one row per canonical listing.
+fact_calendar_activity,total_calendar_rows_represented,3819725,3819725,PASS,All source calendar rows must be represented.
+fact_calendar_activity,complete_365_day_windows,10465,10465,PASS,Each canonical listing should have a complete 365-day calendar window.
+fact_calendar_activity,duplicate_listing_id_rows,0,0,PASS,Calendar fact table must remain one row per listing.
+vw_neighbourhood_performance,row_count,22,> 0,PASS,Reusable analytical view must return at least one row.
+vw_room_type_performance,row_count,4,> 0,PASS,Reusable analytical view must return at least one row.
+vw_host_portfolio_performance,row_count,3,> 0,PASS,Reusable analytical view must return at least one row.
