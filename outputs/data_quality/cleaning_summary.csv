@@ -1,0 +1,74 @@
+dataset_name,column_name,action,affected_rows,notes
+listings.csv,price,currency_to_numeric,6471,Currency symbols and thousands separators were removed. Missing prices remain null. Original values are preserved in 'price_raw'.
+listings.csv,last_review,parse_datetime,9432,Non-null parseable date values were converted to datetime64[ns].
+listings.csv,neighbourhood,trim_category_whitespace,0,Leading and trailing whitespace was removed. Category meanings were otherwise preserved.
+listings.csv,neighbourhood_group,trim_category_whitespace,0,Leading and trailing whitespace was removed. Category meanings were otherwise preserved.
+listings.csv,room_type,trim_category_whitespace,0,Leading and trailing whitespace was removed. Category meanings were otherwise preserved.
+listings.csv,availability_365,convert_numeric,10465,Converted to nullable Int64.
+listings.csv,calculated_host_listings_count,convert_numeric,10369,Converted to nullable Int64.
+listings.csv,host_id,convert_numeric,10369,Converted to nullable Int64.
+listings.csv,id,convert_numeric,10465,Converted to nullable Int64.
+listings.csv,minimum_nights,convert_numeric,10462,Converted to nullable Int64.
+listings.csv,number_of_reviews,convert_numeric,10465,Converted to nullable Int64.
+listings.csv,number_of_reviews_ltm,convert_numeric,10465,Converted to nullable Int64.
+listings.csv,latitude,convert_numeric,10465,Converted to nullable Float64.
+listings.csv,longitude,convert_numeric,10465,Converted to nullable Float64.
+listings.csv,reviews_per_month,convert_numeric,9432,Converted to nullable Float64.
+listings.csv,*,row_count_preservation_check,0,"Row count preserved at 10,465. No canonical listings were dropped."
+listings.csv,*,column_count_report,1,Input columns: 19. Output columns: 20. The additional column is the preserved raw price field when price exists.
+listings.csv.gz,price,currency_to_numeric,6377,Currency symbols and thousands separators were removed. Missing prices remain null. Original values are preserved in 'price_raw'.
+listings.csv.gz,calendar_last_scraped,parse_datetime,10369,Non-null parseable date values were converted to datetime64[ns].
+listings.csv.gz,first_review,parse_datetime,9346,Non-null parseable date values were converted to datetime64[ns].
+listings.csv.gz,host_since,parse_datetime,0,Non-null parseable date values were converted to datetime64[ns].
+listings.csv.gz,last_review,parse_datetime,9346,Non-null parseable date values were converted to datetime64[ns].
+listings.csv.gz,last_scraped,parse_datetime,10369,Non-null parseable date values were converted to datetime64[ns].
+listings.csv.gz,host_response_time,trim_category_whitespace,0,Leading and trailing whitespace was removed. Category meanings were otherwise preserved.
+listings.csv.gz,neighbourhood,trim_category_whitespace,0,Leading and trailing whitespace was removed. Category meanings were otherwise preserved.
+listings.csv.gz,neighbourhood_cleansed,trim_category_whitespace,0,Leading and trailing whitespace was removed. Category meanings were otherwise preserved.
+listings.csv.gz,property_type,trim_category_whitespace,0,Leading and trailing whitespace was removed. Category meanings were otherwise preserved.
+listings.csv.gz,room_type,trim_category_whitespace,0,Leading and trailing whitespace was removed. Category meanings were otherwise preserved.
+listings.csv.gz,has_availability,normalize_boolean,10233,Common Airbnb Boolean representations were converted to Pandas nullable Boolean values.
+listings.csv.gz,host_has_profile_pic,normalize_boolean,10227,Common Airbnb Boolean representations were converted to Pandas nullable Boolean values.
+listings.csv.gz,host_identity_verified,normalize_boolean,10227,Common Airbnb Boolean representations were converted to Pandas nullable Boolean values.
+listings.csv.gz,host_is_superhost,normalize_boolean,10227,Common Airbnb Boolean representations were converted to Pandas nullable Boolean values.
+listings.csv.gz,instant_bookable,normalize_boolean,0,Common Airbnb Boolean representations were converted to Pandas nullable Boolean values.
+listings.csv.gz,host_acceptance_rate,percentage_to_numeric,0,Percentage strings were converted to numeric percentage points on a 0-100 scale.
+listings.csv.gz,host_response_rate,percentage_to_numeric,0,Percentage strings were converted to numeric percentage points on a 0-100 scale.
+listings.csv.gz,accommodates,convert_numeric,10369,Converted to nullable Int64.
+listings.csv.gz,availability_30,convert_numeric,10369,Converted to nullable Int64.
+listings.csv.gz,availability_365,convert_numeric,10369,Converted to nullable Int64.
+listings.csv.gz,availability_60,convert_numeric,10369,Converted to nullable Int64.
+listings.csv.gz,availability_90,convert_numeric,10369,Converted to nullable Int64.
+listings.csv.gz,bedrooms,convert_numeric,9219,Converted to nullable Int64.
+listings.csv.gz,beds,convert_numeric,5717,Converted to nullable Int64.
+listings.csv.gz,calculated_host_listings_count,convert_numeric,10369,Converted to nullable Int64.
+listings.csv.gz,calculated_host_listings_count_entire_homes,convert_numeric,10369,Converted to nullable Int64.
+listings.csv.gz,calculated_host_listings_count_private_rooms,convert_numeric,10369,Converted to nullable Int64.
+listings.csv.gz,calculated_host_listings_count_shared_rooms,convert_numeric,10369,Converted to nullable Int64.
+listings.csv.gz,host_id,convert_numeric,10369,Converted to nullable Int64.
+listings.csv.gz,host_listings_count,convert_numeric,10227,Converted to nullable Int64.
+listings.csv.gz,host_total_listings_count,convert_numeric,0,Converted to nullable Float64.
+listings.csv.gz,id,convert_numeric,10369,Converted to nullable Int64.
+listings.csv.gz,maximum_maximum_nights,convert_numeric,10366,Converted to nullable Int64.
+listings.csv.gz,maximum_minimum_nights,convert_numeric,10366,Converted to nullable Int64.
+listings.csv.gz,maximum_nights,convert_numeric,10366,Converted to nullable Int64.
+listings.csv.gz,minimum_maximum_nights,convert_numeric,10366,Converted to nullable Int64.
+listings.csv.gz,minimum_minimum_nights,convert_numeric,10366,Converted to nullable Int64.
+listings.csv.gz,minimum_nights,convert_numeric,10366,Converted to nullable Int64.
+listings.csv.gz,number_of_reviews,convert_numeric,10369,Converted to nullable Int64.
+listings.csv.gz,number_of_reviews_l30d,convert_numeric,10369,Converted to nullable Int64.
+listings.csv.gz,number_of_reviews_ltm,convert_numeric,10369,Converted to nullable Int64.
+listings.csv.gz,scrape_id,convert_numeric,10369,Converted to nullable Int64.
+listings.csv.gz,bathrooms,convert_numeric,5413,Converted to nullable Float64.
+listings.csv.gz,latitude,convert_numeric,10369,Converted to nullable Float64.
+listings.csv.gz,longitude,convert_numeric,10369,Converted to nullable Float64.
+listings.csv.gz,review_scores_accuracy,convert_numeric,9346,Converted to nullable Float64.
+listings.csv.gz,review_scores_checkin,convert_numeric,9346,Converted to nullable Float64.
+listings.csv.gz,review_scores_cleanliness,convert_numeric,9345,Converted to nullable Float64.
+listings.csv.gz,review_scores_communication,convert_numeric,9346,Converted to nullable Float64.
+listings.csv.gz,review_scores_location,convert_numeric,9346,Converted to nullable Float64.
+listings.csv.gz,review_scores_rating,convert_numeric,9346,Converted to nullable Float64.
+listings.csv.gz,review_scores_value,convert_numeric,9346,Converted to nullable Float64.
+listings.csv.gz,reviews_per_month,convert_numeric,9346,Converted to nullable Float64.
+listings.csv.gz,*,row_count_preservation_check,0,"Row count preserved at 10,369. No detailed listing records were dropped."
+listings.csv.gz,*,column_count_report,1,Input columns: 90. Output columns: 91. The additional column is the preserved raw price field when price exists.
