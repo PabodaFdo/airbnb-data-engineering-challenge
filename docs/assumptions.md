@@ -1,5 +1,9 @@
 # Assumptions and Analytical Caveats
 
+> **Project:** Amsterdam Airbnb Data Engineering Challenge  
+> **Scope:** Amsterdam, Netherlands  
+> **Purpose:** Transparent documentation of assumptions, limitations, and interpretation rules.
+
 ## Purpose
 
 This document records the key assumptions, interpretation rules, and analytical caveats used throughout the Amsterdam Airbnb Data Engineering Challenge.
@@ -151,12 +155,13 @@ For example:
 
 ```text
 "$1,250.00" → 1250.00
+```
 
 The original price representation is preserved where appropriate so that transformations remain traceable.
 
 Invalid or missing price values are not automatically converted to zero.
 
-8. Calendar Availability Is Not True Occupancy
+## 8. Calendar Availability Is Not True Occupancy
 
 The Airbnb calendar dataset indicates whether a date is marked as available or unavailable.
 
@@ -164,30 +169,32 @@ An unavailable date does not necessarily prove that the property was booked.
 
 A date may be unavailable because of:
 
-A confirmed booking.
-Host blocking.
-Maintenance.
-Personal use.
-Regulatory restrictions.
-Calendar-management decisions.
-Other unknown causes.
+- A confirmed booking
+- Host blocking
+- Maintenance
+- Personal use
+- Regulatory restrictions
+- Calendar-management decisions
+- Other unknown causes
 
 Therefore, the derived field:
 
+```text
 unavailability_rate_proxy
+```
 
 is explicitly treated only as an availability-based proxy.
 
 It must not be described as:
 
-True occupancy.
-Verified booked nights.
-Confirmed demand.
-Actual reservation rate.
+- True occupancy
+- Verified booked nights
+- Confirmed demand
+- Actual reservation rate
 
 No actual occupancy claim is made from calendar availability alone.
 
-9. Review Counts Are Not Booking Counts
+## 9. Review Counts Are Not Booking Counts
 
 The review datasets contain review events, not complete reservation records.
 
@@ -195,17 +202,19 @@ Not every guest necessarily leaves a review.
 
 Therefore:
 
-Review count is not treated as actual booking count.
-Review frequency is not treated as verified booking frequency.
-High review activity may suggest stronger guest activity, but it remains an imperfect proxy.
+- Review count is not treated as actual booking count.
+- Review frequency is not treated as verified booking frequency.
+- High review activity may suggest stronger guest activity, but it remains an imperfect proxy.
 
 No revenue or booking conclusions are derived solely from review counts.
 
-10. Repeated Review Dates Are Not Automatically Duplicates
+## 10. Repeated Review Dates Are Not Automatically Duplicates
 
 The summary reviews dataset contains repeated:
 
+```text
 (listing_id, date)
+```
 
 combinations.
 
@@ -221,10 +230,10 @@ Because the summary review dataset contains only listing ID and review date, sep
 
 Therefore:
 
-Repeated (listing_id, date) rows are not blindly deleted.
-The detailed reviews dataset is used when individual review-event identity is required.
-Only true duplicate review-event identifiers should be treated as duplicate events.
-11. Missing Reviewer Names
+- Repeated `(listing_id, date)` rows are not blindly deleted.
+- The detailed reviews dataset is used when individual review-event identity is required.
+- Only true duplicate review-event identifiers should be treated as duplicate events.
+## 11. Missing Reviewer Names
 
 The detailed reviews dataset contains:
 
@@ -236,7 +245,7 @@ A missing reviewer name does not invalidate the review event when the review its
 
 Therefore, the review event is preserved.
 
-12. Empty neighbourhood_group Field
+## 12. Empty neighbourhood_group Field
 
 The Amsterdam neighbourhood metadata contains:
 
@@ -246,13 +255,13 @@ The field is therefore considered unavailable for meaningful analysis in this da
 
 The project does not:
 
-Fabricate neighbourhood groups.
-Replace missing values with invented classifications.
-Use the empty field for analytical conclusions.
+- Fabricate neighbourhood groups
+- Replace missing values with invented classifications
+- Use the empty field for analytical conclusions
 
 Neighbourhood-level analysis instead uses the available neighbourhood identifiers and names.
 
-13. Geographic Validation
+## 13. Geographic Validation
 
 Latitude and longitude fields are treated as geographic coordinates and validated against valid geographic ranges.
 
@@ -260,26 +269,28 @@ The project assumes that syntactically valid coordinates are suitable for listin
 
 A valid coordinate does not independently guarantee perfect physical-location accuracy because source data may contain rounding, privacy adjustments, or scraping inconsistencies.
 
-14. Summary and Detailed Source Differences
+## 14. Summary and Detailed Source Differences
 
 Summary and detailed Airbnb files are treated as related but distinct source extracts.
 
 Differences in:
 
-Row counts.
-Missingness.
-Attribute coverage.
-Listing coverage.
+- Row counts
+- Missingness
+- Attribute coverage
+- Listing coverage
 
 are not automatically treated as pipeline errors.
 
 The pipeline preserves these differences and documents them rather than forcing artificial equality between source files.
 
-15. Missing Values Are Handled Contextually
+## 15. Missing Values Are Handled Contextually
 
 The project does not apply a universal rule such as:
 
+```python
 df.fillna(0)
+```
 
 to all missing values.
 
@@ -292,7 +303,7 @@ Missing review score → preserve as null; do not interpret as zero.
 Missing host ID → preserve listing but limit host-level analysis.
 Missing review activity after a valid left join may be represented as zero only when the absence of matching review events supports that interpretation.
 Completely unavailable source fields are documented rather than artificially populated.
-16. Host Portfolio Segmentation
+## 16. Host Portfolio Segmentation
 
 Host portfolio segments are derived from the available host listing-count information.
 
@@ -306,22 +317,22 @@ These categories are analytical segments created for this project.
 
 The term large/professional host is a descriptive analytical label based on listing count and does not independently prove that a host operates as a legally registered business or professional company.
 
-17. Statistical Significance Does Not Equal Practical Importance
+## 17. Statistical Significance Does Not Equal Practical Importance
 
 Statistical hypothesis tests are interpreted using:
 
-Test statistic.
-P-value.
-Effect size.
-Sample size.
-Distribution characteristics.
-Business context.
+- Test statistic
+- P-value
+- Effect size
+- Sample size
+- Distribution characteristics
+- Business context
 
 A statistically significant result is not automatically considered practically important.
 
 Effect sizes and observed group differences are considered before making business interpretations.
 
-18. Statistical Results Do Not Prove Causation
+## 18. Statistical Results Do Not Prove Causation
 
 The analyses use observational Airbnb data.
 
@@ -331,17 +342,17 @@ For example, a difference between superhost and non-superhost review scores does
 
 Other factors may contribute, including:
 
-Property type.
-Location.
-Price.
-Host experience.
-Listing quality.
-Guest expectations.
-Review-selection behavior.
+- Property type
+- Location
+- Price
+- Host experience
+- Listing quality
+- Guest expectations
+- Review-selection behavior
 
 All statistical findings are interpreted as associations or observed differences unless causal evidence exists.
 
-19. Neighbourhood Comparisons Require Adequate Sample Size
+## 19. Neighbourhood Comparisons Require Adequate Sample Size
 
 Neighbourhood rankings can become misleading when based on very small numbers of listings.
 
@@ -351,7 +362,7 @@ Any threshold used must be explicitly stated in the relevant SQL query, chart, n
 
 A neighbourhood with very few listings should not automatically be presented as the city's highest-priced or best-performing market.
 
-20. Outliers Are Not Automatically Removed
+## 20. Outliers Are Not Automatically Removed
 
 Extreme prices, availability values, review counts, or other unusual observations are first treated as potential genuine source observations.
 
@@ -359,111 +370,113 @@ Outliers are not removed solely because they are statistically extreme.
 
 When exclusion is required for a particular visualization or statistical method:
 
-The rule must be stated.
-The original data must remain preserved.
-The analytical reason must be documented.
+- The rule must be stated.
+- The original data must remain preserved.
+- The analytical reason must be documented.
 
 For example, a price distribution may be visualized both with and without extreme upper outliers to improve interpretability without deleting those records from the source or processed datasets.
 
-21. 8 GB RAM Constraint
+## 21. 8 GB RAM Constraint
 
 The project is intentionally designed to run on an 8 GB RAM Windows laptop.
 
 The following processing strategy is therefore assumed:
 
-Pandas for small and medium datasets.
-DuckDB for larger calendar and detailed review datasets.
-One large processing stage at a time.
-Listing-level aggregation before joins.
-Parquet for efficient processed outputs.
-Compact analytical extracts for visualization.
-Memory cleanup between major stages where appropriate.
+- Pandas for small and medium datasets
+- DuckDB for larger calendar and detailed review datasets
+- One large processing stage at a time
+- Listing-level aggregation before joins
+- Parquet for efficient processed outputs
+- Compact analytical extracts for visualization
+- Memory cleanup between major stages where appropriate
 
 This hardware constraint is treated as an engineering design consideration rather than a reason to reduce data-quality standards.
 
-22. Warehouse Grain and Reconciliation
+## 22. Warehouse Grain and Reconciliation
 
 The DuckDB analytical warehouse preserves the canonical listing grain of:
 
-10,465 listings
+**10,465 listings**
 
 The warehouse also reconciles:
 
-545,162 review events
-3,819,725 calendar rows
+- **545,162 review events**
+- **3,819,725 calendar rows**
 
 Warehouse validation is used to verify row-level reconciliation and structural integrity.
 
 The analytical warehouse is designed for analysis and reporting rather than transactional workloads.
 
-23. Validation Warnings Do Not Automatically Block Processing
+## 23. Validation Warnings Do Not Automatically Block Processing
 
 The automated validation stage produced:
 
-83 PASS
-7 WARNING
-0 FAIL
+| Status | Count |
+|---|---:|
+| PASS | 83 |
+| WARNING | 7 |
+| FAIL | 0 |
 
 Warnings represent source-data limitations, coverage differences, or conditions requiring interpretation.
 
 A warning is allowed to continue through the pipeline when:
 
-The issue does not invalidate the record.
-The limitation is understood.
-The affected data is preserved appropriately.
-The condition is documented.
+- The issue does not invalidate the record.
+- The limitation is understood.
+- The affected data is preserved appropriately.
+- The condition is documented.
 
 Critical FAIL results would block downstream processing through the validation gate.
 
-24. Business Recommendations Must Be Evidence-Based
+## 24. Business Recommendations Must Be Evidence-Based
 
 Business recommendations are derived only from actual:
 
-EDA findings.
-SQL analysis.
-Statistical results.
-Validated source data.
+- EDA findings
+- SQL analysis
+- Statistical results
+- Validated source data
 
 Recommendations are not created before examining the underlying analytical results.
 
 The project avoids presenting unsupported assumptions as established facts.
 
-25. No Cross-City Generalization
+## 25. No Cross-City Generalization
 
 Because the project analyzes Amsterdam only:
 
 Results should be interpreted within the Amsterdam market context.
 No direct assumptions are made about pricing, host behavior, availability, review activity, or neighbourhood patterns in other cities.
 Multi-city comparison is considered a future extension rather than an implicit feature of the current analysis.
-26. No Machine Learning Assumption
+## 26. No Machine Learning Assumption
 
 No machine-learning model is required for the core analytical conclusions in this project.
 
 The project prioritizes:
 
-Data engineering.
-Data quality.
-Reproducibility.
-SQL analytics.
-EDA.
-Statistical testing.
-Business interpretation.
+- Data engineering
+- Data quality
+- Reproducibility
+- SQL analytics
+- EDA
+- Statistical testing
+- Business interpretation
 
 Any future predictive model would require additional feature validation, evaluation design, leakage checks, and appropriate performance metrics.
 
-Summary
+# Summary
 
 The central principles used throughout this project are:
 
-Preserve the full canonical listing population whenever possible.
-Never fabricate missing values without evidence.
-Never interpret missing price as zero.
-Never describe calendar unavailability as verified occupancy.
-Never treat reviews as complete booking records.
-Never blindly delete repeated rows without understanding dataset grain.
-Aggregate one-to-many datasets before joining to the listing master.
-Preserve raw source data unchanged.
-Treat statistical significance and practical importance separately.
-Avoid causal claims from observational data.
-Document source limitations transparently.
+1. Preserve the full canonical listing population whenever possible.
+2. Never fabricate missing values without evidence.
+3. Never interpret missing price as zero.
+4. Never describe calendar unavailability as verified occupancy.
+5. Never treat reviews as complete booking records.
+6. Never blindly delete repeated rows without understanding dataset grain.
+7. Aggregate one-to-many datasets before joining to the listing master.
+8. Preserve raw source data unchanged.
+9. Treat statistical significance and practical importance separately.
+10. Avoid causal claims from observational data.
+11. Document source limitations transparently.
 Prefer reproducible and defensible engineering decisions over artificial completeness.
