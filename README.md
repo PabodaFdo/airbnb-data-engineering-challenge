@@ -1,7 +1,40 @@
-# Amsterdam Airbnb Data Engineering & Analytics Challenge
+<h1 align="center">Amsterdam Airbnb Data Engineering & Analytics Challenge</h1>
 
-> **End-to-end Data Engineering, Analytics, Statistics, and focused Machine Learning project using Inside Airbnb data for Amsterdam, Netherlands.**  
-> Built with **Python, Pandas, DuckDB, Parquet, SciPy, Scikit-learn, Matplotlib, Seaborn, Pytest, Jupyter, and GitHub Actions**.
+<p align="center">
+  <a href="https://git.io/typing-svg">
+    <img
+      src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1200&color=006466&center=true&vCenter=true&width=950&lines=End-to-End+Data+Engineering+Pipeline;Automated+Profiling+%26+Data+Quality+Validation;DuckDB+Analytical+Warehouse+%26+Parquet+Layer;EDA+%2B+Statistical+Hypothesis+Testing;Focused+Machine+Learning+Price+Prediction;Built+for+an+8+GB+RAM+Windows+Environment"
+      alt="Typing SVG"
+    />
+  </a>
+</p>
+
+<p align="center">
+  <strong>
+    A reproducible, memory-aware Data Engineering, Analytics, Statistics,
+    and focused Machine Learning project using Amsterdam Inside Airbnb data.
+  </strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Data%20Quality-83%20PASS%20%7C%207%20WARNING%20%7C%200%20FAIL-006466?style=for-the-badge" alt="Data Quality">
+  <img src="https://img.shields.io/badge/Warehouse%20Validation-17%20PASS%20%7C%200%20FAIL-006466?style=for-the-badge" alt="Warehouse Validation">
+  <img src="https://img.shields.io/badge/Tests-13%20Passed-006466?style=for-the-badge" alt="Tests">
+</p>
+
+<p align="center">
+  <a href="https://github.com/PabodaFdo/airbnb-data-engineering-challenge/actions/workflows/ci.yml">
+    <img src="https://github.com/PabodaFdo/airbnb-data-engineering-challenge/actions/workflows/ci.yml/badge.svg?branch=dev" alt="CI">
+  </a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.13-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/DuckDB-Analytics-FFF000?style=flat-square&logo=duckdb&logoColor=black" alt="DuckDB">
+  <img src="https://img.shields.io/badge/Pandas-Data%20Processing-150458?style=flat-square&logo=pandas&logoColor=white" alt="Pandas">
+  <img src="https://img.shields.io/badge/scikit--learn-ML-F7931E?style=flat-square&logo=scikitlearn&logoColor=white" alt="Scikit-learn">
+  <img src="https://img.shields.io/badge/GitHub%20Actions-CI-2088FF?style=flat-square&logo=githubactions&logoColor=white" alt="GitHub Actions">
+</p>
 
 ---
 
@@ -341,7 +374,7 @@ Validation areas include:
 - Missing metadata
 - Repeated review rows
 
-### Final validation result
+### Final Validation Result
 
 | Status | Count |
 |---|---:|

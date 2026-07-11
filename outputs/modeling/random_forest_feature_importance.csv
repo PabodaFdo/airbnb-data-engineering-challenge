@@ -1,0 +1,82 @@
+rank,feature,importance
+1,bedrooms,0.27135285372816104
+2,room_type_Entire home/apt,0.15967123344957376
+3,longitude,0.08369595293531452
+4,minimum_nights,0.06355389360278997
+5,latitude,0.062254163657972074
+6,accommodates,0.0553403144784984
+7,reviews_per_month,0.03507883275477747
+8,bathrooms,0.03314625276429056
+9,availability_365,0.027541625980349798
+10,unavailability_rate_proxy,0.02683996323172465
+11,review_scores_rating,0.026719832025387698
+12,number_of_reviews_ltm,0.024383927676062372
+13,review_events_per_active_year,0.02016303290657914
+14,neighbourhood_Centrum-West,0.017816795721330124
+15,maximum_nights,0.012683465564575438
+16,detailed_review_count,0.009459578114989127
+17,number_of_reviews,0.00937370929059114
+18,calculated_host_listings_count,0.00750953364138528
+19,room_type_Shared room,0.007232123843350968
+20,beds,0.00695260273654027
+21,room_type_Private room,0.004481307567716099
+22,host_is_superhost_True,0.004415521361122295
+23,host_portfolio_segment_Small multi-listing host (2-5),0.002643680810915242
+24,host_portfolio_segment_Single-listing host,0.002550357939367131
+25,detailed_property_type_Entire rental unit,0.0025149250333107113
+26,neighbourhood_Centrum-Oost,0.0023054121653604954
+27,host_is_superhost_False,0.0017682300374621796
+28,detailed_property_type_Entire home,0.0016552968931827275
+29,detailed_property_type_Entire condo,0.001298518881615895
+30,neighbourhood_Zuid,0.0012364686098359533
+31,host_portfolio_segment_Large/professional host (6+),0.0011210367572198406
+32,neighbourhood_De Baarsjes - Oud-West,0.001000852342360299
+33,neighbourhood_Westerpark,0.0009928678182849742
+34,detailed_property_type_Private room in rental unit,0.0007713037527612932
+35,neighbourhood_Oostelijk Havengebied - Indische Buurt,0.0007297100133948556
+36,neighbourhood_De Pijp - Rivierenbuurt,0.0006046849196334881
+37,detailed_property_type_Boat,0.0005676896531675195
+38,neighbourhood_Noord-West,0.0005427061528275896
+39,detailed_property_type_Private room in bed and breakfast,0.000532036103674111
+40,host_identity_verified_True,0.0005079294987283181
+41,detailed_property_type_Room in hotel,0.0004967476940863279
+42,host_is_superhost_Missing,0.0004764442970086582
+43,neighbourhood_Oud-Noord,0.000462605837341369
+44,neighbourhood_Oud-Oost,0.0004597755986673907
+45,host_identity_verified_Missing,0.0004311004570337959
+46,neighbourhood_Noord-Oost,0.00041594471667159583
+47,detailed_property_type_Entire loft,0.0003997323314114359
+48,detailed_property_type_Houseboat,0.0003840359496058311
+49,detailed_property_type_Private room in houseboat,0.0003062860814884699
+50,detailed_property_type_Room in boutique hotel,0.0002943145026590172
+51,detailed_property_type_Private room in condo,0.00029001696687128034
+52,neighbourhood_Watergraafsmeer,0.0002197894568128605
+53,host_portfolio_segment_Missing,0.00021883486656487885
+54,detailed_property_type_Missing,0.0002083761365375817
+55,neighbourhood_Bos en Lommer,0.00019816314061663946
+56,detailed_property_type_Private room in boat,0.0001753131660671165
+57,neighbourhood_Bijlmer-Centrum,0.00016728089588755488
+58,neighbourhood_Buitenveldert - Zuidas,0.0001552222156721476
+59,neighbourhood_IJburg - Zeeburgereiland,0.0001249623189902461
+60,detailed_property_type_Private room in home,0.00012435312427738402
+61,detailed_property_type_Private room in townhouse,0.00011914326153130453
+62,neighbourhood_Slotervaart,0.00010611996168356834
+63,detailed_property_type_infrequent_sklearn,9.90461590460217e-05
+64,neighbourhood_Geuzenveld - Slotermeer,9.397481202256431e-05
+65,detailed_property_type_Entire townhouse,9.263982193763741e-05
+66,neighbourhood_Osdorp,7.52013124500008e-05
+67,detailed_property_type_Entire guest suite,6.433273194784576e-05
+68,host_identity_verified_False,5.315551198494726e-05
+69,neighbourhood_De Aker - Nieuw Sloten,5.158273816280895e-05
+70,detailed_property_type_Private room in guesthouse,5.087420743709542e-05
+71,neighbourhood_Bijlmer-Oost,4.8274031984081405e-05
+72,detailed_property_type_Shared room in hotel,2.5610002791785504e-05
+73,detailed_property_type_Entire guesthouse,2.1814370357521833e-05
+74,detailed_property_type_Private room in guest suite,2.0557912218689194e-05
+75,detailed_property_type_Entire serviced apartment,1.996677880061599e-05
+76,room_type_Hotel room,1.4043093840373842e-05
+77,detailed_property_type_Private room in loft,9.99316611938665e-06
+78,neighbourhood_Gaasperdam - Driemond,7.753834633837197e-06
+79,detailed_property_type_Tiny home,6.2218284282723834e-06
+80,detailed_property_type_Room in aparthotel,1.7029216524598508e-07
+81,detailed_property_type_Private room in serviced apartment,0.0
