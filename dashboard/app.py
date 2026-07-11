@@ -68,7 +68,7 @@ from dashboard.data_loader import (  # noqa: E402
 
 ARCHITECTURE_IMAGE_PATH = (
     PROJECT_ROOT
-    / "doc"
+    / "docs"
     / "architecture_diagram.png"
 )
 
