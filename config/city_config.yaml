@@ -6,10 +6,10 @@ city:
 paths:
   raw_data: data/raw/amsterdam
   processed_data: data/processed
+  warehouse: data/warehouse
   data_quality_outputs: outputs/data_quality
-  figures: outputs/figures
-  tables: outputs/tables
-  database: outputs/database
+  eda_outputs: outputs/eda
+  statistics_outputs: outputs/statistics
 
 files:
   detailed_listings: listings.csv.gz
