@@ -1,13 +1,13 @@
 # Amsterdam Airbnb Data Engineering & Analytics Challenge
 
-> **End-to-end Data Engineering and Analytics project using Inside Airbnb data for Amsterdam, Netherlands.**  
-> Built with **Python, Pandas, DuckDB, Parquet, SciPy, Matplotlib, Seaborn, Pytest, and Jupyter**.
+> **End-to-end Data Engineering, Analytics, Statistics, and focused Machine Learning project using Inside Airbnb data for Amsterdam, Netherlands.**  
+> Built with **Python, Pandas, DuckDB, Parquet, SciPy, Scikit-learn, Matplotlib, Seaborn, Pytest, Jupyter, and GitHub Actions**.
 
 ---
 
 ## Project Overview
 
-This project transforms raw Airbnb data into reliable, analysis-ready datasets through a complete and reproducible workflow:
+This project transforms raw Airbnb source data into reliable, analysis-ready datasets through a complete, validated, and reproducible workflow.
 
 ```text
 Raw Source Files
@@ -30,10 +30,52 @@ DuckDB Analytical Warehouse
         ↓
 SQL Analysis + EDA + Statistical Testing
         ↓
+Focused Price-Prediction Experiment
+        ↓
 Business Findings & Recommendations
 ```
 
-The project follows a **one-city, depth-first strategy** and prioritizes data quality, reproducibility, memory-aware processing, analytical depth, statistical reasoning, and clear business interpretation.
+The project follows a **one-city, depth-first strategy** and prioritizes data quality, reproducibility, memory-aware processing, analytical depth, statistical reasoning, focused predictive experimentation, automated testing, continuous integration, and clear business interpretation.
+
+---
+
+## Architecture
+
+<p align="center">
+  <img src="docs/images/amsterdam_airbnb_data_pipeline_architecture.png" alt="Amsterdam Airbnb Data Engineering Architecture" width="900">
+</p>
+
+<p align="center">
+  <em>Figure 1. Amsterdam Airbnb Data Engineering Architecture</em>
+</p>
+
+The architecture follows a staged data-engineering workflow:
+
+```text
+Inside Airbnb Public Data
+        ↓
+Raw Data Layer
+        ↓
+Raw Input Verification
+        ↓
+Automated Profiling
+        ↓
+Data-Quality Validation
+        ↓
+Critical Validation Gate
+        ↓
+Cleaning & Standardization
+        ↓
+Listing-Level Enrichment
+        ↓
+Processed Parquet Layer
+        ↓
+DuckDB Analytical Warehouse
+        ↓
+SQL + EDA + Statistics + Machine Learning
+        ↓
+Business Findings & Final Report
+```
 
 ---
 
@@ -50,9 +92,16 @@ The project follows a **one-city, depth-first strategy** and prioritizes data qu
 | Data-quality validation | **83 PASS / 7 WARNING / 0 FAIL** |
 | Warehouse validation | **17 PASS / 0 FAIL** |
 | Automated tests | **13 passed / 0 failed** |
+| GitHub Actions CI | **Passing** |
+| Analytical SQL queries | **8** |
 | EDA visualizations | **10** |
 | Statistical hypotheses | **2** |
-| Latest full pipeline runtime | **45.49 seconds** |
+| Price-prediction models compared | **3** |
+| Best predictive model | **Random Forest Regressor** |
+| Best model MAE | **€78.61** |
+| Best model RMSE | **€133.76** |
+| Best model R² | **0.5884** |
+| Full pipeline runtime | **Approximately 1–2 minutes on the local 8 GB RAM Windows environment** |
 
 ---
 
@@ -72,7 +121,11 @@ The main objectives are to:
 - Build a lightweight DuckDB analytical warehouse.
 - Write business-oriented analytical SQL queries.
 - Perform focused exploratory data analysis.
-- Complete two statistical hypothesis tests.
+- Complete two statistically rigorous hypothesis tests.
+- Conduct a focused price-prediction experiment using the enriched listing-level dataset.
+- Compare a Dummy Regressor baseline, Ridge Regression, and Random Forest Regressor.
+- Evaluate predictive performance using MAE, RMSE, and R².
+- Interpret Random Forest feature importance and actual-vs-predicted behavior.
 - Translate technical results into business insights and recommendations.
 
 ---
@@ -237,18 +290,7 @@ The pipeline executes seven stages:
 7. DuckDB Analytical Warehouse
 ```
 
-### Latest successful pipeline run
-
-| Stage | Time |
-|---|---:|
-| Verify Raw Source Files | 0.01 s |
-| Automated Dataset Profiling | 18.75 s |
-| Data-Quality Validation | 21.98 s |
-| Critical Validation Gate | 0.13 s |
-| Cleaning and Standardization | 1.56 s |
-| Data Enrichment | 2.65 s |
-| DuckDB Analytical Warehouse | 0.41 s |
-| **Total** | **45.49 s** |
+The complete workflow has successfully run on the target **8 GB RAM Windows environment** in approximately **1–2 minutes**, depending on system conditions and disk caching.
 
 ---
 
@@ -416,7 +458,7 @@ The strategy includes:
 | `listings.csv` | Pandas |
 | `reviews.csv` | Pandas |
 | `listings.csv.gz` | Pandas |
-| `neighbourhoods.geojson` | JSON / optional GeoPandas |
+| `neighbourhoods.geojson` | JSON / optional geospatial processing |
 | `calendar.csv.gz` | DuckDB |
 | `reviews.csv.gz` | DuckDB |
 
@@ -436,7 +478,7 @@ Warehouse path:
 data/warehouse/airbnb_analytics.duckdb
 ```
 
-### Main analytical structures
+### Main Analytical Structures
 
 ```text
 enriched_listing_master
@@ -446,7 +488,7 @@ fact_review_activity
 fact_calendar_activity
 ```
 
-### Analytical views
+### Analytical Views
 
 ```text
 vw_neighbourhood_performance
@@ -454,7 +496,7 @@ vw_room_type_performance
 vw_host_portfolio_performance
 ```
 
-### Warehouse reconciliation
+### Warehouse Reconciliation
 
 | Metric | Result |
 |---|---:|
@@ -462,7 +504,7 @@ vw_host_portfolio_performance
 | Review events | **545,162** |
 | Calendar rows | **3,819,725** |
 
-### Warehouse validation
+### Warehouse Validation
 
 | Status | Count |
 |---|---:|
@@ -515,35 +557,238 @@ The final report prioritizes the strongest figures using:
 Finding → Business Meaning → Recommended Action
 ```
 
+### Important EDA Findings
+
+- Supply is concentrated in a relatively small group of neighbourhoods.
+- Entire-home listings command substantially higher prices than private rooms.
+- Prices are strongly right-skewed and include extreme premium listings.
+- Property size and accommodation capacity are materially related to price.
+- Calendar unavailability is useful only as a proxy and is not treated as verified occupancy.
+- Review activity is not treated as verified booking demand.
+
 ---
 
 ## Statistical Analysis
 
 Two focused statistical hypotheses were completed.
 
-### Hypothesis 1
+### Hypothesis 1 — Entire Homes vs Private Rooms
 
-**Do entire-home listings have significantly different or higher prices than private-room listings?**
+**Question:** Do entire-home listings command higher prices than private-room listings?
 
-### Hypothesis 2
+Key results:
 
-**Do superhost listings achieve different or higher review scores than non-superhost listings?**
+- Entire home/apt: **n = 4,771**, median price **€331**
+- Private room: **n = 1,653**, median price **€171**
+- Mann-Whitney U statistic: **6,692,891.0**
+- **p < 0.001**
+- Rank-biserial effect size: **0.697**
 
-The statistical workflow includes:
+**Conclusion:** Entire homes have a statistically significant and practically large price premium over private rooms.
 
-- Null and alternative hypotheses
-- Sample-size review
-- Distribution assessment
-- Assumption considerations
-- Test selection
-- Test statistic
-- P-value
-- Effect size
-- Practical significance
-- Business interpretation
-- Limitations
+### Hypothesis 2 — Superhosts vs Non-Superhosts
+
+**Question:** Do superhost listings achieve different review scores than non-superhost listings?
+
+Key results:
+
+- Superhost: **n = 1,661**, median review score **4.90**
+- Non-superhost: **n = 7,566**, median review score **4.94**
+- Mann-Whitney U statistic: **5,293,896.5**
+- **p = 3.19 × 10⁻²⁵**
+- Rank-biserial effect size: **-0.158**
+
+**Conclusion:** The difference is statistically significant but small in practical terms.
 
 > Statistical significance is not treated as automatic practical importance, and observational results are not presented as proof of causation.
+
+---
+
+## Focused Price-Prediction Experiment
+
+After completing the core data engineering, EDA, statistical analysis, automated testing, and documentation work, a focused optional machine-learning experiment was added using the enriched listing-level dataset.
+
+### Research Question
+
+> **Can listing characteristics predict the available Airbnb listing price for Amsterdam listings?**
+
+### Modeling Dataset
+
+The experiment uses:
+
+```text
+data/processed/enriched_listing_master.parquet
+```
+
+The canonical enriched dataset contains **10,465 listings**.
+
+| Metric | Count |
+|---|---:|
+| Total canonical listings | **10,465** |
+| Listings with valid positive target price | **6,471** |
+| Listings excluded because target price was missing or invalid | **3,994** |
+| Training observations | **5,176** |
+| Test observations | **1,295** |
+
+Missing target prices were **not imputed or fabricated**.
+
+### Target Variable
+
+```text
+price_best_available
+```
+
+The target uses the best available valid listing price according to the project's documented enrichment rules.
+
+To prevent target leakage, price-derived fields were excluded from model features:
+
+```text
+price_raw
+price
+detailed_price
+detailed_price_raw
+price_best_available
+price_source
+price_per_bedroom
+price_per_guest
+```
+
+### Selected Predictors
+
+The experiment uses a focused combination of:
+
+- Neighbourhood
+- Room type
+- Detailed property type
+- Host superhost status
+- Host identity verification
+- Host portfolio segment
+- Latitude
+- Longitude
+- Accommodation capacity
+- Bathrooms
+- Bedrooms
+- Beds
+- Minimum and maximum nights
+- Availability
+- Review activity
+- Review scores
+- Host listing count
+- Review-event frequency
+- Unavailability-rate proxy
+
+### Preprocessing
+
+The modeling workflow includes:
+
+- Median imputation for missing numerical features
+- Explicit missing-category handling for categorical features
+- One-hot encoding with unknown-category protection
+- Numerical feature standardization
+- `log1p` target transformation to reduce the influence of strong right skew
+- Fixed `random_state=42` for reproducibility
+- 80/20 train-test split
+
+### Models Compared
+
+Three models were evaluated:
+
+1. **Dummy Regressor** — baseline
+2. **Ridge Regression** — regularized linear benchmark
+3. **Random Forest Regressor** — nonlinear ensemble model
+
+### Evaluation Metrics
+
+The models were evaluated using:
+
+- Mean Absolute Error (MAE)
+- Root Mean Squared Error (RMSE)
+- R² Score
+
+### Final Model Results
+
+| Model | MAE | RMSE | R² |
+|---|---:|---:|---:|
+| **Random Forest Regressor** | **€78.61** | **€133.76** | **0.5884** |
+| Ridge Regression | €85.63 | €152.33 | 0.4662 |
+| Dummy Regressor | €134.91 | €213.50 | -0.0486 |
+
+### Main Finding
+
+The **Random Forest Regressor** achieved the strongest test-set performance.
+
+Compared with the Dummy Regressor baseline, it reduced Mean Absolute Error from **€134.91 to €78.61**, an improvement of approximately **41.7%**.
+
+The model achieved an R² of **0.5884**, meaning that approximately **58.8% of the variation in held-out listing prices was explained by the selected features within this experiment**.
+
+The considerably higher RMSE relative to MAE indicates that extreme premium-priced listings still produce some substantially larger prediction errors.
+
+### Top Random Forest Encoded Features
+
+| Rank | Feature | Importance |
+|---|---|---:|
+| 1 | Bedrooms | 0.2714 |
+| 2 | Room type: Entire home/apt | 0.1597 |
+| 3 | Longitude | 0.0837 |
+| 4 | Minimum nights | 0.0636 |
+| 5 | Latitude | 0.0623 |
+| 6 | Accommodates | 0.0553 |
+| 7 | Reviews per month | 0.0351 |
+| 8 | Bathrooms | 0.0331 |
+| 9 | Availability 365 | 0.0275 |
+| 10 | Unavailability-rate proxy | 0.0268 |
+
+The feature-importance results suggest that property size, accommodation type, geographic position, minimum-stay requirements, review activity, and availability characteristics contributed meaningful predictive information.
+
+> **Feature importance does not establish causation.** It indicates how strongly features contributed to predictions within this fitted Random Forest model.
+
+Because categorical features such as neighbourhood are one-hot encoded, their total influence may be distributed across multiple encoded categories rather than appearing as one single feature.
+
+### Diagnostic Visualization
+
+The actual-vs-predicted visualization displays **1,283 of 1,295 test observations**, using the **99th percentile of actual test prices (€1,141)** as a visualization limit.
+
+This limit is applied **only to the chart for readability**.
+
+All **1,295 test observations** remain included in:
+
+- MAE
+- RMSE
+- R²
+- Model evaluation
+- Saved prediction outputs
+
+### Generated Modeling Outputs
+
+```text
+outputs/modeling/
+├── price_model_results.csv
+├── price_model_predictions.csv
+├── price_model_comparison.png
+├── random_forest_feature_importance.csv
+├── random_forest_feature_importance.png
+└── actual_vs_predicted_price.png
+```
+
+### Reproduce the Experiment
+
+Run:
+
+```bash
+python experiments/price_prediction.py
+```
+
+### Limitations
+
+- Only listings with valid positive target prices were used.
+- **3,994 canonical listings had missing or invalid target prices and were excluded rather than imputed.**
+- The target represents an available listing price, not a confirmed booked transaction price.
+- The model does not estimate verified revenue, profitability, or causal effects.
+- Extreme premium listings remain difficult to predict.
+- No extensive hyperparameter optimization or cross-city validation was performed.
+- Feature importance should not be interpreted as causal evidence.
+
+The experiment should therefore be treated as a focused analytical extension rather than a production pricing system.
 
 ---
 
@@ -568,6 +813,60 @@ python -m pytest tests/ -v
 | Passed | **13** |
 | Failed | **0** |
 
+### Latest Local Verification
+
+```text
+Python compilation: PASS
+Automated tests collected: 13
+Passed: 13
+Failed: 0
+Test runtime: 1.32 seconds
+```
+
+The project was also verified using:
+
+```bash
+python -m compileall -q run_pipeline.py src tests experiments
+```
+
+and:
+
+```bash
+python -m pytest tests/ -v
+```
+
+Both completed successfully.
+
+---
+
+## Continuous Integration
+
+GitHub Actions automatically verifies the Python project on pushes and pull requests.
+
+Workflow:
+
+```text
+.github/workflows/ci.yml
+```
+
+The CI process performs:
+
+```text
+Checkout repository
+        ↓
+Set up Python 3.13
+        ↓
+Install dependencies
+        ↓
+Compile Python modules
+        ↓
+Run automated tests
+        ↓
+PASS / FAIL
+```
+
+The GitHub Actions workflow has completed successfully on the `dev` branch.
+
 ---
 
 ## Project Structure
@@ -575,10 +874,17 @@ python -m pytest tests/ -v
 ```text
 airbnb-data-engineering-challenge/
 │
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+│
 ├── README.md
 ├── requirements.txt
 ├── .gitignore
 ├── run_pipeline.py
+│
+├── config/
+│   └── city_config.yaml
 │
 ├── data/
 │   ├── raw/
@@ -586,13 +892,28 @@ airbnb-data-engineering-challenge/
 │   ├── processed/
 │   └── warehouse/
 │
+├── docs/
+│   ├── images/
+│   │   └── amsterdam_airbnb_data_pipeline_architecture.png
+│   ├── assumptions.md
+│   ├── decision_log.md
+│   ├── completed_work.md
+│   ├── incomplete_work.md
+│   └── ai_usage_disclosure.md
+│
 ├── src/
 │   ├── __init__.py
+│   ├── ingest.py
 │   ├── profile.py
 │   ├── validate.py
 │   ├── clean.py
 │   ├── enrich.py
-│   └── build_warehouse.py
+│   ├── build_warehouse.py
+│   ├── database.py
+│   └── utils.py
+│
+├── experiments/
+│   └── price_prediction.py
 │
 ├── sql/
 │   └── analytical_queries.sql
@@ -604,14 +925,8 @@ airbnb-data-engineering-challenge/
 ├── outputs/
 │   ├── data_quality/
 │   ├── eda/
-│   └── statistics/
-│
-├── docs/
-│   ├── assumptions.md
-│   ├── decision_log.md
-│   ├── completed_work.md
-│   ├── incomplete_work.md
-│   └── ai_usage_disclosure.md
+│   ├── statistics/
+│   └── modeling/
 │
 └── tests/
     └── test_data_quality.py
@@ -621,14 +936,14 @@ airbnb-data-engineering-challenge/
 
 ## Getting Started
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/PabodaFdo/airbnb-data-engineering-challenge.git
 cd airbnb-data-engineering-challenge
 ```
 
-### 2. Create a virtual environment
+### 2. Create a Virtual Environment
 
 ```bash
 python -m venv .venv
@@ -646,13 +961,13 @@ Git Bash:
 source .venv/Scripts/activate
 ```
 
-### 3. Install dependencies
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Add the Amsterdam source files
+### 4. Add the Amsterdam Source Files
 
 Place the seven source files inside:
 
@@ -672,17 +987,27 @@ neighbourhoods.csv
 neighbourhoods.geojson
 ```
 
-### 5. Run the complete pipeline
+### 5. Run the Complete Pipeline
 
 ```bash
 python run_pipeline.py --city amsterdam
 ```
 
-### 6. Run automated tests
+### 6. Run Automated Tests
 
 ```bash
 python -m pytest tests/ -v
 ```
+
+### 7. Run the Focused Price-Prediction Experiment
+
+After the processed enriched dataset has been generated:
+
+```bash
+python experiments/price_prediction.py
+```
+
+This trains and compares the Dummy Regressor, Ridge Regression, and Random Forest Regressor and generates model evaluation, prediction, feature-importance, and diagnostic outputs.
 
 ---
 
@@ -714,6 +1039,8 @@ Important limitations include:
 - Repeated review dates are not automatically duplicates.
 - A single-city analysis cannot be generalized automatically to all markets.
 - Statistical findings do not prove causation.
+- Machine-learning feature importance does not prove causal influence.
+- The price-prediction experiment does not estimate verified booking prices, revenue, or profitability.
 
 See:
 
@@ -727,7 +1054,7 @@ for the full set of assumptions and analytical caveats.
 
 ## AI Usage Disclosure
 
-Generative AI was used as a support tool for planning, code review, debugging, statistical methodology guidance, testing, and documentation.
+Generative AI was used as a support tool for planning, code review, debugging, statistical methodology guidance, machine-learning experiment design, testing, and documentation.
 
 AI-generated suggestions were not accepted automatically. Validation included:
 
@@ -737,7 +1064,12 @@ AI-generated suggestions were not accepted automatically. Validation included:
 - Verifying processed Parquet outputs
 - Reconciling DuckDB warehouse counts
 - Reviewing statistical outputs
+- Running the price-prediction experiment locally
+- Comparing model metrics against a baseline
+- Reviewing feature-importance outputs
 - Running automated tests
+- Running Python compilation checks
+- Verifying GitHub Actions CI
 
 Full disclosure:
 
@@ -752,19 +1084,21 @@ docs/ai_usage_disclosure.md
 Potential future improvements include:
 
 - Multi-city pipeline support
-- Automated schema harmonization
-- Incremental processing
-- Advanced data-quality frameworks
+- Automated cross-city schema harmonization
+- Incremental data processing
+- More advanced data-quality frameworks
 - Additional statistical hypotheses
-- Price prediction models
-- Streamlit dashboard
+- Cross-validation and formal hyperparameter optimization
+- Additional carefully selected predictive models
+- Grouped or permutation-based feature importance
+- Streamlit analytical dashboard
 - Workflow orchestration
 - Docker containerization
 - Cloud deployment
-- CI/CD
 - Advanced geospatial analysis
+- Model monitoring and drift detection for a production scenario
 
-These were intentionally deferred to protect the quality of the completed engineering core.
+These improvements were intentionally deferred to protect the reliability, documentation quality, reproducibility, and interpretability of the completed engineering and analytical work.
 
 ---
 
@@ -785,21 +1119,27 @@ These were intentionally deferred to protect the quality of the completed engine
 ✅ 8 Analytical SQL Queries
 ✅ 10 EDA Visualizations
 ✅ 2 Statistical Hypothesis Tests
+✅ Focused Price-Prediction Experiment
+✅ 3 Regression Models Compared
+✅ Random Forest Feature Importance
+✅ Actual-vs-Predicted Diagnostic Analysis
 ✅ End-to-End Pipeline
 ✅ 13 Automated Tests
+✅ GitHub Actions Continuous Integration
 ✅ Assumptions Documentation
 ✅ Engineering Decision Log
 ✅ Completed Work Summary
 ✅ Incomplete Work Summary
 ✅ AI Usage Disclosure
+✅ Architecture Diagram
 ```
 
 ### Remaining Submission Work
 
 ```text
-⬜ Final Architecture Diagram
-⬜ Professional 20+ Page PDF Report
-⬜ Final Repository QA
+⬜ Update final report with the completed price-prediction experiment
+⬜ Add final candidate submission details
+⬜ Final repository QA
 ⬜ Merge dev → main
 ⬜ Submit
 ```
@@ -808,10 +1148,11 @@ These were intentionally deferred to protect the quality of the completed engine
 
 ## Author
 
-**PabodaFdo**
+**Paboda Sathsarani Fernando**  
+GitHub: **PabodaFdo**
 
 BSc (Hons) Information Technology Undergraduate  
-Specialization in Information Systems Engineering  
+Specialization in Data Science  
 Sri Lanka Institute of Information Technology (SLIIT)
 
 ---
@@ -826,6 +1167,6 @@ Raw dataset files are not included in this repository.
 
 ## Final Note
 
-This project demonstrates a reproducible, memory-aware, validated, and analytically useful data engineering workflow for the Amsterdam Airbnb market.
+This project demonstrates a reproducible, memory-aware, validated, statistically reasoned, and analytically useful data engineering workflow for the Amsterdam Airbnb market.
 
-> **The goal was not to maximize feature count, but to build a defensible submission with clear assumptions, reliable data processing, strong validation, transparent engineering decisions, reproducible outputs, focused analysis, and honest limitations.**
+> **The goal was not to maximize feature count, but to build a defensible submission with clear assumptions, reliable data processing, strong validation, transparent engineering decisions, reproducible outputs, focused analysis, honest limitations, and careful interpretation of both statistical and machine-learning results.**
