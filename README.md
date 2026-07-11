@@ -3,7 +3,7 @@
 <p align="center">
   <a href="https://git.io/typing-svg">
     <img
-      src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1200&color=006466&center=true&vCenter=true&width=950&lines=End-to-End+Data+Engineering+Pipeline;Automated+Profiling+%26+Data+Quality+Validation;DuckDB+Analytical+Warehouse+%26+Parquet+Layer;EDA+%2B+Statistical+Hypothesis+Testing;Focused+Machine+Learning+Price+Prediction;Built+for+an+8+GB+RAM+Windows+Environment"
+      src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1200&color=006466&center=true&vCenter=true&width=950&lines=End-to-End+Data+Engineering+Pipeline;Automated+Profiling+%26+Data+Quality+Validation;DuckDB+Analytical+Warehouse+%26+Parquet+Layer;EDA+%2B+Statistical+Hypothesis+Testing;Focused+Machine+Learning+Price+Prediction;Interactive+Streamlit+Dashboard+%26+Cloud+Deployment;Built+for+an+8+GB+RAM+Windows+Environment"
       alt="Typing SVG"
     />
   </a>
@@ -12,7 +12,7 @@
 <p align="center">
   <strong>
     A reproducible, memory-aware Data Engineering, Analytics, Statistics,
-    and focused Machine Learning project using Amsterdam Inside Airbnb data.
+    focused Machine Learning, and interactive dashboard project using Amsterdam Inside Airbnb data.
   </strong>
 </p>
 
@@ -33,7 +33,15 @@
   <img src="https://img.shields.io/badge/DuckDB-Analytics-FFF000?style=flat-square&logo=duckdb&logoColor=black" alt="DuckDB">
   <img src="https://img.shields.io/badge/Pandas-Data%20Processing-150458?style=flat-square&logo=pandas&logoColor=white" alt="Pandas">
   <img src="https://img.shields.io/badge/scikit--learn-ML-F7931E?style=flat-square&logo=scikitlearn&logoColor=white" alt="Scikit-learn">
+  <img src="https://img.shields.io/badge/Streamlit-Interactive%20Dashboard-FF4B4B?style=flat-square&logo=streamlit&logoColor=white" alt="Streamlit">
+  <img src="https://img.shields.io/badge/Plotly-Interactive%20Charts-3F4F75?style=flat-square&logo=plotly&logoColor=white" alt="Plotly">
   <img src="https://img.shields.io/badge/GitHub%20Actions-CI-2088FF?style=flat-square&logo=githubactions&logoColor=white" alt="GitHub Actions">
+</p>
+
+<p align="center">
+  <a href="https://amsterdam-airbnb-market-explorer.streamlit.app/">
+    <img src="https://img.shields.io/badge/Live%20Dashboard-Open%20Streamlit%20App-006466?style=for-the-badge&logo=streamlit&logoColor=white" alt="Live Dashboard">
+  </a>
 </p>
 
 ---
@@ -65,10 +73,64 @@ SQL Analysis + EDA + Statistical Testing
         ↓
 Focused Price-Prediction Experiment
         ↓
+Interactive Streamlit Dashboard
+        ↓
+Streamlit Community Cloud Deployment
+        ↓
 Business Findings & Recommendations
 ```
 
-The project follows a **one-city, depth-first strategy** and prioritizes data quality, reproducibility, memory-aware processing, analytical depth, statistical reasoning, focused predictive experimentation, automated testing, continuous integration, and clear business interpretation.
+The project follows a **one-city, depth-first strategy** and prioritizes data quality, reproducibility, memory-aware processing, analytical depth, statistical reasoning, focused predictive experimentation, automated testing, continuous integration, interactive exploration, cloud deployment, and clear business interpretation.
+
+---
+
+## Live Interactive Dashboard
+
+The completed project includes a deployed **Streamlit + Plotly analytical dashboard** for exploring the validated Amsterdam Airbnb data.
+
+<p align="center">
+  <a href="https://amsterdam-airbnb-market-explorer.streamlit.app/">
+    <strong>🚀 Open the Amsterdam Airbnb Market Explorer</strong>
+  </a>
+</p>
+
+**Live URL:**  
+`https://amsterdam-airbnb-market-explorer.streamlit.app/`
+
+### Dashboard Features
+
+The dashboard contains seven interactive analytical tabs:
+
+1. **Overview** — high-level market KPIs and summary charts.
+2. **Market Explorer** — neighbourhood, room type, capacity, and price exploration.
+3. **Pricing** — price distributions and pricing differences.
+4. **Reviews & Availability** — review activity and the documented unavailability-rate proxy.
+5. **Statistics** — the two completed hypothesis tests and saved statistical results.
+6. **Machine Learning** — model comparison, Random Forest feature importance, and actual-vs-predicted diagnostics.
+7. **Data Engineering** — pipeline stages, validation metrics, testing status, CI status, and architecture.
+
+### Interactive Filters
+
+Users can filter by:
+
+- Neighbourhood
+- Room type
+- Host portfolio segment
+- Superhost status
+- Available price range
+- Guest capacity
+
+The default dashboard preserves the full canonical listing population. Missing price or capacity values are excluded only when the corresponding numeric range is actively narrowed.
+
+### Deployment
+
+The app is deployed on **Streamlit Community Cloud** from the repository's `dev` branch.
+
+Run the dashboard locally with:
+
+```bash
+streamlit run dashboard/app.py
+```
 
 ---
 
@@ -107,6 +169,8 @@ DuckDB Analytical Warehouse
         ↓
 SQL + EDA + Statistics + Machine Learning
         ↓
+Interactive Streamlit Dashboard
+        ↓
 Business Findings & Final Report
 ```
 
@@ -134,6 +198,8 @@ Business Findings & Final Report
 | Best model MAE | **€78.61** |
 | Best model RMSE | **€133.76** |
 | Best model R² | **0.5884** |
+| Interactive dashboard | **7 tabs with live filtering and analytical views** |
+| Dashboard deployment | **Live on Streamlit Community Cloud** |
 | Full pipeline runtime | **Approximately 1–2 minutes on the local 8 GB RAM Windows environment** |
 
 ---
@@ -159,6 +225,9 @@ The main objectives are to:
 - Compare a Dummy Regressor baseline, Ridge Regression, and Random Forest Regressor.
 - Evaluate predictive performance using MAE, RMSE, and R².
 - Interpret Random Forest feature importance and actual-vs-predicted behavior.
+- Build an interactive Streamlit dashboard using validated processed outputs.
+- Provide live filters across neighbourhood, room type, host segment, superhost status, price, and capacity.
+- Deploy the dashboard on Streamlit Community Cloud.
 - Translate technical results into business insights and recommendations.
 
 ---
@@ -902,6 +971,54 @@ The GitHub Actions workflow has completed successfully on the `dev` branch.
 
 ---
 
+## Interactive Dashboard Implementation
+
+Dashboard code is organized under:
+
+```text
+dashboard/
+├── __init__.py
+├── app.py
+├── charts.py
+├── components.py
+└── data_loader.py
+```
+
+The dashboard reads validated processed outputs rather than the large raw source files.
+
+Main data sources include:
+
+```text
+data/processed/enriched_listing_master.parquet
+outputs/modeling/price_model_results.csv
+outputs/modeling/random_forest_feature_importance.csv
+outputs/modeling/price_model_predictions.csv
+outputs/statistics/tables/statistical_test_results.csv
+docs/architecture_diagram.png
+```
+
+Key design decisions:
+
+- Preserve the full canonical listing population by default.
+- Apply price and capacity filters only when the user actively narrows those ranges.
+- Keep missing prices as null rather than converting them to zero.
+- Exclude missing numeric values only from the filtered result when the relevant numeric filter is active.
+- Use Plotly for interactive charts.
+- Use unique Streamlit element keys to avoid duplicate chart-ID errors.
+- Keep statistical, model, and business interpretation caveats visible in the interface.
+- Avoid describing `unavailability_rate_proxy` as true occupancy.
+- Avoid treating review activity as verified bookings.
+
+### Live Deployment
+
+**Streamlit Community Cloud**
+
+```text
+https://amsterdam-airbnb-market-explorer.streamlit.app/
+```
+
+---
+
 ## Project Structure
 
 ```text
@@ -925,9 +1042,15 @@ airbnb-data-engineering-challenge/
 │   ├── processed/
 │   └── warehouse/
 │
+├── dashboard/
+│   ├── __init__.py
+│   ├── app.py
+│   ├── charts.py
+│   ├── components.py
+│   └── data_loader.py
+│
 ├── docs/
-│   ├── images/
-│   │   └── amsterdam_airbnb_data_pipeline_architecture.png
+│   ├── architecture_diagram.png
 │   ├── assumptions.md
 │   ├── decision_log.md
 │   ├── completed_work.md
@@ -1042,6 +1165,18 @@ python experiments/price_prediction.py
 
 This trains and compares the Dummy Regressor, Ridge Regression, and Random Forest Regressor and generates model evaluation, prediction, feature-importance, and diagnostic outputs.
 
+### 8. Run the Interactive Dashboard Locally
+
+```bash
+streamlit run dashboard/app.py
+```
+
+The live deployed dashboard is available at:
+
+```text
+https://amsterdam-airbnb-market-explorer.streamlit.app/
+```
+
 ---
 
 ## Documentation
@@ -1087,22 +1222,17 @@ for the full set of assumptions and analytical caveats.
 
 ## AI Usage Disclosure
 
-Generative AI was used as a support tool for planning, code review, debugging, statistical methodology guidance, machine-learning experiment design, testing, and documentation.
+Generative AI was used as a support tool to help manage and organize the project.
 
-AI-generated suggestions were not accepted automatically. Validation included:
+The assistance mainly included:
 
-- Running the full pipeline locally
-- Checking row counts and unique keys
-- Reviewing missing values and warnings
-- Verifying processed Parquet outputs
-- Reconciling DuckDB warehouse counts
-- Reviewing statistical outputs
-- Running the price-prediction experiment locally
-- Comparing model metrics against a baseline
-- Reviewing feature-importance outputs
-- Running automated tests
-- Running Python compilation checks
-- Verifying GitHub Actions CI
+- Generating ideas for how to approach the assignment.
+- Helping plan the project structure and implementation order.
+- Suggesting possible solutions when problems occurred.
+- Giving guidance for data engineering, analysis, testing, dashboard development, and documentation.
+- Helping review and improve explanations and project documentation.
+
+AI was used only as a supporting assistant. The project was implemented, executed, tested, reviewed, and validated using the actual datasets, code, pipeline outputs, statistical results, machine-learning results, dashboard deployment, and automated tests.
 
 Full disclosure:
 
@@ -1124,10 +1254,8 @@ Potential future improvements include:
 - Cross-validation and formal hyperparameter optimization
 - Additional carefully selected predictive models
 - Grouped or permutation-based feature importance
-- Streamlit analytical dashboard
 - Workflow orchestration
 - Docker containerization
-- Cloud deployment
 - Advanced geospatial analysis
 - Model monitoring and drift detection for a production scenario
 
@@ -1165,13 +1293,16 @@ These improvements were intentionally deferred to protect the reliability, docum
 ✅ Incomplete Work Summary
 ✅ AI Usage Disclosure
 ✅ Architecture Diagram
+✅ Interactive Streamlit Dashboard
+✅ Live Streamlit Community Cloud Deployment
+✅ Dashboard Filter Validation
 ```
 
 ### Remaining Submission Work
 
 ```text
-⬜ Update final report with the completed price-prediction experiment
-⬜ Add final candidate submission details
+⬜ Update final report with the completed ML experiment, CI, and deployed dashboard
+⬜ Add dashboard screenshots and live URL to the final report
 ⬜ Final repository QA
 ⬜ Merge dev → main
 ⬜ Submit
@@ -1200,6 +1331,6 @@ Raw dataset files are not included in this repository.
 
 ## Final Note
 
-This project demonstrates a reproducible, memory-aware, validated, statistically reasoned, and analytically useful data engineering workflow for the Amsterdam Airbnb market.
+This project demonstrates a reproducible, memory-aware, validated, statistically reasoned, analytically useful, and interactively explorable data engineering workflow for the Amsterdam Airbnb market.
 
-> **The goal was not to maximize feature count, but to build a defensible submission with clear assumptions, reliable data processing, strong validation, transparent engineering decisions, reproducible outputs, focused analysis, honest limitations, and careful interpretation of both statistical and machine-learning results.**
+> **The goal was not to maximize feature count, but to build a defensible submission with clear assumptions, reliable data processing, strong validation, transparent engineering decisions, reproducible outputs, focused analysis, honest limitations, and careful interpretation of statistical and machine-learning results, and a live interactive dashboard for exploring validated outputs.**
