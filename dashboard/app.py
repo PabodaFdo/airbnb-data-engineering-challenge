@@ -143,6 +143,10 @@ def apply_dashboard_filters(
 ) -> pd.DataFrame:
     """
     Apply all interactive sidebar filters.
+
+    The full canonical dataset is preserved by default. Missing price or
+    capacity values are excluded only when the corresponding numeric filter
+    is actively narrowed by the user.
     """
     filtered_df = df.copy()
 
@@ -191,51 +195,43 @@ def apply_dashboard_filters(
             )
         ]
 
-    if PRICE_COLUMN in filtered_df.columns:
+    if (
+        PRICE_COLUMN in filtered_df.columns
+        and minimum_price is not None
+        and maximum_price is not None
+    ):
         numeric_price = pd.to_numeric(
             filtered_df[PRICE_COLUMN],
             errors="coerce",
         )
 
-        if minimum_price is not None:
-            filtered_df = filtered_df[
-                numeric_price.isna()
-                | (numeric_price >= minimum_price)
-            ]
-
-        if maximum_price is not None:
-            numeric_price = pd.to_numeric(
-                filtered_df[PRICE_COLUMN],
-                errors="coerce",
+        filtered_df = filtered_df[
+            numeric_price.notna()
+            & numeric_price.between(
+                minimum_price,
+                maximum_price,
+                inclusive="both",
             )
+        ]
 
-            filtered_df = filtered_df[
-                numeric_price.isna()
-                | (numeric_price <= maximum_price)
-            ]
-
-    if "accommodates" in filtered_df.columns:
+    if (
+        "accommodates" in filtered_df.columns
+        and minimum_capacity is not None
+        and maximum_capacity is not None
+    ):
         numeric_capacity = pd.to_numeric(
             filtered_df["accommodates"],
             errors="coerce",
         )
 
-        if minimum_capacity is not None:
-            filtered_df = filtered_df[
-                numeric_capacity.isna()
-                | (numeric_capacity >= minimum_capacity)
-            ]
-
-        if maximum_capacity is not None:
-            numeric_capacity = pd.to_numeric(
-                filtered_df["accommodates"],
-                errors="coerce",
+        filtered_df = filtered_df[
+            numeric_capacity.notna()
+            & numeric_capacity.between(
+                minimum_capacity,
+                maximum_capacity,
+                inclusive="both",
             )
-
-            filtered_df = filtered_df[
-                numeric_capacity.isna()
-                | (numeric_capacity <= maximum_capacity)
-            ]
+        ]
 
     return filtered_df
 
@@ -250,6 +246,10 @@ def render_sidebar_filters(
 ) -> dict[str, object]:
     """
     Render all interactive dashboard filters in the sidebar.
+
+    Numeric filters are considered inactive while they remain at their full
+    default ranges. This keeps the complete canonical dataset visible by
+    default, including rows with missing price or capacity values.
     """
     st.sidebar.header("Market Filters")
 
@@ -330,22 +330,29 @@ def render_sidebar_filters(
             observed_minimum = float(valid_prices.min())
             observed_maximum = float(valid_prices.max())
 
+            full_price_range = (
+                observed_minimum,
+                observed_maximum,
+            )
+
             selected_price_range = st.sidebar.slider(
                 "Available Price Range (€)",
                 min_value=observed_minimum,
                 max_value=observed_maximum,
-                value=(
-                    observed_minimum,
-                    observed_maximum,
-                ),
+                value=full_price_range,
                 step=10.0,
             )
 
-            minimum_price = selected_price_range[0]
-            maximum_price = selected_price_range[1]
+            # Apply the price filter only when the user narrows
+            # the default full observed range.
+            if selected_price_range != full_price_range:
+                minimum_price = selected_price_range[0]
+                maximum_price = selected_price_range[1]
 
             st.sidebar.caption(
-                "Missing prices remain null and are not treated as zero."
+                "Missing prices remain null in the dataset. "
+                "When the price range is narrowed, listings without "
+                "a valid price are excluded from the filtered result."
             )
 
     minimum_capacity = None
@@ -372,19 +379,24 @@ def render_sidebar_filters(
                 16,
             )
 
+            full_capacity_range = (
+                observed_minimum_capacity,
+                observed_maximum_capacity,
+            )
+
             selected_capacity_range = st.sidebar.slider(
                 "Guest Capacity",
                 min_value=observed_minimum_capacity,
                 max_value=observed_maximum_capacity,
-                value=(
-                    observed_minimum_capacity,
-                    observed_maximum_capacity,
-                ),
+                value=full_capacity_range,
                 step=1,
             )
 
-            minimum_capacity = selected_capacity_range[0]
-            maximum_capacity = selected_capacity_range[1]
+            # Apply the capacity filter only when the user narrows
+            # the default full displayed range.
+            if selected_capacity_range != full_capacity_range:
+                minimum_capacity = selected_capacity_range[0]
+                maximum_capacity = selected_capacity_range[1]
 
     st.sidebar.divider()
 
