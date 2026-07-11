@@ -75,7 +75,7 @@ The project follows a **one-city, depth-first strategy** and prioritizes data qu
 ## Architecture
 
 <p align="center">
-  <img src="docs/images/amsterdam_airbnb_data_pipeline_architecture.png" alt="Amsterdam Airbnb Data Engineering Architecture" width="900">
+  <img src="docs/architecture_diagram.png" alt="Amsterdam Airbnb Data Engineering Architecture" width="900">
 </p>
 
 <p align="center">
