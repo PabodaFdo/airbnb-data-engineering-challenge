@@ -1358,11 +1358,9 @@ The project currently delivers:
 ✅ Engineering Decision Log
 ✅ AI Usage Disclosure
 ✅ Submission Details File
-
-⬜ Final Report Update
-⬜ Final Repository QA
-⬜ Merge dev → main
-⬜ Submit
+✅ Final Report Completed
+✅ Final Report PDF Added
+✅ Final Report DOCX Added
 ```
 
 The completed work demonstrates a reproducible, memory-aware, validated, statistically reasoned, testable, and analytically useful data-engineering workflow for the Amsterdam Airbnb market.
