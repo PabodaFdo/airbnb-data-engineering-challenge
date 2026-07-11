@@ -68,9 +68,8 @@ from dashboard.data_loader import (  # noqa: E402
 
 ARCHITECTURE_IMAGE_PATH = (
     PROJECT_ROOT
-    / "docs"
-    / "images"
-    / "amsterdam_airbnb_data_pipeline_architecture.png"
+    / "doc"
+    / "architecture_diagram.png"
 )
 
 PRICE_COLUMN = "price_best_available"
