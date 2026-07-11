@@ -1,28 +1,33 @@
 # Completed Work Summary
 
-> **Project:** Amsterdam Airbnb Data Engineering Challenge  
+> **Project:** Amsterdam Airbnb Data Engineering & Analytics Challenge  
 > **City:** Amsterdam, Netherlands  
-> **Strategy:** One-city, depth-first, 8 GB RAM-aware implementation
+> **Strategy:** One-city, depth-first, 8 GB RAM-aware implementation  
+> **Primary Development Branch:** `dev`
+
+---
 
 ## Project Overview
 
-This document summarizes the work completed for the Amsterdam Airbnb Data Engineering Challenge.
+This document summarizes the work completed for the Amsterdam Airbnb Data Engineering & Analytics Challenge.
 
 The project follows a one-city, depth-first strategy focused on:
 
-- Dataset understanding.
-- Automated profiling.
-- Data-quality validation.
-- Cleaning and standardization.
-- Listing-level data enrichment.
-- Memory-aware large-file processing.
-- DuckDB analytical warehouse construction.
-- SQL analysis.
-- Exploratory data analysis.
-- Statistical hypothesis testing.
-- Automated testing.
-- Reproducibility.
-- Professional documentation.
+- Dataset understanding
+- Automated profiling
+- Data-quality validation
+- Cleaning and standardization
+- Listing-level data enrichment
+- Memory-aware large-file processing
+- DuckDB analytical warehouse construction
+- SQL analysis
+- Exploratory data analysis
+- Statistical hypothesis testing
+- Focused machine-learning experimentation
+- Automated testing
+- Continuous integration
+- Reproducibility
+- Professional documentation
 
 The selected city is:
 
@@ -34,6 +39,12 @@ The complete engineering workflow can be executed using:
 python run_pipeline.py --city amsterdam
 ```
 
+The focused price-prediction experiment can be executed using:
+
+```bash
+python experiments/price_prediction.py
+```
+
 ---
 
 ## 1. Project Setup and Repository Structure
@@ -42,47 +53,71 @@ A modular project structure was created to separate:
 
 - Raw data
 - Processed data
+- Warehouse data
 - Source code
+- Machine-learning experiments
 - SQL queries
 - Notebooks
 - Data-quality outputs
 - EDA outputs
 - Statistical outputs
+- Modeling outputs
 - Documentation
 - Tests
+- Continuous-integration workflows
 
 Key project components include:
 
 ```text
-airbnb-data-challenge/
+airbnb-data-engineering-challenge/
 │
-├── run_pipeline.py
-├── requirements.txt
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+│
 ├── README.md
+├── requirements.txt
+├── .gitignore
+├── run_pipeline.py
+│
+├── config/
+│   └── city_config.yaml
 │
 ├── data/
 │   ├── raw/
+│   │   └── amsterdam/
 │   ├── processed/
 │   └── warehouse/
 │
 ├── src/
+│   ├── __init__.py
+│   ├── ingest.py
 │   ├── profile.py
 │   ├── validate.py
 │   ├── clean.py
 │   ├── enrich.py
-│   └── build_warehouse.py
+│   ├── build_warehouse.py
+│   ├── database.py
+│   └── utils.py
+│
+├── experiments/
+│   └── price_prediction.py
 │
 ├── sql/
 │   └── analytical_queries.sql
 │
 ├── notebooks/
+│   ├── 01_dataset_familiarization.ipynb
+│   └── 02_eda_and_statistics.ipynb
 │
 ├── outputs/
 │   ├── data_quality/
 │   ├── eda/
-│   └── statistics/
+│   ├── statistics/
+│   └── modeling/
 │
 ├── docs/
+│   ├── images/
 │   ├── assumptions.md
 │   ├── decision_log.md
 │   ├── completed_work.md
@@ -92,6 +127,7 @@ airbnb-data-challenge/
 └── tests/
     └── test_data_quality.py
 ```
+
 ---
 
 ## 2. Dataset Collection
@@ -107,6 +143,8 @@ Seven Amsterdam Airbnb source datasets were included in the project:
 7. `neighbourhoods.geojson`
 
 The raw files are preserved unchanged.
+
+Raw source datasets are intentionally excluded from the public Git repository because of their size and data-handling considerations.
 
 ---
 
@@ -129,9 +167,22 @@ The analysis included:
 - Duplicate-row analysis
 - Candidate primary-key investigation
 - Foreign-key relationship investigation
-- Dataset grain identification
+- Dataset-grain identification
 - Business-domain interpretation
 - Source limitations and caveats
+
+Verified source sizes include:
+
+| Dataset | Rows / Features | Columns / Properties |
+|---|---:|---:|
+| `neighbourhoods.csv` | 22 rows | 2 columns |
+| `listings.csv` | 10,465 rows | 19 columns |
+| `reviews.csv` | 545,162 rows | 2 columns |
+| `listings.csv.gz` | 10,369 rows | 90 columns |
+| `neighbourhoods.geojson` | 22 features | Geographic properties + geometry |
+| `calendar.csv.gz` | 3,819,725 rows | 5 columns |
+| `reviews.csv.gz` | 545,162 rows | 6 columns |
+
 ---
 
 ## 4. Dataset Relationship Analysis
@@ -148,8 +199,11 @@ Listing
   ├──────────────► Calendar
   │                 listing_id
   │
-  └──────────────► Reviews
-                    listing_id
+  ├──────────────► Reviews
+  │                 listing_id
+  │
+  └──────────────► Neighbourhood
+                    neighbourhood
 ```
 
 Key candidate identifiers examined included:
@@ -168,7 +222,9 @@ Potential keys were validated rather than assumed.
 
 A reusable profiling module was implemented in:
 
-`src/profile.py`
+```text
+src/profile.py
+```
 
 The profiler successfully processed all seven datasets.
 
@@ -177,26 +233,35 @@ Processing strategy:
 - **Pandas** for small and medium datasets
 - **DuckDB** for large detailed datasets
 
-The following large datasets were processed without loading everything simultaneously into Pandas:
+Large datasets processed without loading everything simultaneously into Pandas include:
 
+```text
 calendar.csv.gz: 3,819,725 rows
-reviews.csv.gz: 545,162 rows
+reviews.csv.gz:    545,162 rows
+```
 
 Generated profiling outputs:
 
-`outputs/data_quality/dataset_summary.csv`
-`outputs/data_quality/column_profile.csv`
+```text
+outputs/data_quality/dataset_summary.csv
+outputs/data_quality/column_profile.csv
+```
 
-The profiling stage completed successfully for:
+Final profiling result:
 
-7 / 7 datasets
+```text
+7 / 7 datasets profiled successfully
+```
+
 ---
 
 ## 6. Automated Data-Quality Validation
 
 A reusable validation module was implemented in:
 
-`src/validate.py`
+```text
+src/validate.py
+```
 
 The validation framework checks areas including:
 
@@ -211,17 +276,17 @@ The validation framework checks areas including:
 - Room-type categories
 - Date parsing
 - Foreign-key coverage
-- Source coverage differences
+- Source-coverage differences
 - Missing metadata
 - Review-row repetition
 
-The final validation result was:
+Final validation result:
 
 | Status | Count |
 |---|---:|
-| PASS | 83 |
-| WARNING | 7 |
-| FAIL | 0 |
+| PASS | **83** |
+| WARNING | **7** |
+| FAIL | **0** |
 
 All seven warnings were reviewed individually and classified as known source limitations or non-critical structural conditions.
 
@@ -229,7 +294,7 @@ No critical validation failures were present.
 
 ---
 
-## 7. Validation Gate
+## 7. Critical Validation Gate
 
 A critical validation gate was added to the end-to-end pipeline.
 
@@ -249,17 +314,17 @@ Validation results
 
 Warnings do not automatically block downstream processing when:
 
-The limitation is understood.
-The affected data remains valid for appropriate uses.
-The condition is documented.
+- The limitation is understood.
+- The affected data remains valid for appropriate uses.
+- The condition is documented.
 
-The latest successful pipeline execution produced:
+The latest successful validation result was:
 
 | Status | Count |
 |---|---:|
-| PASS | 83 |
-| WARNING | 7 |
-| FAIL | 0 |
+| PASS | **83** |
+| WARNING | **7** |
+| FAIL | **0** |
 
 Therefore, the pipeline correctly continued to downstream processing.
 
@@ -269,7 +334,9 @@ Therefore, the pipeline correctly continued to downstream processing.
 
 A reusable cleaning module was implemented in:
 
-`src/clean.py`
+```text
+src/clean.py
+```
 
 Major cleaning work included:
 
@@ -283,19 +350,18 @@ Major cleaning work included:
 
 Generated outputs:
 
-`data/processed/cleaned_listings.parquet`
-`data/processed/cleaned_detailed_listings.parquet`
-`outputs/data_quality/cleaning_summary.csv`
+```text
+data/processed/cleaned_listings.parquet
+data/processed/cleaned_detailed_listings.parquet
+outputs/data_quality/cleaning_summary.csv
+```
 
 Verified cleaned outputs:
 
-cleaned_listings.parquet
-10,465 rows
-Unique non-null listing IDs
-
-cleaned_detailed_listings.parquet
-10,369 rows
-Unique non-null listing IDs
+| Output | Rows | Listing ID Integrity |
+|---|---:|---|
+| `cleaned_listings.parquet` | **10,465** | Unique and non-null |
+| `cleaned_detailed_listings.parquet` | **10,369** | Unique and non-null |
 
 Missing prices were preserved as null.
 
@@ -307,17 +373,23 @@ No zero-price imputation was performed.
 
 The project established:
 
+```text
 10,465 canonical listings
+```
 
 from the summary listings source.
 
 The detailed listings source contained:
 
+```text
 10,369 listings
+```
 
 Therefore:
 
+```text
 96 canonical summary listings
+```
 
 were not represented in the detailed listings source.
 
@@ -329,24 +401,30 @@ These 96 records were preserved rather than discarded.
 
 The detailed review dataset contains:
 
+```text
 545,162 review events
+```
 
 Review-level investigations included:
 
 - Full duplicate-row checking
-- Review identifier validation
-- Repeated (listing_id, date) analysis
+- Review-identifier validation
+- Repeated `(listing_id, date)` analysis
 - Missing reviewer metadata
 
 The summary reviews dataset contains repeated:
 
-`(listing_id, date)`
+```text
+(listing_id, date)
+```
 
 combinations.
 
-Observed repeated-row count:
+Observed repeated-row count beyond first occurrences:
 
+```text
 22,541 rows
+```
 
 These were not blindly deleted because multiple legitimate review events may occur for the same listing on the same date.
 
@@ -356,35 +434,42 @@ These were not blindly deleted because multiple legitimate review events may occ
 
 A reusable enrichment module was implemented in:
 
-`src/enrich.py`
+```text
+src/enrich.py
+```
 
 The final enriched master dataset was designed at the grain:
 
-One row per canonical listing
+> **One row per canonical listing**
 
 The enrichment process:
 
-Starts with the 10,465 canonical listings.
-Adds matching detailed listing attributes.
-Aggregates detailed review data to listing level.
-Aggregates calendar data to listing level.
-Joins compact listing-level aggregates.
-Creates derived analytical features.
-Validates the final one-row-per-listing grain.
+1. Starts with the **10,465 canonical listings**.
+2. Adds matching detailed-listing attributes.
+3. Aggregates detailed review data to listing level.
+4. Aggregates calendar data to listing level.
+5. Joins compact listing-level aggregates.
+6. Creates derived analytical features.
+7. Validates the final one-row-per-listing grain.
 
 Generated outputs:
 
-`data/processed/review_listing_aggregates.parquet`
-`data/processed/calendar_listing_aggregates.parquet`
-`data/processed/enriched_listing_master.parquet`
-`outputs/data_quality/enrichment_summary.csv`
+```text
+data/processed/review_listing_aggregates.parquet
+data/processed/calendar_listing_aggregates.parquet
+data/processed/enriched_listing_master.parquet
+outputs/data_quality/enrichment_summary.csv
+```
 
 Final verified enrichment result:
 
-Canonical listings preserved:       10,465
-Detailed-source matches:            10,369
-Summary-only listings preserved:        96
-Unique non-null listing IDs:           Yes
+| Metric | Result |
+|---|---:|
+| Canonical listings preserved | **10,465** |
+| Detailed-source matches | **10,369** |
+| Summary-only listings preserved | **96** |
+| Unique non-null listing IDs | **Yes** |
+
 ---
 
 ## 12. Derived Features
@@ -398,10 +483,10 @@ Examples include:
 - Price per bedroom
 - Price per guest
 - Review-event counts
-- Review frequency measures
+- Review-frequency measures
 - Host portfolio segmentation
 - Availability rate
-- Unavailability rate proxy
+- Unavailability-rate proxy
 - Review-history indicators
 
 No derived feature was used to make claims beyond what the underlying source data can support.
@@ -418,7 +503,7 @@ Hosts were segmented into analytical categories:
 
 This segmentation supports analysis of host concentration and market-supply structure.
 
-The term large/professional host is treated as an analytical label based on listing count, not proof of legal or commercial business status.
+The term `large/professional host` is treated as an analytical label based on listing count, not proof of legal or commercial business status.
 
 ---
 
@@ -426,7 +511,9 @@ The term large/professional host is treated as an analytical label based on list
 
 The calendar dataset contains:
 
+```text
 3,819,725 rows
+```
 
 To remain compatible with the 8 GB RAM development environment:
 
@@ -436,13 +523,16 @@ To remain compatible with the 8 GB RAM development environment:
 
 Calendar unavailability is stored only as:
 
-`unavailability_rate_proxy`
+```text
+unavailability_rate_proxy
+```
 
 It is not described as:
 
 - True occupancy
 - Confirmed booking rate
 - Verified reservation activity
+
 ---
 
 ## 15. 8 GB RAM-Aware Processing
@@ -458,7 +548,7 @@ The engineering strategy includes:
 - Parquet intermediate outputs
 - Avoiding simultaneous loading of all seven raw datasets
 - Memory cleanup between pipeline stages where appropriate
-- Conservative DuckDB memory usage
+- Conservative memory-aware processing
 
 The full pipeline successfully processed all available Amsterdam data without downsampling the core datasets.
 
@@ -468,11 +558,15 @@ The full pipeline successfully processed all available Amsterdam data without do
 
 A DuckDB analytical warehouse was implemented through:
 
-`src/build_warehouse.py`
+```text
+src/build_warehouse.py
+```
 
 Warehouse location:
 
-`data/warehouse/airbnb_analytics.duckdb`
+```text
+data/warehouse/airbnb_analytics.duckdb
+```
 
 The warehouse contains analytical structures including:
 
@@ -490,27 +584,34 @@ Analytical views include:
 
 The warehouse successfully reconciled:
 
-Canonical listings:  10,465
-Review events:       545,162
-Calendar rows:     3,819,725
+| Metric | Result |
+|---|---:|
+| Canonical listings | **10,465** |
+| Review events | **545,162** |
+| Calendar rows | **3,819,725** |
 
 Warehouse validation result:
 
 | Warehouse Check | Count |
 |---|---:|
-| PASS | 17 |
-| FAIL | 0 |
+| PASS | **17** |
+| FAIL | **0** |
 
 Generated warehouse validation output:
 
-`outputs/data_quality/warehouse_summary.csv`
+```text
+outputs/data_quality/warehouse_summary.csv
+```
+
 ---
 
 ## 17. Analytical SQL Queries
 
 A dedicated analytical SQL file was created:
 
-`sql/analytical_queries.sql`
+```text
+sql/analytical_queries.sql
+```
 
 The SQL analysis addresses business questions including:
 
@@ -523,7 +624,7 @@ The SQL analysis addresses business questions including:
 7. Availability-based proxy patterns
 8. Pricing by accommodation capacity
 
-The queries use the DuckDB analytical warehouse and documented thresholds where appropriate.
+The query set is designed for business-oriented analytical consumption through the DuckDB warehouse.
 
 ---
 
@@ -557,7 +658,14 @@ The analyses cover:
 - Outliers
 - Feature correlations
 
-The final report will prioritize the strongest 6–8 visualizations rather than presenting every graph without interpretation.
+Important EDA findings include:
+
+- Supply is concentrated in a relatively small group of neighbourhoods.
+- Entire-home listings command substantially higher prices than private rooms.
+- Prices are strongly right-skewed and include extreme premium listings.
+- Property size and accommodation capacity are materially related to price.
+- Calendar unavailability is treated only as a proxy, not verified occupancy.
+- Review activity is not treated as verified booking demand.
 
 ---
 
@@ -565,40 +673,47 @@ The final report will prioritize the strongest 6–8 visualizations rather than 
 
 Two focused statistical hypotheses were completed.
 
-### Hypothesis 1
+### Hypothesis 1 — Entire Homes vs Private Rooms
 
 **Question:**
 
-Do entire-home listings have significantly different or higher prices than private-room listings?
+Do entire-home listings command higher prices than private-room listings?
 
-The statistical workflow includes:
+Key results:
 
-- Null hypothesis
-- Alternative hypothesis
-- Sample-size review
-- Distribution analysis
-- Outlier considerations
-- Test selection
-- Test statistic
-- P-value
-- Effect size
-- Business interpretation
-### Hypothesis 2
+| Metric | Entire Home/Apt | Private Room |
+|---|---:|---:|
+| Sample size | **4,771** | **1,653** |
+| Median price | **€331** | **€171** |
+
+Additional result details:
+
+- Mann-Whitney U statistic: **6,692,891.0**
+- **p < 0.001**
+- Rank-biserial effect size: **0.697**
+
+**Conclusion:** Entire homes have a statistically significant and practically large price premium over private rooms.
+
+### Hypothesis 2 — Superhosts vs Non-Superhosts
 
 **Question:**
 
-Do superhost listings achieve different or higher review scores than non-superhost listings?
+Do superhost listings achieve different review scores than non-superhost listings?
 
-The analysis similarly includes:
+Key results:
 
-- Null hypothesis
-- Alternative hypothesis
-- Assumption considerations
-- Test selection
-- Statistical result
-- Effect size
-- Practical interpretation
-- Business interpretation
+| Metric | Superhost | Non-Superhost |
+|---|---:|---:|
+| Sample size | **1,661** | **7,566** |
+| Median review score | **4.90** | **4.94** |
+
+Additional result details:
+
+- Mann-Whitney U statistic: **5,293,896.5**
+- **p = 3.19 × 10⁻²⁵**
+- Rank-biserial effect size: **-0.158**
+
+**Conclusion:** The difference is statistically significant but small in practical terms.
 
 The project does not rely only on statistical significance.
 
@@ -610,7 +725,9 @@ Effect size and practical importance are also considered.
 
 The pipeline entry point was implemented in:
 
+```text
 run_pipeline.py
+```
 
 Execution command:
 
@@ -628,23 +745,13 @@ The complete workflow contains seven stages:
 6. Data Enrichment
 7. DuckDB Analytical Warehouse
 
-Latest successful execution:
+The latest verified full run completed successfully.
 
-| Pipeline Stage | Time |
-|---|---:|
-| Verify Raw Source Files | 0.01 seconds |
-| Automated Dataset Profiling | 18.75 seconds |
-| Data-Quality Validation | 21.98 seconds |
-| Critical Validation Gate | 0.13 seconds |
-| Cleaning and Standardization | 1.56 seconds |
-| Data Enrichment | 2.65 seconds |
-| DuckDB Analytical Warehouse | 0.41 seconds |
+Because runtime can vary with system conditions and disk caching, the most defensible summary is:
 
-Total execution time:
+> **Approximately 1–2 minutes on the local 8 GB RAM Windows environment.**
 
-**45.49 seconds**
-
-The complete pipeline finished successfully.
+All seven stages completed successfully.
 
 ---
 
@@ -652,15 +759,19 @@ The complete pipeline finished successfully.
 
 A focused automated test suite was implemented in:
 
-`tests/test_data_quality.py`
+```text
+tests/test_data_quality.py
+```
 
 The suite contains:
 
+```text
 13 automated tests
+```
 
 Test coverage includes:
 
-- Currency price parsing
+- Currency-price parsing
 - Raw-price preservation
 - Missing-price preservation
 - Valid-date parsing
@@ -674,18 +785,211 @@ Test coverage includes:
 - Derived-feature calculations
 - Final canonical listing-grain preservation
 
-Latest test result:
+Latest local verification:
 
-| Test Result | Count |
-|---|---:|
-| Passed | 13 |
-| Failed | 0 |
+```text
+Python compilation: PASS
+Automated tests collected: 13
+Passed: 13
+Failed: 0
+Test runtime: 1.32 seconds
+```
 
-The test suite completed successfully.
+Verification commands:
+
+```bash
+python -m compileall -q run_pipeline.py src tests experiments
+```
+
+```bash
+python -m pytest tests/ -v
+```
+
+Both completed successfully.
 
 ---
 
-## 22. Validation Warning Review
+## 22. GitHub Actions Continuous Integration
+
+A GitHub Actions workflow was implemented in:
+
+```text
+.github/workflows/ci.yml
+```
+
+The CI workflow automatically:
+
+1. Checks out the repository.
+2. Sets up Python 3.13.
+3. Installs project dependencies.
+4. Compiles Python modules.
+5. Runs automated tests.
+
+The workflow is configured for the relevant development and integration branches and has completed successfully on the `dev` branch.
+
+This adds automated verification beyond local execution and helps detect regressions before integration.
+
+---
+
+## 23. Focused Price-Prediction Experiment
+
+After the engineering core, warehouse, EDA, statistical analysis, testing, CI, and documentation were stabilized, a focused machine-learning experiment was added.
+
+Implementation:
+
+```text
+experiments/price_prediction.py
+```
+
+Research question:
+
+> **Can listing characteristics predict the available Airbnb listing price for Amsterdam listings?**
+
+### Modeling Dataset
+
+The experiment uses:
+
+```text
+data/processed/enriched_listing_master.parquet
+```
+
+Dataset usage:
+
+| Metric | Count |
+|---|---:|
+| Total canonical listings | **10,465** |
+| Listings with valid positive target price | **6,471** |
+| Listings excluded because target price was missing or invalid | **3,994** |
+| Training observations | **5,176** |
+| Test observations | **1,295** |
+
+Missing target prices were not imputed or fabricated.
+
+### Target Variable
+
+```text
+price_best_available
+```
+
+### Leakage Prevention
+
+Price-derived fields were excluded from model features, including:
+
+```text
+price_raw
+price
+detailed_price
+detailed_price_raw
+price_best_available
+price_source
+price_per_bedroom
+price_per_guest
+```
+
+### Preprocessing
+
+The workflow includes:
+
+- Median imputation for missing numerical features
+- Explicit missing-category handling for categorical features
+- One-hot encoding with unknown-category protection
+- Numerical feature standardization
+- `log1p` target transformation
+- Fixed `random_state=42`
+- 80/20 train-test split
+
+### Models Compared
+
+Three models were evaluated:
+
+1. **Dummy Regressor**
+2. **Ridge Regression**
+3. **Random Forest Regressor**
+
+### Evaluation Metrics
+
+- Mean Absolute Error (MAE)
+- Root Mean Squared Error (RMSE)
+- R² Score
+
+### Final Results
+
+| Model | MAE | RMSE | R² |
+|---|---:|---:|---:|
+| **Random Forest Regressor** | **€78.61** | **€133.76** | **0.5884** |
+| Ridge Regression | €85.63 | €152.33 | 0.4662 |
+| Dummy Regressor | €134.91 | €213.50 | -0.0486 |
+
+The Random Forest Regressor achieved the strongest test-set performance.
+
+Compared with the Dummy Regressor baseline, it reduced Mean Absolute Error from **€134.91 to €78.61**, an improvement of approximately **41.7%**.
+
+The Random Forest achieved an R² of **0.5884**, meaning that approximately **58.8% of the variation in held-out listing prices was explained by the selected features within this experiment**.
+
+The considerably higher RMSE relative to MAE indicates that extreme premium-priced listings still generate some larger prediction errors.
+
+### Top Random Forest Encoded Features
+
+| Rank | Feature | Importance |
+|---|---|---:|
+| 1 | Bedrooms | 0.2714 |
+| 2 | Room type: Entire home/apt | 0.1597 |
+| 3 | Longitude | 0.0837 |
+| 4 | Minimum nights | 0.0636 |
+| 5 | Latitude | 0.0623 |
+| 6 | Accommodates | 0.0553 |
+| 7 | Reviews per month | 0.0351 |
+| 8 | Bathrooms | 0.0331 |
+| 9 | Availability 365 | 0.0275 |
+| 10 | Unavailability-rate proxy | 0.0268 |
+
+Feature importance does not establish causation.
+
+Because categorical features such as neighbourhood are one-hot encoded, their total influence may be distributed across multiple encoded categories rather than appearing as one single feature.
+
+### Diagnostic Visualization
+
+The actual-vs-predicted visualization displays:
+
+```text
+1,283 of 1,295 test observations
+```
+
+using the:
+
+```text
+99th percentile of actual test prices = €1,141
+```
+
+as a visualization limit.
+
+This limit is applied only to the chart for readability.
+
+All 1,295 test observations remain included in:
+
+- MAE
+- RMSE
+- R²
+- Model evaluation
+- Saved prediction outputs
+
+### Generated Modeling Outputs
+
+```text
+outputs/modeling/
+├── price_model_results.csv
+├── price_model_predictions.csv
+├── price_model_comparison.png
+├── random_forest_feature_importance.csv
+├── random_forest_feature_importance.png
+└── actual_vs_predicted_price.png
+```
+
+The experiment is treated as a focused analytical extension, not a production pricing system.
+
+---
+
+## 24. Validation Warning Review
 
 All seven validation warnings were manually reviewed.
 
@@ -695,8 +999,8 @@ They covered:
 2. 3,994 missing summary-listing prices.
 3. 96 canonical summary listings absent from detailed listings.
 4. 3,992 missing detailed-listing prices.
-5. Fully empty neighbourhood_group.
-6. 22,541 repeated (listing_id, date) summary-review rows.
+5. Fully empty `neighbourhood_group`.
+6. 22,541 repeated `(listing_id, date)` summary-review rows.
 7. One missing reviewer name.
 
 No warning required blind deletion or fabricated imputation.
@@ -705,11 +1009,13 @@ Each was handled according to source meaning and analytical context.
 
 ---
 
-## 23. Assumptions and Caveats Documentation
+## 25. Assumptions and Caveats Documentation
 
 A dedicated assumptions document was created:
 
-`docs/assumptions.md`
+```text
+docs/assumptions.md
+```
 
 It documents topics including:
 
@@ -717,21 +1023,25 @@ It documents topics including:
 - Canonical population
 - Missing prices
 - Missing host metadata
-- Source coverage differences
-- Calendar proxy limitations
+- Source-coverage differences
+- Calendar-proxy limitations
 - Review-count limitations
 - Outlier treatment
 - Statistical interpretation
+- Machine-learning interpretation
 - One-row-per-listing grain
 - 8 GB RAM strategy
 - Non-causal interpretation
+
 ---
 
-## 24. Engineering Decision Log
+## 26. Engineering Decision Log
 
 A dedicated engineering decision log was created:
 
-`docs/decision_log.md`
+```text
+docs/decision_log.md
+```
 
 It records major decisions including:
 
@@ -743,50 +1053,119 @@ It records major decisions including:
 - Left-preserving enrichment
 - Aggregate-before-join strategy
 - Null-price preservation
-- Validation severity framework
-- Validation gate behavior
+- Validation-severity framework
+- Validation-gate behavior
 - Warehouse design
 - Statistical scope
 - Outlier strategy
 - Automated testing
+- Continuous integration
+- Focused machine-learning experiment
+- Target-leakage prevention
 - AI disclosure
 - Confidential-data handling
+
 ---
 
-## 25. Reproducibility
+## 27. Architecture Diagram
+
+A project architecture diagram was created to show the full engineering flow from raw source data to analytical outputs and reporting.
+
+Recommended repository path:
+
+```text
+docs/images/amsterdam_airbnb_data_pipeline_architecture.png
+```
+
+The architecture communicates:
+
+1. Public source data
+2. Raw data layer
+3. Raw input verification
+4. Automated profiling
+5. Data-quality validation
+6. Critical validation gate
+7. Cleaning and standardization
+8. Listing-level enrichment
+9. Processed Parquet layer
+10. DuckDB analytical warehouse
+11. SQL, EDA, statistics, and machine learning
+12. Business findings and final reporting
+
+---
+
+## 28. Reproducibility
 
 The project supports reproducibility through:
 
 - Modular Python source code
 - A single end-to-end pipeline entry point
-- requirements.txt
+- A separate reproducible machine-learning experiment
+- `requirements.txt`
 - Separate raw and processed layers
 - Deterministic output paths
 - Data-quality reports
 - Automated tests
+- GitHub Actions CI
 - Documented assumptions
 - Documented engineering decisions
 - Git version control
 
 Core execution command:
 
+```bash
 python run_pipeline.py --city amsterdam
+```
+
+Machine-learning experiment command:
+
+```bash
+python experiments/price_prediction.py
+```
 
 Test execution command:
 
+```bash
 python -m pytest tests/ -v
+```
+
+Compilation verification command:
+
+```bash
+python -m compileall -q run_pipeline.py src tests experiments
+```
+
+---
+
+## 29. Current Interactive Dashboard Status
+
+A live interactive market-analysis dashboard is **planned next** but is not yet counted as completed work.
+
+The intended purpose is to provide exploratory access to:
+
+- Market overview
+- Neighbourhood comparison
+- Room-type analysis
+- Pricing distributions
+- Review activity
+- Availability proxy patterns
+- Statistical findings
+- Machine-learning results
+
+This work should be documented as completed only after the dashboard has been implemented, tested, and verified.
+
 ---
 
 # Final Completed Work Summary
 
-The project successfully delivers:
+The project currently delivers:
 
 - One-city Amsterdam scope
 - Seven source datasets processed
 - Complete dataset familiarization
 - Automated profiling
 - Automated data-quality validation
-- Validation gate
+- Critical validation gate
 - Cleaning and standardization
 - Canonical population preservation
 - Listing-level enrichment
@@ -797,47 +1176,78 @@ The project successfully delivers:
 - 8 GB RAM-aware processing
 - DuckDB analytical warehouse
 - Warehouse reconciliation
-- Analytical SQL queries
+- Eight analytical SQL queries
 - Ten EDA visualizations
 - Two statistical hypotheses
 - End-to-end pipeline execution
 - Thirteen automated tests
+- GitHub Actions continuous integration
+- Focused price-prediction experiment
+- Three regression models compared
+- Random Forest feature-importance analysis
+- Actual-vs-predicted diagnostic analysis
+- Architecture diagram
 - Assumptions documentation
 - Engineering decision documentation
+- AI usage disclosure
 
-Key final engineering results:
+## Key Final Engineering Results
 
 | Metric | Result |
 |---|---:|
-| Canonical listings preserved | 10,465 |
-| Detailed listings matched | 10,369 |
-| Summary-only listings preserved | 96 |
-| Review events reconciled | 545,162 |
-| Calendar rows reconciled | 3,819,725 |
+| Canonical listings preserved | **10,465** |
+| Detailed listings matched | **10,369** |
+| Summary-only listings preserved | **96** |
+| Review events reconciled | **545,162** |
+| Calendar rows reconciled | **3,819,725** |
+| Source datasets profiled | **7 / 7** |
+| Data-quality validation | **83 PASS / 7 WARNING / 0 FAIL** |
+| Warehouse validation | **17 PASS / 0 FAIL** |
+| Automated tests | **13 passed / 0 failed** |
+| GitHub Actions CI | **Passing** |
+| Analytical SQL queries | **8** |
+| EDA visualizations | **10** |
+| Statistical hypotheses | **2** |
+| Price-prediction models compared | **3** |
+| Best predictive model | **Random Forest Regressor** |
+| Best model MAE | **€78.61** |
+| Best model RMSE | **€133.76** |
+| Best model R² | **0.5884** |
 
-Data-quality validation:
-| Status | Count |
-|---|---:|
-| PASS | 83 |
-| WARNING | 7 |
-| FAIL | 0 |
+## Current Completion Status
 
-Warehouse validation:
-| Warehouse Check | Count |
-|---|---:|
-| PASS | 17 |
-| FAIL | 0 |
+```text
+✅ Dataset Familiarization
+✅ Automated Profiling
+✅ Data-Quality Validation
+✅ Critical Validation Gate
+✅ Cleaning and Standardization
+✅ Listing-Level Enrichment
+✅ Review and Calendar Aggregation
+✅ Processed Parquet Layer
+✅ DuckDB Analytical Warehouse
+✅ 8 Analytical SQL Queries
+✅ 10 EDA Visualizations
+✅ 2 Statistical Hypothesis Tests
+✅ End-to-End Pipeline
+✅ 13 Automated Tests
+✅ GitHub Actions Continuous Integration
+✅ Focused Price-Prediction Experiment
+✅ Random Forest Feature Importance
+✅ Actual-vs-Predicted Diagnostic Analysis
+✅ Architecture Diagram
+✅ Assumptions Documentation
+✅ Engineering Decision Log
+✅ AI Usage Disclosure
 
-Automated tests:
-| Test Result | Count |
-|---|---:|
-| Passed | 13 |
-| Failed | 0 |
+⬜ Interactive Dashboard
+⬜ Final Report Update
+⬜ Submission Details File
+⬜ Final Repository QA
+⬜ Merge dev → main
+⬜ Submit
+```
 
-Full pipeline execution:
-Successful
+The completed work demonstrates a reproducible, memory-aware, validated, statistically reasoned, testable, and analytically useful data-engineering workflow for the Amsterdam Airbnb market.
 
-Latest measured pipeline runtime:
-**45.49 seconds**
-
-The completed work demonstrates a reproducible, memory-aware, validated, and analytically useful data engineering workflow for the Amsterdam Airbnb market.
+The next planned analytical extension is an **interactive Streamlit dashboard for live market exploration**.
