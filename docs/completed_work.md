@@ -26,6 +26,8 @@ The project follows a one-city, depth-first strategy focused on:
 - Focused machine-learning experimentation
 - Automated testing
 - Continuous integration
+- Interactive Streamlit dashboard
+- Streamlit Community Cloud deployment
 - Reproducibility
 - Professional documentation
 
@@ -43,6 +45,18 @@ The focused price-prediction experiment can be executed using:
 
 ```bash
 python experiments/price_prediction.py
+```
+
+The interactive dashboard can be executed locally using:
+
+```bash
+streamlit run dashboard/app.py
+```
+
+Live deployed dashboard:
+
+```text
+https://amsterdam-airbnb-market-explorer.streamlit.app/
 ```
 
 ---
@@ -89,6 +103,13 @@ airbnb-data-engineering-challenge/
 │   ├── processed/
 │   └── warehouse/
 │
+├── dashboard/
+│   ├── __init__.py
+│   ├── app.py
+│   ├── charts.py
+│   ├── components.py
+│   └── data_loader.py
+│
 ├── src/
 │   ├── __init__.py
 │   ├── ingest.py
@@ -117,7 +138,7 @@ airbnb-data-engineering-challenge/
 │   └── modeling/
 │
 ├── docs/
-│   ├── images/
+│   ├── architecture_diagram.png
 │   ├── assumptions.md
 │   ├── decision_log.md
 │   ├── completed_work.md
@@ -798,7 +819,7 @@ Test runtime: 1.32 seconds
 Verification commands:
 
 ```bash
-python -m compileall -q run_pipeline.py src tests experiments
+python -m compileall -q run_pipeline.py src tests experiments dashboard
 ```
 
 ```bash
@@ -1074,7 +1095,7 @@ A project architecture diagram was created to show the full engineering flow fro
 Recommended repository path:
 
 ```text
-docs/images/amsterdam_airbnb_data_pipeline_architecture.png
+docs/architecture_diagram.png
 ```
 
 The architecture communicates:
@@ -1107,6 +1128,8 @@ The project supports reproducibility through:
 - Data-quality reports
 - Automated tests
 - GitHub Actions CI
+- Interactive dashboard code
+- Live Streamlit Community Cloud deployment
 - Documented assumptions
 - Documented engineering decisions
 - Git version control
@@ -1123,6 +1146,18 @@ Machine-learning experiment command:
 python experiments/price_prediction.py
 ```
 
+Dashboard command:
+
+```bash
+streamlit run dashboard/app.py
+```
+
+Live dashboard:
+
+```text
+https://amsterdam-airbnb-market-explorer.streamlit.app/
+```
+
 Test execution command:
 
 ```bash
@@ -1132,27 +1167,100 @@ python -m pytest tests/ -v
 Compilation verification command:
 
 ```bash
-python -m compileall -q run_pipeline.py src tests experiments
+python -m compileall -q run_pipeline.py src tests experiments dashboard
 ```
 
 ---
 
-## 29. Current Interactive Dashboard Status
+## 29. Interactive Streamlit Dashboard and Live Deployment
 
-A live interactive market-analysis dashboard is **planned next** but is not yet counted as completed work.
+A complete interactive analytical dashboard was implemented using:
 
-The intended purpose is to provide exploratory access to:
+```text
+Streamlit
+Plotly
+```
 
-- Market overview
-- Neighbourhood comparison
-- Room-type analysis
-- Pricing distributions
-- Review activity
-- Availability proxy patterns
-- Statistical findings
-- Machine-learning results
+Implementation files:
 
-This work should be documented as completed only after the dashboard has been implemented, tested, and verified.
+```text
+dashboard/
+├── __init__.py
+├── app.py
+├── charts.py
+├── components.py
+└── data_loader.py
+```
+
+The dashboard is deployed live at:
+
+```text
+https://amsterdam-airbnb-market-explorer.streamlit.app/
+```
+
+### Dashboard Tabs
+
+The dashboard contains seven interactive tabs:
+
+1. **Overview**
+2. **Market Explorer**
+3. **Pricing**
+4. **Reviews & Availability**
+5. **Statistics**
+6. **Machine Learning**
+7. **Data Engineering**
+
+### Interactive Filters
+
+Users can filter by:
+
+- Neighbourhood
+- Room type
+- Host portfolio segment
+- Superhost status
+- Available price range
+- Guest capacity
+
+### Filter Behavior
+
+The final filter behavior was deliberately designed to preserve source meaning:
+
+- The full canonical dataset remains visible by default.
+- Missing prices remain null and are not treated as zero.
+- Missing capacities are preserved by default.
+- When the price range is actively narrowed, rows without a valid price are excluded from that filtered result.
+- When the capacity range is actively narrowed, rows without valid capacity are excluded from that filtered result.
+
+### Dashboard Data Sources
+
+The dashboard reads validated processed outputs rather than loading the large raw datasets directly.
+
+Key inputs include:
+
+```text
+data/processed/enriched_listing_master.parquet
+outputs/modeling/price_model_results.csv
+outputs/modeling/random_forest_feature_importance.csv
+outputs/modeling/price_model_predictions.csv
+outputs/statistics/tables/statistical_test_results.csv
+docs/architecture_diagram.png
+```
+
+### Dashboard Verification
+
+The dashboard was:
+
+1. Implemented.
+2. Compiled successfully.
+3. Tested locally.
+4. Verified against project outputs.
+5. Deployed to Streamlit Community Cloud.
+6. Reviewed after deployment.
+7. Updated to correct price and capacity filter behavior.
+8. Updated to show the project architecture diagram.
+9. Marked as completed in the dashboard project-status panel.
+
+Therefore, the interactive dashboard and its live deployment are now completed project deliverables.
 
 ---
 
@@ -1186,6 +1294,10 @@ The project currently delivers:
 - Three regression models compared
 - Random Forest feature-importance analysis
 - Actual-vs-predicted diagnostic analysis
+- Interactive Streamlit dashboard
+- Seven analytical dashboard tabs
+- Interactive market filters
+- Live Streamlit Community Cloud deployment
 - Architecture diagram
 - Assumptions documentation
 - Engineering decision documentation
@@ -1213,6 +1325,9 @@ The project currently delivers:
 | Best model MAE | **€78.61** |
 | Best model RMSE | **€133.76** |
 | Best model R² | **0.5884** |
+| Interactive dashboard tabs | **7** |
+| Dashboard deployment | **Live on Streamlit Community Cloud** |
+| Live dashboard | **https://amsterdam-airbnb-market-explorer.streamlit.app/** |
 
 ## Current Completion Status
 
@@ -1235,14 +1350,16 @@ The project currently delivers:
 ✅ Focused Price-Prediction Experiment
 ✅ Random Forest Feature Importance
 ✅ Actual-vs-Predicted Diagnostic Analysis
+✅ Interactive Streamlit Dashboard
+✅ Live Streamlit Community Cloud Deployment
+✅ Dashboard Filter Validation
 ✅ Architecture Diagram
 ✅ Assumptions Documentation
 ✅ Engineering Decision Log
 ✅ AI Usage Disclosure
+✅ Submission Details File
 
-⬜ Interactive Dashboard
 ⬜ Final Report Update
-⬜ Submission Details File
 ⬜ Final Repository QA
 ⬜ Merge dev → main
 ⬜ Submit
@@ -1250,4 +1367,4 @@ The project currently delivers:
 
 The completed work demonstrates a reproducible, memory-aware, validated, statistically reasoned, testable, and analytically useful data-engineering workflow for the Amsterdam Airbnb market.
 
-The next planned analytical extension is an **interactive Streamlit dashboard for live market exploration**.
+The interactive Streamlit dashboard has been completed and deployed. The remaining work is focused on the final report, repository QA, integration to `main`, and submission.

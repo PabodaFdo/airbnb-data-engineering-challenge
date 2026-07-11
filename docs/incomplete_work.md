@@ -9,7 +9,7 @@
 
 ## Purpose
 
-This document records work that remains intentionally incomplete, deferred, out of scope, or dependent on unavailable source data.
+This document records work that remains intentionally incomplete, deferred, out of scope, or dependent on source data that is not available.
 
 The project followed a depth-first strategy. Priority was given to completing a reliable engineering and analytical core before adding optional breadth.
 
@@ -33,29 +33,34 @@ The completed core now includes:
 - Focused machine-learning price-prediction experiment
 - Random Forest feature-importance analysis
 - Actual-vs-predicted diagnostic analysis
+- Interactive Streamlit dashboard
+- Seven analytical dashboard tabs
+- Interactive market filters
+- Live Streamlit Community Cloud deployment
 - Architecture documentation
 - Assumptions documentation
 - Engineering decision documentation
 - AI usage disclosure
+- Submission details documentation
 
-The following areas remain incomplete, deferred, planned, or out of scope.
+Live dashboard:
+
+```text
+https://amsterdam-airbnb-market-explorer.streamlit.app/
+```
+
+The following areas remain intentionally incomplete, deferred, planned, or out of scope.
 
 ---
 
 ## Recently Completed Optional Extensions
 
-Some work that was originally deferred has now been completed after the engineering core was stabilized.
+Several items that were originally deferred were later completed after the engineering core had been stabilized.
 
 ### Focused Machine Learning
 
 **Previous status:** Deferred  
 **Current status:** **Completed**
-
-A focused price-prediction experiment was implemented in:
-
-```text
-experiments/price_prediction.py
-```
 
 Three models were compared:
 
@@ -69,28 +74,12 @@ Best result:
 |---|---:|---:|---:|
 | **Random Forest Regressor** | **€78.61** | **€133.76** | **0.5884** |
 
-The experiment also includes:
-
-- Target-leakage prevention
-- 80/20 train-test split
-- Reproducible random state
-- Missing-feature preprocessing
-- Log target transformation
-- Feature-importance analysis
-- Actual-vs-predicted diagnostic visualization
-
-Therefore, machine learning is no longer listed as incomplete work.
+Machine learning is no longer listed as incomplete work.
 
 ### GitHub Actions Continuous Integration
 
 **Previous status:** Deferred  
 **Current status:** **Completed**
-
-A GitHub Actions workflow was implemented in:
-
-```text
-.github/workflows/ci.yml
-```
 
 The workflow:
 
@@ -102,84 +91,68 @@ The workflow:
 
 The workflow has completed successfully on the `dev` branch.
 
-Therefore, continuous integration is no longer listed as incomplete work.
+Continuous integration is no longer listed as incomplete work.
+
+### Interactive Streamlit Dashboard
+
+**Previous status:** Planned  
+**Current status:** **Completed and deployed**
+
+Implementation:
+
+```text
+dashboard/
+├── __init__.py
+├── app.py
+├── charts.py
+├── components.py
+└── data_loader.py
+```
+
+The dashboard includes seven tabs:
+
+1. Overview
+2. Market Explorer
+3. Pricing
+4. Reviews & Availability
+5. Statistics
+6. Machine Learning
+7. Data Engineering
+
+Live deployment:
+
+```text
+https://amsterdam-airbnb-market-explorer.streamlit.app/
+```
+
+The dashboard was implemented, tested locally, verified against processed outputs, deployed, and reviewed after deployment.
+
+Therefore, the dashboard is no longer listed as incomplete work.
+
+### Dashboard Cloud Deployment
+
+**Previous status:** Not implemented  
+**Current status:** **Completed**
+
+The interactive dashboard is deployed using Streamlit Community Cloud.
+
+This completed deployment does not mean the entire engineering pipeline has been migrated to a production cloud platform. Full cloud-native pipeline execution remains a possible future improvement.
 
 ---
 
-## 1. Interactive Dashboard
+## 1. Multi-City Analysis
 
 ### Status
 
-**Planned next — not yet implemented.**
-
-### Purpose
-
-The next planned analytical extension is a live interactive dashboard for exploratory market analysis.
-
-The preferred implementation is:
-
-```text
-Streamlit
-```
-
-The dashboard should read from compact processed outputs such as:
-
-```text
-data/processed/enriched_listing_master.parquet
-```
-
-and, where useful:
-
-```text
-data/warehouse/airbnb_analytics.duckdb
-```
-
-rather than loading all raw source files directly.
-
-### Planned dashboard areas
-
-The intended dashboard may include:
-
-- Market overview KPI cards
-- Neighbourhood filters
-- Room-type filters
-- Price-range filters
-- Listing-count analysis
-- Median-price comparisons
-- Price distributions
-- Host portfolio segmentation
-- Review activity
-- Availability-proxy patterns
-- Accommodation-capacity analysis
-- Statistical findings
-- Machine-learning model comparison
-- Random Forest feature importance
-- Actual-vs-predicted diagnostic results
-- Key business insights and caveats
-
-### Completion rule
-
-The dashboard should be moved to completed work only after it has been:
-
-1. Implemented
-2. Tested locally
-3. Verified against processed project outputs
-4. Documented in the README
-5. Added to the final report where relevant
-
----
-
-## 2. Multi-City Analysis
-
-### Status
-
-**Not implemented.**
+**Not implemented by design.**
 
 ### Reason
 
-The project intentionally focuses on one city:
+The project intentionally focuses on:
 
-**Amsterdam, Netherlands**
+```text
+Amsterdam, Netherlands
+```
 
 The goal was to achieve greater depth in:
 
@@ -193,20 +166,16 @@ The goal was to achieve greater depth in:
 - Testing
 - Documentation
 
-Adding additional cities would require:
+Adding multiple cities would require:
 
 - Additional data acquisition
 - Schema harmonization
 - Cross-city validation
-- Market-specific interpretation
 - Currency considerations
+- Market-specific interpretation
 - More complex comparison logic
-- Additional report content
-- More opportunities for inconsistent processing
 
-### Future improvement
-
-The current pipeline could be generalized further using configuration-driven city selection and repeated execution across multiple markets.
+### Future Improvement
 
 Possible future work includes:
 
@@ -219,40 +188,40 @@ Possible future work includes:
 
 ---
 
-## 3. Cloud Deployment
+## 2. Full Cloud-Native Pipeline Deployment
 
 ### Status
 
 **Not implemented.**
 
-### Reason
+### Important Distinction
 
-The project was designed and validated for local execution on an 8 GB RAM Windows laptop.
+The **Streamlit dashboard is already deployed live**.
 
-Cloud deployment was not required for the core submission and would add infrastructure complexity without materially improving the fundamental quality of the completed engineering workflow.
+What remains incomplete is full cloud-native deployment of the complete engineering workflow, such as:
 
-### Future improvement
+- Scheduled source ingestion
+- Cloud object storage
+- Managed warehouse services
+- Scheduled transformation jobs
+- Secrets management
+- Production monitoring
+- Automated environment promotion
 
-Possible deployment options include:
+### Future Improvement
+
+Possible platforms include:
 
 - AWS
 - Microsoft Azure
 - Google Cloud
 - Managed container platforms
-- Scheduled cloud execution
-- Hosted Streamlit deployment
 
-Any cloud deployment should preserve:
-
-- Reproducibility
-- Secure configuration
-- Cost awareness
-- Data-access controls
-- Clear environment documentation
+Any future implementation should preserve reproducibility, cost awareness, secure configuration, and clear data-access controls.
 
 ---
 
-## 4. Workflow Orchestration
+## 3. Workflow Orchestration
 
 ### Status
 
@@ -260,32 +229,29 @@ Any cloud deployment should preserve:
 
 ### Reason
 
-The project currently uses:
+The complete pipeline already runs through:
 
 ```bash
 python run_pipeline.py --city amsterdam
 ```
 
-to execute the complete seven-stage engineering workflow.
+A separate framework such as Airflow, Prefect, or Dagster was not prioritized because the project has a focused one-city scope and the current entry point already provides ordered, reproducible execution.
 
-A separate orchestration framework such as Airflow, Prefect, or Dagster was not added because the project has a focused single-city scope and the current pipeline already provides ordered, reproducible stage execution.
+### Future Improvement
 
-### Future improvement
-
-A production-oriented version could use orchestration for:
+A production-oriented version could add:
 
 - Scheduling
 - Retries
 - Dependency management
 - Monitoring
 - Failure alerts
-- Incremental execution
 - Backfills
-- Operational dashboards
+- Incremental execution
 
 ---
 
-## 5. Incremental Data Processing
+## 4. Incremental Data Processing
 
 ### Status
 
@@ -293,33 +259,30 @@ A production-oriented version could use orchestration for:
 
 ### Reason
 
-The current pipeline performs full-batch processing of the selected Amsterdam datasets.
+The current pipeline performs full-batch processing of the selected Amsterdam snapshot.
 
 Incremental processing would require:
 
-- Reliable source-update behavior
-- Stable record identifiers
-- Change-detection logic
+- Stable source-update behavior
+- Change-detection rules
 - Watermark tracking
-- Additional metadata management
-- Upsert and merge rules
+- Upsert or merge logic
 - Historical-state decisions
+- Late-arriving-data handling
 
-### Future improvement
+### Future Improvement
 
-Possible improvements include:
+Possible additions include:
 
 - Incremental ingestion
-- Watermark tracking
+- Watermarks
 - Change-data capture
 - Partition-based updates
-- Merge/upsert logic
 - Historical snapshots
-- Late-arriving-data handling
 
 ---
 
-## 6. Dockerization
+## 5. Dockerization
 
 ### Status
 
@@ -332,26 +295,26 @@ The project is currently reproducible through:
 - Python virtual environment
 - `requirements.txt`
 - Modular source code
-- A single pipeline entry point
-- A separate machine-learning experiment entry point
+- End-to-end pipeline entry point
+- Separate ML experiment entry point
 - Automated tests
 - GitHub Actions CI
 
-Docker was not prioritized ahead of core engineering, analytical, testing, and documentation deliverables.
+Docker was not prioritized ahead of the required engineering, analytical, testing, dashboard, and documentation deliverables.
 
-### Future improvement
+### Future Improvement
 
-A Docker image could improve:
+Docker could improve:
 
 - Portability
 - Environment consistency
 - Dependency isolation
 - Deployment readiness
-- Reproducibility across operating systems
+- Cross-platform reproducibility
 
 ---
 
-## 7. Advanced Data-Quality Framework
+## 6. Advanced External Data-Quality Framework
 
 ### Status
 
@@ -359,15 +322,15 @@ A Docker image could improve:
 
 ### Reason
 
-The project already includes a custom validation framework with:
+The project already includes a custom framework using:
 
-- `PASS`
-- `WARNING`
-- `FAIL`
+```text
+PASS
+WARNING
+FAIL
+```
 
-It also includes a critical validation gate.
-
-The current validation result is:
+Latest result:
 
 | Status | Count |
 |---|---:|
@@ -375,23 +338,24 @@ The current validation result is:
 | WARNING | **7** |
 | FAIL | **0** |
 
-External frameworks such as Great Expectations, Soda, or Deequ were not added because the current custom validation system already covers the most important source-quality checks for this assignment.
+The project also includes a critical validation gate.
 
-### Future improvement
+External frameworks such as Great Expectations, Soda, or Deequ were not added because the custom framework already covers the assignment's most important source-quality checks.
 
-A larger production system could integrate:
+### Future Improvement
+
+Possible additions:
 
 - Great Expectations
 - Soda
 - Data contracts
-- Schema evolution checks
+- Schema-evolution checks
 - Trend-based anomaly detection
 - Data-quality observability
-- Historical validation trends
 
 ---
 
-## 8. Full Historical Snapshot Tracking
+## 7. Full Historical Snapshot Tracking
 
 ### Status
 
@@ -399,9 +363,9 @@ A larger production system could integrate:
 
 ### Reason
 
-The project uses the available Amsterdam dataset snapshot and does not maintain a full historical slowly changing dimension model.
+The project uses the available Amsterdam dataset snapshot and does not maintain a full slowly changing dimension model.
 
-### Future improvement
+### Future Improvement
 
 A production version could support:
 
@@ -411,11 +375,11 @@ A production version could support:
 - Price changes
 - Availability changes
 - Slowly changing dimensions
-- Point-in-time analytical views
+- Point-in-time analysis
 
 ---
 
-## 9. Real Occupancy and Revenue Calculation
+## 8. Verified Occupancy, Revenue, and Profitability
 
 ### Status
 
@@ -423,7 +387,7 @@ A production version could support:
 
 ### Reason
 
-The source data does not provide verified reservation or transaction records.
+The source data does not provide trusted reservation or transaction records.
 
 Therefore, the project does not claim to calculate:
 
@@ -434,23 +398,19 @@ Therefore, the project does not claim to calculate:
 - Confirmed transaction prices
 - Verified profitability
 
-Calendar unavailability is treated only as:
+Calendar unavailability is used only as:
 
 ```text
 unavailability_rate_proxy
 ```
 
-and is not interpreted as true occupancy.
+and is not interpreted as verified occupancy.
 
-### Future improvement
-
-Accurate occupancy or revenue analysis would require trusted reservation and transaction data.
-
-This is primarily a **data-availability limitation**, not an implementation failure.
+This is primarily a data-availability limitation rather than an implementation failure.
 
 ---
 
-## 10. Causal Analysis
+## 9. Causal Analysis
 
 ### Status
 
@@ -460,26 +420,24 @@ This is primarily a **data-availability limitation**, not an implementation fail
 
 The project uses observational Airbnb data.
 
-Therefore, statistical and machine-learning analyses identify:
+The statistical and machine-learning analyses identify:
 
 - Associations
 - Differences
 - Predictive patterns
 
-but do not prove causation.
+They do not prove causation.
 
 For example:
 
 - Entire-home listings have higher prices than private rooms.
 - Bedrooms and room type are important predictive features in the fitted Random Forest model.
 
-These findings do not prove that changing a feature would causally produce the observed price change.
+These findings do not prove that changing a feature would causally create the observed price change.
 
-### Future improvement
+### Future Improvement
 
-Causal questions would require stronger study design, additional variables, experiments, quasi-experimental methods, or causal-inference techniques.
-
-Possible approaches could include:
+Suitable data and stronger study designs would be required for methods such as:
 
 - Matching
 - Difference-in-differences
@@ -487,11 +445,9 @@ Possible approaches could include:
 - Regression discontinuity
 - Causal forests
 
-Only where supported by suitable data and assumptions.
-
 ---
 
-## 11. Additional Statistical Hypotheses
+## 10. Additional Statistical Hypotheses
 
 ### Status
 
@@ -499,40 +455,33 @@ Only where supported by suitable data and assumptions.
 
 ### Reason
 
-The project completed two focused statistical hypotheses deeply rather than many shallow tests.
+The project completed two focused hypotheses deeply:
 
-The selected analyses were:
-
-1. Entire-home versus private-room pricing
-2. Superhost versus non-superhost review-score performance
+1. Entire-home versus private-room pricing.
+2. Superhost versus non-superhost review-score performance.
 
 The emphasis was on:
 
-- Proper null and alternative hypotheses
-- Sample-size review
-- Distribution assessment
 - Appropriate test selection
-- Statistical significance
+- Sample-size review
 - Effect size
 - Practical significance
 - Business interpretation
 - Honest limitations
 
-### Future improvement
+### Future Improvement
 
-Possible future tests include:
+Possible additional tests include:
 
 - Neighbourhood price differences
 - Weekend versus weekday pricing
 - High-review versus low-review listing performance
-- Availability-proxy differences across room types
+- Availability-proxy differences by room type
 - Host-portfolio segment comparisons
-
-Any additional testing should include multiple-comparison considerations where appropriate.
 
 ---
 
-## 12. Advanced Geographic Visualization
+## 11. Advanced Geographic Visualization
 
 ### Status
 
@@ -540,77 +489,57 @@ Any additional testing should include multiple-comparison considerations where a
 
 ### Reason
 
-The project includes neighbourhood-level analysis but did not prioritize advanced interactive geospatial mapping.
+The project includes neighbourhood-level analysis and geographic attributes, but an advanced interactive map was not necessary for the core submission.
 
-### Future improvement
+### Future Improvement
 
 Possible additions include:
 
 - Choropleth maps
-- Listing-density maps
-- Price heatmaps
-- Interactive neighbourhood exploration
-- Geospatial clustering
-- Map-based dashboard filtering
-
-This could later be integrated into the planned Streamlit dashboard.
+- Spatial price patterns
+- Interactive GeoJSON layers
+- Neighbourhood boundary overlays
+- Spatial clustering
 
 ---
 
-## 13. Advanced Machine-Learning Evaluation
+## 12. Advanced Machine-Learning Evaluation
 
 ### Status
 
-**Not implemented beyond the focused baseline experiment.**
+**Partially deferred.**
 
-### Completed scope
+### Completed
 
-The current machine-learning experiment already includes:
+The focused experiment includes:
 
-- Dummy Regressor baseline
+- Dummy baseline
 - Ridge Regression
 - Random Forest Regressor
+- 80/20 train-test split
 - MAE
 - RMSE
 - R²
-- Explicit leakage prevention
-- Reproducible train-test split
 - Feature importance
 - Actual-vs-predicted diagnostics
+- Target-leakage prevention
 
-### Deferred scope
+### Deferred
 
-The following were intentionally not added:
+The following were intentionally not prioritized:
 
-- Extensive hyperparameter tuning
-- Cross-validation
-- Nested cross-validation
-- Additional boosting models
-- Model calibration
-- SHAP analysis
-- Permutation importance
-- Model persistence and serving
-- Production inference API
-- Drift monitoring
+- Extensive cross-validation
+- Broad hyperparameter search
+- Many additional model families
+- Multi-city validation
+- Formal model calibration
+- Production robustness testing
 
-### Reason
-
-The goal was to add one focused, defensible experiment without turning a Data Engineering internship assignment into an oversized machine-learning project.
-
-### Future improvement
-
-Potential next steps include:
-
-- K-fold cross-validation
-- Randomized hyperparameter search
-- Permutation importance
-- Grouped feature importance
-- SHAP explanations
-- Cross-city external validation
+The experiment is an analytical extension, not a production pricing system.
 
 ---
 
-## 14. Production Model Serving
+## 13. Production Model Serving
 
 ### Status
 
@@ -618,34 +547,23 @@ Potential next steps include:
 
 ### Reason
 
-The Random Forest model is used only for a focused analytical experiment.
+The machine-learning work is a focused analytical experiment.
 
-It is not deployed as:
+The model is not exposed through:
 
-- An API
-- A batch-scoring service
-- A real-time pricing service
-- A production recommendation engine
+- API serving
+- Batch scoring service
+- Online inference endpoint
+- Model registry
+- Production feature store
 
-### Future improvement
+### Future Improvement
 
-A production-oriented version would require:
-
-- Model serialization
-- Versioning
-- Reproducible preprocessing
-- Inference validation
-- API or batch interface
-- Monitoring
-- Drift detection
-- Retraining policy
-- Security controls
-
-The current model should not be treated as a production pricing system.
+A production scenario could add these capabilities only after stronger validation and operational requirements are defined.
 
 ---
 
-## 15. Full Production Observability
+## 14. Full Production Observability
 
 ### Status
 
@@ -653,135 +571,97 @@ The current model should not be treated as a production pricing system.
 
 ### Reason
 
-The project includes logging, validation outputs, automated tests, and CI, but does not include a complete production observability stack.
+The project is a take-home assignment rather than a continuously operated production system.
 
-### Future improvement
+### Future Improvement
 
-Possible additions include:
+Possible production features include:
 
+- Pipeline monitoring
+- Alerting
+- Data freshness checks
+- Runtime metrics
+- Historical data-quality trends
+- Model drift monitoring
 - Centralized logs
-- Pipeline metrics
-- Data-quality trends
-- Runtime monitoring
-- Failure alerts
-- Model-performance monitoring
-- Data-drift detection
-- Dashboard-based operational health checks
 
 ---
 
-## 16. Final Report Update
+## 15. Final Report Update
 
 ### Status
 
-**Pending.**
+**Pending finalization.**
 
-### Reason
+The final report still needs to be updated to include the completed work added after the earlier draft:
 
-The final report must be updated to reflect recently completed work, including:
-
-- GitHub Actions continuous integration
-- Focused price-prediction experiment
-- Model results
-- Feature importance
+- Focused ML price-prediction experiment
+- Model comparison results
+- Feature-importance findings
 - Actual-vs-predicted diagnostics
-- Architecture diagram
-- Final completion status
+- GitHub Actions CI
+- Interactive Streamlit dashboard
+- Live dashboard URL
+- Dashboard screenshots
+- Updated future improvements
+- Updated project-completion status
 
-After the interactive dashboard is completed, the report should also include the dashboard in the appropriate section.
-
-### Completion rule
-
-The report should not be considered final until:
-
-1. All completed features are accurately documented.
-2. No completed feature is still described as deferred.
-3. No incomplete feature is falsely described as completed.
-4. Figures and tables are visually verified.
-5. The PDF is professionally formatted and reviewed.
-
----
-
-## 17. Submission Details File
-
-### Status
-
-**Pending.**
-
-The repository should include:
+Live dashboard URL:
 
 ```text
-SUBMISSION_DETAILS.md
+https://amsterdam-airbnb-market-explorer.streamlit.app/
 ```
 
-with:
-
-- Candidate name
-- GitHub username
-- Degree programme
-- Specialization
-- Institution
-- Current GPA
-- Latest academic results
-- Notice period
-- Earliest available start date
-- Onsite flexibility
-- Repository information
-- Submission date
-
-Sensitive personal information should not be added unnecessarily to a public repository.
+This is the main remaining documentation deliverable before repository QA and final submission.
 
 ---
 
 ## Final Prioritization Rationale
 
-The following principle guided the project:
+The guiding principle was:
 
 > **Complete the core work deeply before adding optional breadth.**
 
 The project prioritized:
 
-1. Reliable data ingestion
+1. Reliable data handling
 2. Complete dataset familiarization
 3. Automated profiling
 4. Data-quality validation
-5. Cleaning
-6. Enrichment
-7. Listing-grain preservation
+5. Cleaning and standardization
+6. Listing-level enrichment
+7. Canonical-grain preservation
 8. DuckDB analytical modeling
 9. SQL analysis
 10. EDA
 11. Statistical testing
-12. Automated tests
+12. Automated testing
 13. Continuous integration
 14. Focused machine-learning experimentation
-15. Architecture documentation
-16. Reproducibility
-17. Professional documentation
+15. Interactive dashboard development
+16. Live dashboard deployment
+17. Architecture documentation
+18. Reproducibility
+19. Professional documentation
 
-The following areas remain deferred or planned:
+The following remain deferred or out of scope:
 
-- Interactive Streamlit dashboard — **planned next**
 - Multiple cities
-- Cloud deployment
+- Full cloud-native pipeline deployment
 - Workflow orchestration
 - Incremental processing
 - Dockerization
-- Advanced external data-quality frameworks
+- External enterprise data-quality frameworks
 - Historical snapshot tracking
 - Verified occupancy and revenue analysis
 - Causal analysis
 - Additional statistical hypotheses
-- Advanced geospatial analysis
-- Advanced machine-learning evaluation
+- Advanced geospatial visualization
+- Extensive ML tuning and cross-validation
 - Production model serving
 - Full production observability
-- Final report update
-- Submission details file
 
 This is a deliberate engineering trade-off rather than an accidental omission.
-
-The goal is to deliver complete, validated, reproducible, and well-documented components rather than a larger number of unfinished features.
 
 ---
 
@@ -806,14 +686,16 @@ The goal is to deliver complete, validated, reproducible, and well-documented co
 ✅ Focused Price-Prediction Experiment
 ✅ Random Forest Feature Importance
 ✅ Actual-vs-Predicted Diagnostic Analysis
+✅ Interactive Streamlit Dashboard
+✅ Live Streamlit Community Cloud Deployment
+✅ Dashboard Filter Validation
 ✅ Architecture Diagram
 ✅ Assumptions Documentation
 ✅ Engineering Decision Log
 ✅ AI Usage Disclosure
+✅ SUBMISSION_DETAILS.md
 
-⬜ Interactive Streamlit Dashboard
 ⬜ Final Report Update
-⬜ SUBMISSION_DETAILS.md
 ⬜ Final Repository QA
 ⬜ Merge dev → main
 ⬜ Submit
