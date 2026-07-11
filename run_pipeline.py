@@ -29,6 +29,7 @@ import pandas as pd
 from src import build_warehouse
 from src import clean
 from src import enrich
+from src import ingest
 from src import profile
 from src import validate
 
@@ -39,8 +40,6 @@ from src import validate
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 
-RAW_DATA_ROOT = PROJECT_ROOT / "data" / "raw"
-
 VALIDATION_RESULTS_PATH = (
     PROJECT_ROOT
     / "outputs"
@@ -48,17 +47,8 @@ VALIDATION_RESULTS_PATH = (
     / "validation_results.csv"
 )
 
-SUPPORTED_CITIES = {"amsterdam"}
-
-REQUIRED_RAW_FILES = (
-    "listings.csv.gz",
-    "listings.csv",
-    "calendar.csv.gz",
-    "reviews.csv.gz",
-    "reviews.csv",
-    "neighbourhoods.csv",
-    "neighbourhoods.geojson",
-)
+# Reuse the supported-city configuration from src/ingest.py
+SUPPORTED_CITIES = ingest.SUPPORTED_CITIES
 
 
 # ---------------------------------------------------------------------------
@@ -72,48 +62,6 @@ logging.basicConfig(
 )
 
 LOGGER = logging.getLogger(__name__)
-
-
-# ---------------------------------------------------------------------------
-# Raw input verification
-# ---------------------------------------------------------------------------
-
-def verify_raw_inputs(city: str) -> None:
-    """
-    Verify that all required raw source files exist for the selected city.
-
-    Raw source files are never modified by this pipeline.
-    """
-
-    city_raw_dir = RAW_DATA_ROOT / city
-
-    LOGGER.info("Verifying raw source files...")
-    LOGGER.info("Raw data directory: %s", city_raw_dir)
-
-    if not city_raw_dir.exists():
-        raise FileNotFoundError(
-            f"Raw data directory does not exist: {city_raw_dir}"
-        )
-
-    missing_files = [
-        file_name
-        for file_name in REQUIRED_RAW_FILES
-        if not (city_raw_dir / file_name).exists()
-    ]
-
-    if missing_files:
-        missing_list = ", ".join(missing_files)
-
-        raise FileNotFoundError(
-            "The following required raw source files are missing: "
-            f"{missing_list}"
-        )
-
-    LOGGER.info(
-        "Raw input verification passed: %s/%s required files found.",
-        len(REQUIRED_RAW_FILES),
-        len(REQUIRED_RAW_FILES),
-    )
 
 
 # ---------------------------------------------------------------------------
@@ -177,7 +125,10 @@ def enforce_validation_gate() -> None:
                 row["rule_id"],
                 row["dataset_name"],
                 row["rule_description"],
-                row.get("invalid_count", "unknown invalid count"),
+                row.get(
+                    "invalid_count",
+                    "unknown invalid count",
+                ),
             )
 
         if len(failed_results) > 10:
@@ -207,7 +158,10 @@ def enforce_validation_gate() -> None:
         "and do not automatically block downstream processing."
     )
 
-    del results, statuses, failed_results
+    del results
+    del statuses
+    del failed_results
+
     gc.collect()
 
 
@@ -219,13 +173,29 @@ def run_stage(
     stage_number: int,
     total_stages: int,
     stage_name: str,
-    stage_function: Callable[[], None],
+    stage_function: Callable[[], object],
 ) -> float:
     """
     Execute one pipeline stage with timing, logging, memory cleanup,
     and clear failure handling.
 
-    Returns:
+    Parameters
+    ----------
+    stage_number:
+        Current pipeline stage number.
+
+    total_stages:
+        Total number of pipeline stages.
+
+    stage_name:
+        Human-readable stage name.
+
+    stage_function:
+        Callable that performs the stage work.
+
+    Returns
+    -------
+    float
         Elapsed execution time in seconds.
     """
 
@@ -265,7 +235,8 @@ def run_stage(
         raise
 
     finally:
-        # Help release temporary Python objects between large processing stages.
+        # Help release temporary Python objects between
+        # memory-intensive pipeline stages.
         gc.collect()
 
     elapsed_seconds = time.perf_counter() - start_time
@@ -289,13 +260,18 @@ def run_pipeline(city: str) -> None:
 
     Current supported scope:
         Amsterdam, Netherlands
+
+    Parameters
+    ----------
+    city:
+        City dataset to process.
     """
 
     normalized_city = city.lower().strip()
 
     if normalized_city not in SUPPORTED_CITIES:
         raise ValueError(
-            f"Unsupported city: '{city}'. "
+            f"Unsupported city: {city!r}. "
             f"Supported cities: {sorted(SUPPORTED_CITIES)}"
         )
 
@@ -317,15 +293,19 @@ def run_pipeline(city: str) -> None:
 
     stage_results: list[tuple[str, float]] = []
 
+    total_stages = 7
+
     # ------------------------------------------------------------------
     # Stage 1: Verify raw inputs
     # ------------------------------------------------------------------
 
     elapsed = run_stage(
         stage_number=1,
-        total_stages=7,
+        total_stages=total_stages,
         stage_name="Verify Raw Source Files",
-        stage_function=lambda: verify_raw_inputs(normalized_city),
+        stage_function=lambda: ingest.verify_raw_inputs(
+            normalized_city
+        ),
     )
 
     stage_results.append(
@@ -338,7 +318,7 @@ def run_pipeline(city: str) -> None:
 
     elapsed = run_stage(
         stage_number=2,
-        total_stages=7,
+        total_stages=total_stages,
         stage_name="Automated Dataset Profiling",
         stage_function=profile.main,
     )
@@ -353,7 +333,7 @@ def run_pipeline(city: str) -> None:
 
     elapsed = run_stage(
         stage_number=3,
-        total_stages=7,
+        total_stages=total_stages,
         stage_name="Data-Quality Validation",
         stage_function=validate.main,
     )
@@ -368,7 +348,7 @@ def run_pipeline(city: str) -> None:
 
     elapsed = run_stage(
         stage_number=4,
-        total_stages=7,
+        total_stages=total_stages,
         stage_name="Critical Validation Gate",
         stage_function=enforce_validation_gate,
     )
@@ -383,7 +363,7 @@ def run_pipeline(city: str) -> None:
 
     elapsed = run_stage(
         stage_number=5,
-        total_stages=7,
+        total_stages=total_stages,
         stage_name="Cleaning and Standardization",
         stage_function=clean.main,
     )
@@ -398,7 +378,7 @@ def run_pipeline(city: str) -> None:
 
     elapsed = run_stage(
         stage_number=6,
-        total_stages=7,
+        total_stages=total_stages,
         stage_name="Data Enrichment",
         stage_function=enrich.main,
     )
@@ -413,7 +393,7 @@ def run_pipeline(city: str) -> None:
 
     elapsed = run_stage(
         stage_number=7,
-        total_stages=7,
+        total_stages=total_stages,
         stage_name="DuckDB Analytical Warehouse",
         stage_function=build_warehouse.main,
     )
@@ -473,7 +453,14 @@ def run_pipeline(city: str) -> None:
 # ---------------------------------------------------------------------------
 
 def parse_arguments() -> argparse.Namespace:
-    """Parse command-line arguments."""
+    """
+    Parse command-line arguments.
+
+    Returns
+    -------
+    argparse.Namespace
+        Parsed command-line arguments.
+    """
 
     parser = argparse.ArgumentParser(
         description=(
@@ -495,7 +482,14 @@ def parse_arguments() -> argparse.Namespace:
 
 
 def main() -> int:
-    """Command-line entry point."""
+    """
+    Command-line entry point.
+
+    Returns
+    -------
+    int
+        Process exit code.
+    """
 
     args = parse_arguments()
 
